@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxycroak
+        {% if meta.title %}
+        | {{meta.title}}
+        {% endif %}
+
+    </title>
+    <meta name="Description" content="{{meta.description}}"/>
+    <!-- TODO: Dynamically set locale? -->
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <meta property="og:url" content="{{request.url}}"/>
+    <meta property="og:site_name" content="Proxycroak"/>
+    <!-- TODO: SET THIS -->
+    <meta property="og:image" content=""/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <!-- TODO: SET THIS -->
+    <meta name="twitter:image" content=""/>
+    <script type='application/ld+json'>
+        {
+            "@context": "http:\/\/schema.org",
+            "@type": "WebSite",
+            "@id": "#website",
+            "url": "http:\/\/proxycroak.com\/",
+            "name": "Proxycroak",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "http:\/\/proxycroak.com\/?s={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,400i,700,700i" rel="stylesheet">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="60x60"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-60x60.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="120x120"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="76x76"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="152x152"
+          href="https://assets.proxycroak.com/img/favicons/apple-touch-icon-152x152.png"/>
+    <link rel="icon" type="image/png" href="https://assets.proxycroak.com/img/favicons/favicon-196x196.png"
+          sizes="196x196"/>
+    <link rel="icon" type="image/png" href="https://assets.proxycroak.com/img/favicons/favicon-96x96.png"
+          sizes="96x96"/>
+    <link rel="icon" type="image/png" href="https://assets.proxycroak.com/img/favicons/favicon-32x32.png"
+          sizes="32x32"/>
+    <link rel="icon" type="image/png" href="https://assets.proxycroak.com/img/favicons/favicon-16x16.png"
+          sizes="16x16"/>
+    <link rel="icon" type="image/png" href="https://assets.proxycroak.com/img/favicons/favicon-128.png"
+          sizes="128x128"/>
+    <meta name="application-name" content="Proxycroak | Print multiple Pokémon TCG proxy decks"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF"/>
+    <!-- TODO: Set these -->
+    <meta name="msapplication-TileImage" content="https://assets.proxycroak.com/img/favicons/mstile-144x144.png"/>
+    <meta name="msapplication-square70x70logo" content="https://assets.proxycroak.com/img/favicons/mstile-70x70.png"/>
+    <meta name="msapplication-square150x150logo"
+          content="https://assets.proxycroak.com/img/favicons/mstile-150x150.png"/>
+    <meta name="msapplication-wide310x150logo" content="https://assets.proxycroak.com/img/favicons/mstile-310x150.png"/>
+    <meta name="msapplication-square310x310logo"
+          content="https://assets.proxycroak.com/img/favicons/mstile-310x310.png"/>
+
+    <script>
+        // (function (i, s, o, g, r, a, m) {
+        //     i['GoogleAnalyticsObject'] = r;
+        //     i[r] = i[r] || function () {
+        //         (i[r].q = i[r].q || []).push(arguments)
+        //     }, i[r].l = 1 * new Date();
+        //     a = s.createElement(o),
+        //         m = s.getElementsByTagName(o)[0];
+        //     a.async = 1;
+        //     a.src = g;
+        //     m.parentNode.insertBefore(a, m)
+        // })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        //
+        // ga('create', 'UA-89438503-1', 'auto');
+        // ga('set', 'anonymizeIp', true);
+        // ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body class="page {% for tag in meta.tags %}page--{{ tag }} {% endfor %}">
+<div id="container" class="container">
+    <header class="header">
+        <div class="topBar">
+            <a href="/" class="topBar__logo"><img id="mainLogo"
+                                                  src="https://assets.proxycroak.com/img/logo.svg"
+                                                  alt="Proxycroak"></a>
+            <nav class="topBar__nav">
+                <ul class="topBar__nav__list">
+                    <li class="topBar__nav__item"><a href="/features">Features</a></li>
+                    <li class="topBar__nav__item"><a href="/changelog">Changelog</a></li>
+                    <li class="topBar__nav__item"><a href="/help">Help</a></li>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <small class="footer__smallText">
+                <p><strong>Proxycroak</strong> is based on a <a href="http://metadeck.me/" target="_blank">very good
+                    idea</a> applied to the Pokémon TCG, thanks to some <a href="http://pokemontcg.io/"
+                                                                           target="_blank">great API</a>. The rest
+                    has been originally designed and coded by <a
+                            href="mailto:%22Marco%20Escher%22%3Cinfo%40proxycroak.com%3E">m.e.</a> and is now maintained
+                    and developed by <a href="mailto:steve@proxycroak.com">Steve</a>.</p>
+                <p>The information presented on this site about Pokémon and the Pokémon Trading Card Game, both literal
+                    and graphical, is copyrighted by their respectful owners. This website is in no way affiliated with
+                    TPCi, Nintendo, Creatures, or Game Freak.</p>
+            </small>
+        </div>
+    </footer>
+</div> <!-- .container -->
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<main class="main main--alignTop">
+    <div class="row">
+        <h1 class="text--title text--center">Help</h1>
+        <h4 class="text--caption size--h4">FAQ</h4>
+        <p>
+            <strong>Q. Which set codes should I use?</strong>
+            <br>
+            A. You can find the complete list <a
+                href="https://docs.google.com/spreadsheets/d/1hC8tzEssptL0IH9toNDQSNfNTxalfKqNurvnEe8EzwI/edit?usp=sharing">here</a>.
+        </p>
+        <p>
+            <strong>Q. Why are the proxies so small/big?</strong>
+            <br>
+            A. The proxy size has been chosen to easily fit a proxy inside a sleeved card without touching the edges.
+            However, results may vary depending on your printer and sheet size. Try adjusting the zoom scale in your
+            printer settings if you're not satisfied with the results.
+        </p>
+        <p>
+            <strong>Q. I have more questions!</strong>
+            <br>
+            <!-- TODO: Change this! -->
+            A. <a href="mailto:%22Marco%20Escher%22%3Cinfo%40proxycroak.com%3E">Drop me a line ✍️</a>
+        </p>
+        <br>
+        <h4 class="text--caption size--h4">Known bugs</h4>
+        <ul class="list">
+            <li>SP Pokémon are supported, but they <strong>always</strong> require at least the set code (e.g. 1 Palkia
+                G PL)
+            </li>
+            <li>Lots of cards are missing; here's the <a href="http://bit.ly/ProxycroakMissing" target="_blank">full
+                list</a>.
+            </li>
+            <li>Cards heavily word-filled get cut off in Text mode when combining 2 or more decks.</li>
+        </ul>
+    </div>
+</main>
+
+{% endblock %}

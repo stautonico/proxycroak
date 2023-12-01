@@ -1,0 +1,157 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<main class="main main--home">
+    <form action="/proxies" method="POST" class="form" autocomplete="off">
+        <!--  TODO: Find a way to change the mode? -->
+        <input id="format-pic" type="radio" name="mode" value="pic"
+               class="format input--hidden" <?= isset($mode) && $mode === 'pic' ? 'checked' : ''; ?>>
+        <input id="format-text" type="radio" name="mode" value="text"
+               class="format input--hidden" <?= isset($mode) && $mode === 'text' ? 'checked' : ''; ?>>
+
+        <div id="form__step1">
+            <div class="form__head">
+                <h1 class="form__title form__title--start">Print Pokémon proxy cards</h1>
+                <h4 class="form__subtitle">Choose the format of your proxy deck:</h4>
+            </div>
+            <div class="formatBtns">
+                <label for="format-pic" class="formatBtn">
+                    <img src="https://assets.proxycroak.com/img/format-pic.svg" class="formatBtn__pic">
+                    <h2 class="formatBtn__title">Pics</h2>
+                    <p class="formatBtn__desc">Just 1 deck</p>
+                </label>
+                <label for="format-text" class="formatBtn">
+                    <img src="https://assets.proxycroak.com/img/format-text.svg" class="formatBtn__pic">
+                    <h2 class="formatBtn__title">Text</h2>
+                    <p class="formatBtn__desc">Up to 3 decks combined!</p>
+                </label>
+            </div>
+        </div>
+
+        <div id="form__step2">
+            <div class="form__head">
+                <h1 class="form__title form__title--format-pic">Type your decklist</h1>
+                <h1 class="form__title form__title--format-text">Type your decklist(s)</h1>
+                <h4 class="form__subtitle">For best results, use the PTCGO format<br>(e.g. 4 Toxicroak STS 59)</h4>
+            </div>
+            <input id="activeDeck1" type="radio" name="activeDeck" value="1" class="input--hidden"
+                   checked="checked">
+            <input id="activeDeck2" type="radio" name="activeDeck" value="2" class="input--hidden">
+            <input id="activeDeck3" type="radio" name="activeDeck" value="3" class="input--hidden">
+
+            <div class="deckBtns">
+                <label for="activeDeck1" class="deckBtn deckBtn1">Deck 1</label>
+                <label for="activeDeck2" class="deckBtn deckBtn2">Deck 2</label>
+                <label for="activeDeck3" class="deckBtn deckBtn3">Deck 3</label>
+            </div>
+
+            <textarea id="deck1" name="decks[0]" class="deck" required
+                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
+            <textarea id="deck2" name="decks[1]" class="deck"
+                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
+            <textarea id="deck3" name="decks[2]" class="deck"
+                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
+
+            <?php if (false): ?>
+            <div class="form__checkbox form__checkbox--picsOnly">
+                <input id="lowresCheck" type="checkbox" name="options[lowres]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['lowres']) && $options['lowres'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="lowresCheck" class="form__checkbox__label">Low-res pics</label>
+            </div>
+            <?php endif; ?>
+
+            <?php if (false): ?>
+            <div class="form__checkbox form__checkbox--picsOnly">
+                <input id="watermarkCheck" type="checkbox" name="options[watermark]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['watermark']) && $options['watermark'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="watermarkCheck" class="form__checkbox__label">Add watermark</label>
+            </div>
+            <?php endif; ?>
+
+            <div class="form__checkbox">
+                <input id="legacyCheck" type="checkbox" name="options[legacy]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['legacy']) && $options['legacy'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="legacyCheck" class="form__checkbox__label">Legacy support <span
+                        class="tooltip tooltip--help"
+                        data-tooltip-content="Check this option if you have RSE-era Pokémon ex in your decklist">?</span></label>
+            </div>
+
+            <div class="form__checkbox form__checkbox--textOnly">
+                <input id="bgCheck" type="checkbox" name="options[bgPic]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['bgPic']) && $options['bgPic'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="bgCheck" class="form__checkbox__label">Include illustration</label>
+            </div>
+
+            <div class="form__checkbox form__checkbox--textOnly">
+                <input id="liteminCheck" type="checkbox" name="options[litemin]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['litemin']) && $options['litemin'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="liteminCheck" class="form__checkbox__label">Don't minify text</label>
+            </div>
+
+            <?php if (true): ?>
+            <div class="form__checkbox">
+                <input id="jpCheck" type="checkbox" name="options[excludeJp]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['excludeJp']) && $options['excludeJp'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="jpCheck" class="form__checkbox__label">Exclude JP sets</label>
+                <span class="tooltip tooltip--help"
+                      data-tooltip-content="Check this option if you want to exclude Japanese sets from your results">?</span>
+            </div>
+            <?php endif; ?>
+
+            <div class="form__checkbox">
+                <input id="excludeSecret" type="checkbox" name="options[excludeSecret]" value="1"
+                       class="form__checkbox__input" <?= (isset($options['excludeSecret']) && $options['excludeSecret'] == 1) ? 'checked' : ''; ?>
+                >
+                <label for="excludeSecret" class="form__checkbox__label">Exclude secret cards <span
+                        class="text--super">BETA</span></label>
+                <span class="tooltip tooltip--help"
+                      data-tooltip-content="Check this option to exclude secret cards">?</span>
+            </div>
+
+            <input id="listView" type="hidden" name="options[listView]"
+                   value="<?= (isset($options['listView']) && $options['listView']==1) ? 1 : 0; ?>"
+                   class="form__checkbox__input">
+
+            <input type="submit" name="submit" value="Generate" class="btn submitBtn">
+            <a href="#" id="reset" class="btn resetBtn">Change mode</a>
+        </div>
+    </form>
+</main>
+
+<script>
+    const reset = document.getElementById("reset");
+
+    function resetAll(e) {
+        e.preventDefault();
+        document.getElementById('form__step2').style.transitionDelay = '0s';
+        document.getElementById('form__step2').style.opacity = '0';
+        var inputs = document.querySelectorAll('[name*="decks"],[name="mode"]');
+        setTimeout(function () {
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+            document.getElementById('form__step2').style.opacity = '';
+            document.getElementById('form__step2').style.transitionDelay = '';
+        }, 400);
+    }
+
+    // if (typeof adsbygoogle !== 'undefined') {
+    //     [].forEach.call(document.querySelectorAll('.adsbygoogle'), function () {
+    //         (adsbygoogle = window.adsbygoogle || []).push({});
+    //     });
+    // }
+
+
+    if (reset) {
+        reset.addEventListener('click', resetAll);
+    }
+</script>
+
+{% endblock %}

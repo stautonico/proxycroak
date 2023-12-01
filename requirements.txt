@@ -1,0 +1,6 @@
+flask-SQLAlchemy==3.1.1
+python-dotenv==1.0.0
+pokemontcgsdk==3.4.0
+flask==3.0.0
+flask-migrate==4.0.5
+python-dotenv==1.0.0
