@@ -4,23 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxycroak
-        {% if meta.title %}
-        | {{meta.title}}
-        {% endif %}
-
-    </title>
-    <meta name="Description" content="{{meta.description}}"/>
+    <title>Proxycroak | Maintenance</title>
+    <meta name="Description" content="Proxycroak is currently under maintenance"/>
     <!-- TODO: Dynamically set locale? -->
     <meta property="og:locale" content="en_US"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <meta property="og:url" content="{{request.url}}"/>
+    <meta property="og:title" content="Proxycroak | Maintenance"/>
+    <meta property="og:url" content="/"/>
     <meta property="og:site_name" content="Proxycroak"/>
     <!-- TODO: SET THIS -->
     <meta property="og:image" content=""/>
     <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <meta name="twitter:title" content="Proxycroak | Maintenance"/>
     <!-- TODO: SET THIS -->
     <meta name="twitter:image" content=""/>
     <script type='application/ld+json'>
@@ -96,25 +91,23 @@
     </script>
 </head>
 
-<body class="page {% for tag in meta.tags %}page--{{ tag }} {% endfor %}">
+<body class="page">
 <div id="container" class="container">
     <header class="header">
         <div class="topBar">
             <a href="/" class="topBar__logo"><img id="mainLogo"
                                                   src="/static/img/logo.svg"
                                                   alt="Proxycroak"></a>
-            <nav class="topBar__nav">
-                <ul class="topBar__nav__list">
-                    <li class="topBar__nav__item"><a href="/features">Features</a></li>
-                    <li class="topBar__nav__item"><a href="/changelog">Changelog</a></li>
-                    <li class="topBar__nav__item"><a href="/help">Help</a></li>
-                    </li>
-                </ul>
-            </nav>
+
         </div>
     </header>
 
-    {% block content %}{% endblock %}
+    <main class="main main--alignTop vertical-center">
+        <div class="row">
+            <h1 class="text--title text--center">Proxycroak is currently under maintenance</h1>
+            <h5 class="text--caption text--center">We should hopefully be back up and running soon!</h5>
+        </div>
+    </main>
 
     <footer class="footer">
         <div class="footer__inner">
