@@ -3,12 +3,12 @@
 {% block content %}
 
 <main class="main main--home">
-    <form action="/proxies" method="POST" class="form" autocomplete="off">
+    <form class="form" autocomplete="off" id="mainform" method="post" action="{{ url_for('ui_api.proxies') }}">
         <!--  TODO: Find a way to change the mode? -->
         <input id="format-pic" type="radio" name="mode" value="pic"
-               class="format input--hidden" <?= isset($mode) && $mode === 'pic' ? 'checked' : ''; ?>>
+               class="format input--hidden">
         <input id="format-text" type="radio" name="mode" value="text"
-               class="format input--hidden" <?= isset($mode) && $mode === 'text' ? 'checked' : ''; ?>>
+               class="format input--hidden">
 
         <div id="form__step1">
             <div class="form__head">
@@ -33,7 +33,8 @@
             <div class="form__head">
                 <h1 class="form__title form__title--format-pic">Type your decklist</h1>
                 <h1 class="form__title form__title--format-text">Type your decklist(s)</h1>
-                <h4 class="form__subtitle">For best results, use the PTCGO format<br>(e.g. 4 Toxicroak STS 59)</h4>
+                <h4 class="form__subtitle">For best results, use the PTCGO/PTCGL format<br>(e.g. 4 Toxicroak STS 59)
+                </h4>
             </div>
             <input id="activeDeck1" type="radio" name="activeDeck" value="1" class="input--hidden"
                    checked="checked">
@@ -56,7 +57,7 @@
             <?php if (false): ?>
             <div class="form__checkbox form__checkbox--picsOnly">
                 <input id="lowresCheck" type="checkbox" name="options[lowres]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['lowres']) && $options['lowres'] == 1) ? 'checked' : ''; ?>
+                       class="form__checkbox__input">
                 >
                 <label for="lowresCheck" class="form__checkbox__label">Low-res pics</label>
             </div>
@@ -65,16 +66,14 @@
             <?php if (false): ?>
             <div class="form__checkbox form__checkbox--picsOnly">
                 <input id="watermarkCheck" type="checkbox" name="options[watermark]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['watermark']) && $options['watermark'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="watermarkCheck" class="form__checkbox__label">Add watermark</label>
             </div>
             <?php endif; ?>
 
             <div class="form__checkbox">
                 <input id="legacyCheck" type="checkbox" name="options[legacy]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['legacy']) && $options['legacy'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="legacyCheck" class="form__checkbox__label">Legacy support <span
                         class="tooltip tooltip--help"
                         data-tooltip-content="Check this option if you have RSE-era Pokémon ex in your decklist">?</span></label>
@@ -82,33 +81,27 @@
 
             <div class="form__checkbox form__checkbox--textOnly">
                 <input id="bgCheck" type="checkbox" name="options[bgPic]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['bgPic']) && $options['bgPic'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="bgCheck" class="form__checkbox__label">Include illustration</label>
             </div>
 
             <div class="form__checkbox form__checkbox--textOnly">
                 <input id="liteminCheck" type="checkbox" name="options[litemin]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['litemin']) && $options['litemin'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="liteminCheck" class="form__checkbox__label">Don't minify text</label>
             </div>
 
-            <?php if (true): ?>
             <div class="form__checkbox">
                 <input id="jpCheck" type="checkbox" name="options[excludeJp]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['excludeJp']) && $options['excludeJp'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="jpCheck" class="form__checkbox__label">Exclude JP sets</label>
                 <span class="tooltip tooltip--help"
                       data-tooltip-content="Check this option if you want to exclude Japanese sets from your results">?</span>
             </div>
-            <?php endif; ?>
 
             <div class="form__checkbox">
                 <input id="excludeSecret" type="checkbox" name="options[excludeSecret]" value="1"
-                       class="form__checkbox__input" <?= (isset($options['excludeSecret']) && $options['excludeSecret'] == 1) ? 'checked' : ''; ?>
-                >
+                       class="form__checkbox__input">
                 <label for="excludeSecret" class="form__checkbox__label">Exclude secret cards <span
                         class="text--super">BETA</span></label>
                 <span class="tooltip tooltip--help"
@@ -116,7 +109,6 @@
             </div>
 
             <input id="listView" type="hidden" name="options[listView]"
-                   value="<?= (isset($options['listView']) && $options['listView']==1) ? 1 : 0; ?>"
                    class="form__checkbox__input">
 
             <input type="submit" name="submit" value="Generate" class="btn submitBtn">
@@ -127,6 +119,130 @@
 
 <script>
     const reset = document.getElementById("reset");
+    const form = document.getElementById("mainform");
+
+    // TODO: Write form validator
+
+    // TODO: Use a custom form handler
+    // function handleFormSubmit(e) {
+    //     e.preventDefault();
+    //
+    //     let form_data = {
+    //         "mode": "pic",
+    //         "active_deck": 1,
+    //         "decks": {1: "", 2: "", 3: ""},
+    //         "lowres": false,
+    //         "watermark": false,
+    //         "legacy": false,
+    //         "illustration": false,
+    //         "litemin": false,
+    //         "jp": false,
+    //         "exclude_secrets": false,
+    //     };
+    //
+    //     /*
+    //     Form inputs:
+    //     0: Pic mode
+    //     1: Text mode
+    //     2: Active deck #1 (checked?)
+    //     3: Active deck #2 (checked?)
+    //     4: Active deck #3 (checked?)
+    //     5: Active deck #1 (content)
+    //     6: Active deck #2 (content)
+    //     7: Active deck #3 (content)
+    //     8: lowres
+    //     9: watermark
+    //     10: legacy
+    //     11: illustration (text mode only, "bg")
+    //     12: litemin (text mode only, "mimify text")
+    //     13:jp
+    //     14: exclude secrets
+    //     15: submit
+    //      */
+    //
+    //     for (let i = 0; i < e.target.length; i++) {
+    //         let element = e.target[i];
+    //         switch (i) {
+    //             case 0: { // Pic mode
+    //                 if (element.checked) form_data["mode"] = "pic";
+    //                 break;
+    //             }
+    //
+    //             case 1: { // Text mode
+    //                 if (element.checked) form_data["mode"] = "text";
+    //                 break;
+    //             }
+    //
+    //             case 2: { // Deck 1 Active
+    //                 if (element.checked) form_data["active_deck"] = 1;
+    //                 break;
+    //             }
+    //
+    //             case 3: { // Deck 2 Active
+    //                 if (element.checked) form_data["active_deck"] = 2;
+    //                 break;
+    //             }
+    //
+    //             case 4: { // Deck 3 Active
+    //                 if (element.checked) form_data["active_deck"] = 3;
+    //                 break;
+    //             }
+    //
+    //             case 5: { // Active deck 1 content
+    //                 form_data["decks"][1] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 6: { // Active deck 2 content
+    //                 form_data["decks"][2] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 7: { // Active deck 3 content
+    //                 form_data["decks"][3] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 8: { // Low res images mode
+    //                 form_data["lowres"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 9: { // Watermark
+    //                 form_data["watermark"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 10: { // Legacy support
+    //                 form_data["legacy"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 11: { // Illustration for text mode cards
+    //                 form_data["illustration"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 12: { // Minify text cards
+    //                 form_data["litemin"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 13: { // Exclude JP sets
+    //                 form_data["jp"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 14: { // Exclude secret cards
+    //                 form_data["exclude_secrets"] = element.checked;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //
+    //
+    //     console.log(form_data);
+    // }
 
     function resetAll(e) {
         e.preventDefault();

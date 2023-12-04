@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, send_from_directory
 
+from proxycroak.util.cards_db import update_sets
+
 blueprint = Blueprint("ui", __name__, url_prefix="/")
 
 
@@ -40,6 +42,11 @@ def help():
 
     return render_template("pages/help.html", meta=meta)
 
+
+@blueprint.route("/debug")
+def debug():
+    update_sets()
+    return "<h1>Done!</h1>"
 
 @blueprint.route("/static/<path:path>")
 def static_asset(path):

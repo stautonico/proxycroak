@@ -448,3 +448,7 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,gitbook,virtualenv,flask,emacs,vim,jetbrains+all
+
+# Any images from the TCG API should be ignored
+proxycroak/static/img/cards/*
+!proxycroak/static/img/cards

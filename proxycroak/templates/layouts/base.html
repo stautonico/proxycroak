@@ -100,14 +100,14 @@
 <div id="container" class="container">
     <header class="header">
         <div class="topBar">
-            <a href="/" class="topBar__logo"><img id="mainLogo"
+            <a href="{{ url_for('ui.index') }}" class="topBar__logo"><img id="mainLogo"
                                                   src="/static/img/logo.svg"
                                                   alt="Proxycroak"></a>
             <nav class="topBar__nav">
                 <ul class="topBar__nav__list">
-                    <li class="topBar__nav__item"><a href="/features">Features</a></li>
-                    <li class="topBar__nav__item"><a href="/changelog">Changelog</a></li>
-                    <li class="topBar__nav__item"><a href="/help">Help</a></li>
+                    <li class="topBar__nav__item"><a href="{{ url_for('ui.features') }}">Features</a></li>
+                    <li class="topBar__nav__item"><a href="{{ url_for('ui.changelog') }}">Changelog</a></li>
+                    <li class="topBar__nav__item"><a href="{{ url_for('ui.help') }}">Help</a></li>
                     </li>
                 </ul>
             </nav>
