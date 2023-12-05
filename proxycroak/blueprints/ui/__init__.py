@@ -48,6 +48,8 @@ def debug():
     update_sets()
     return "<h1>Done!</h1>"
 
+
+
 @blueprint.route("/static/<path:path>")
 def static_asset(path):
     return send_from_directory("static", path)

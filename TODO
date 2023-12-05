@@ -1,3 +1,11 @@
 - [ ] Keep track of prices and show average price of all printed proxies
-- [ ] "Edit deck" button doesn't work on /proxies
-- [ ] "Export as.." button doesn't work on /proxies
+- [ ] Implement "Export as.." on /ui/api/proxies
+- [ ] Implement logging
+- [ ] Implement remote logging
+- [ ] Implement sentry support
+- [ ] Write dotenv.template
+- [ ] Implement some kind of bg job that runs on a timer to update the database
+- [ ] Support PTCGL basic energy format (4 Basic {P} Energy SVE 5, 2 Basic {P} Energy CRZ 156)
+- [ ] Properly support both PTCGL and PTCGO decklist formats
+- [ ] Edit decklist hack using "history.back()" doesn't work reliably
+- [ ] Support Shiny Vault cards (They seem to not have a standard set id?, some say they're part of the main set they belong to, some say they belong to their own set: sm1)

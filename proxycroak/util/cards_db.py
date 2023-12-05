@@ -135,12 +135,15 @@ def generate_card_payload(ptcglcard):
     return payload
 
 
+from time import sleep
+
 def update_sets():
     # Go through each set and check if we have it in the database
-    # sets = tcgapi.Set.all()
-    sets = [tcgapi.Set.find("base1")]
+    sets = tcgapi.Set.all()
+    # sets = [tcgapi.Set.find("base1")]
 
     for s in sets:
+        print(f"Working on {s.name}...")
         in_db_set = Set.query.get(s.id)
 
         # If we do not have the set, insert it into the database
@@ -151,8 +154,6 @@ def update_sets():
             db.session.add(new_set)
 
             add_new_cards_for_set(s.id)
-            break
-
         else:
             # If we do have the set, check if the new updated date is > the updated date in the database
             if in_db_set.updatedAt < datetime.strptime(s.updatedAt, "%Y/%m/%d %H:%M:%S"):
@@ -166,7 +167,10 @@ def update_sets():
                 # TODO: Log here
                 print("Set does not have an update!")
 
-    db.session.commit()
+        print(f"Done with {s.name}. Sleeping for 10 seconds...")
+        db.session.commit()
+        sleep(10)
+
 
 
 def make_new_card(card_obj):
