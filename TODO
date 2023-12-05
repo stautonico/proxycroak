@@ -2,7 +2,7 @@
 - [ ] Implement "Export as.." on /ui/api/proxies
 - [ ] Implement logging
 - [ ] Implement remote logging
-- [ ] Implement sentry support
+- [~] Implement sentry support
 - [ ] Write dotenv.template
 - [ ] Implement some kind of bg job that runs on a timer to update the database
 - [ ] Support PTCGL basic energy format (4 Basic {P} Energy SVE 5, 2 Basic {P} Energy CRZ 156)

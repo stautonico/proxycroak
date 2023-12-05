@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template
 from dotenv import dotenv_values
 from flask_migrate import Migrate
+import sentry_sdk
 
 from proxycroak.config import BaseConfig
 from proxycroak.database import db
@@ -24,10 +25,20 @@ def generate_config(mode="dev"):
 
 
 def create_app(mode="dev"):
+
     config = generate_config(mode)
 
     if not os.path.exists(os.path.join(config.INSTANCE_FOLDER_PATH, "instance")):
         os.mkdir(os.path.join(config.INSTANCE_FOLDER_PATH, "instance"))
+
+    sentry_sdk.init(
+        dsn=config.SENTRY_DSN,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+        enable_tracing=True,
+        debug=config.DEBUG,
+        environment="development" if config.DEBUG else "testing" if config.TESTING else "production"
+    )
 
     app = Flask(config.PROJECT_NAME, instance_path=config.INSTANCE_FOLDER_PATH, instance_relative_config=True)
 

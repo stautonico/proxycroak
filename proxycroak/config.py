@@ -12,7 +12,7 @@ def _create_database_uri(vendor, user, passwd, host, port, current_config):
 
 
 def _check_required_values(env):
-    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST"]
+    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST", "SENTRY_DSN"]
     for field in required_fields:
         if field not in env or env.get(field) in [None, ""]:
             raise Exception(f"[init:config] Missing required value '{field}' in environment!")
@@ -35,6 +35,8 @@ class BaseConfig:
     DB_PASS = None
     DB_PORT = None
     DB_URI = None
+
+    SENTRY_DSN = None
 
     @staticmethod
     def from_env(env):
@@ -62,5 +64,7 @@ class BaseConfig:
 
         newconfig.DB_URI = _create_database_uri(newconfig.DB_VENDOR, newconfig.DB_USER, newconfig.DB_PASS,
                                                 newconfig.DB_HOST, newconfig.DB_PORT, newconfig)
+
+        newconfig.SENTRY_DSN = env.get("SENTRY_DSN")
 
         return newconfig
