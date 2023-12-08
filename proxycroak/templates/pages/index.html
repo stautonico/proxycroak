@@ -19,12 +19,12 @@
                 <label for="format-pic" class="formatBtn">
                     <img src="/static/img/format-pic.svg" class="formatBtn__pic">
                     <h2 class="formatBtn__title">Pics</h2>
-                    <p class="formatBtn__desc">Just 1 deck</p>
+<!--                    <p class="formatBtn__desc">Just 1 deck</p>-->
                 </label>
                 <label for="format-text" class="formatBtn">
                     <img src="/static/img/format-text.svg" class="formatBtn__pic">
                     <h2 class="formatBtn__title">Text</h2>
-                    <p class="formatBtn__desc">Up to 3 decks combined!</p>
+<!--                    <p class="formatBtn__desc">Up to 3 decks combined!</p>-->
                 </label>
             </div>
         </div>
@@ -32,7 +32,8 @@
         <div id="form__step2">
             <div class="form__head">
                 <h1 class="form__title form__title--format-pic">Type your decklist</h1>
-                <h1 class="form__title form__title--format-text">Type your decklist(s)</h1>
+<!--                <h1 class="form__title form__title&#45;&#45;format-text">Type your decklist(s)</h1>-->
+                <h1 class="form__title form__title--format-text">Type your decklist</h1>
                 <h4 class="form__subtitle">For best results, use the PTCGO/PTCGL format<br>(e.g. 4 Toxicroak STS 59)
                 </h4>
             </div>
@@ -41,18 +42,19 @@
             <input id="activeDeck2" type="radio" name="activeDeck" value="2" class="input--hidden">
             <input id="activeDeck3" type="radio" name="activeDeck" value="3" class="input--hidden">
 
-            <div class="deckBtns">
-                <label for="activeDeck1" class="deckBtn deckBtn1">Deck 1</label>
-                <label for="activeDeck2" class="deckBtn deckBtn2">Deck 2</label>
-                <label for="activeDeck3" class="deckBtn deckBtn3">Deck 3</label>
-            </div>
+            <!-- TODO: Work on improving having multiple decklists -->
+<!--            <div class="deckBtns">-->
+<!--                <label for="activeDeck1" class="deckBtn deckBtn1">Deck 1</label>-->
+<!--                <label for="activeDeck2" class="deckBtn deckBtn2">Deck 2</label>-->
+<!--                <label for="activeDeck3" class="deckBtn deckBtn3">Deck 3</label>-->
+<!--            </div>-->
 
             <textarea id="deck1" name="decks[0]" class="deck" required
                       placeholder="Don't forget set code (in all caps) and number!"></textarea>
-            <textarea id="deck2" name="decks[1]" class="deck"
-                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
-            <textarea id="deck3" name="decks[2]" class="deck"
-                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
+<!--            <textarea id="deck2" name="decks[1]" class="deck"-->
+<!--                      placeholder="Don't forget set code (in all caps) and number!"></textarea>-->
+<!--            <textarea id="deck3" name="decks[2]" class="deck"-->
+<!--                      placeholder="Don't forget set code (in all caps) and number!"></textarea>-->
 
             <?php if (false): ?>
             <div class="form__checkbox form__checkbox--picsOnly">

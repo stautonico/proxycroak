@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<main class="main main--alignTop">
+    <h1 id="notice-title" class="text--title text--center">Something went wrong!</h1>
+    <div class="row errors">
+        <div class="error">
+            <div class="error__head">The following errors have occurred:</div>
+            <ul class="error__lines">
+                {% for error in errors %}
+                <li class="error__line">{{error}}</li>
+                {% endfor %}
+                </li>
+            </ul>
+        </div>
+        <a class="text--center" href="/">Go back home</a>
+    </div>
+</main>
+
+{% endblock %}

@@ -9,3 +9,15 @@
 - [ ] Properly support both PTCGL and PTCGO decklist formats
 - [ ] Edit decklist hack using "history.back()" doesn't work reliably
 - [ ] Support Shiny Vault cards (They seem to not have a standard set id?, some say they're part of the main set they belong to, some say they belong to their own set: sm1)
+- [ ] Make a background job that deletes expired shares
+
+## MISSING CARDS:
+- hsp-HGSS18
+- xyp-XY39 doesn't have a high-res image
+- xyp-XY46 doesn't have a high-res image
+- xyp-XY68 doesn't have a high-res image
+- ALL OF mcd14
+- ALL OF mcd15
+- ALL OF mcd17
+- ALL OF mcd18
+

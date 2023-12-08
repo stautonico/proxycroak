@@ -9,7 +9,7 @@ import requests
 from proxycroak.models import Set, Card
 from proxycroak.database import db
 from proxycroak.util.serialize import serialize_card
-from proxycroak.util.image import convert_to_webp
+from proxycroak.util.image import convert_to_webp, make_cropped_image
 
 
 def generate_set_payload(ptcglset):
@@ -137,6 +137,7 @@ def generate_card_payload(ptcglcard):
 
 from time import sleep
 
+
 def update_sets():
     # Go through each set and check if we have it in the database
     sets = tcgapi.Set.all()
@@ -172,7 +173,6 @@ def update_sets():
         sleep(10)
 
 
-
 def make_new_card(card_obj):
     image_folder_path = os.path.join("proxycroak", "static", "img", "cards", card_obj.set.id, card_obj.id)
     os.makedirs(image_folder_path, exist_ok=True)
@@ -181,6 +181,7 @@ def make_new_card(card_obj):
 
     if r.status_code == 200:
         convert_to_webp(r.content, os.path.join(image_folder_path, "small.webp"))
+        make_cropped_image(r.content, os.path.join(image_folder_path, "small_cropped.webp"), (22, 50, 224, 176))
     else:
         # TODO: Send a warning and log
         pass
@@ -189,6 +190,7 @@ def make_new_card(card_obj):
 
     if r.status_code == 200:
         convert_to_webp(r.content, os.path.join(image_folder_path, "large.webp"))
+        make_cropped_image(r.content, os.path.join(image_folder_path, "large_cropped.webp"), (60, 146, 674, 526))
     else:
         # TODO: Send a warning and log
         pass

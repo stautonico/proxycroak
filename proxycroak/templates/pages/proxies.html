@@ -22,16 +22,17 @@
         <div class="row text--center">
             <p>Needless to say, you can't use proxy cards at sanctioned events or pass them off as original cards. They
                 just serve as placeholders for private deck testing.</p>
-            <!-- This should work since you can't directly access /proxies without coming from the index page -->
+            <!-- TODO: IT DOESN'T (orig: This should work since you can't directly access /proxies without coming from the index page) -->
             <div onclick="history.back();" id="edit-deck" class="btn" data-toggle="#formModal"
                  data-toggle-class="modal--visible">
-                <span class="btn__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16"
-                                             height="16"><g class="nc-icon-wrapper" fill="#444"><path
-                        data-color="color-2"
-                        d="M14.1.3c-.4-.4-1-.4-1.4 0L6 7v3h3l6.7-6.7c.4-.4.4-1 0-1.4L14.1.3z"></path><path
-                        d="M15 9c-.6 0-1 .4-1 1v4H2V2h4c.6 0 1-.4 1-1s-.4-1-1-1H1C.4 0 0 .4 0 1v14c0 .6.4 1 1 1h14c.6 0 1-.4 1-1v-5c0-.6-.4-1-1-1z"></path></g></svg></span>
-                <span class="btn__text">Edit deck</span>
+                <span class="btn__icon"><img width="16" src="/static/img/icons/edit.svg" class="white-svg"/></span>
+                <span class="btn__text">Edit Deck</span>
             </div>
+            <div onclick="copy_to_clipboard()" id="share-deck" class="btn">
+                <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
+                <span class="btn__text">Share Deck</span>
+            </div>
+
             <!--
             <div id="export-deck" class="btn btn--dropdown" data-toggle="#export-dropdown"
                  data-toggle-class="dropdown--visible" data-toggle-outside="">
@@ -84,7 +85,7 @@
             {% for card in row %}
             <div class="proxyDeck__card">
                 <div class="proxyDeck__card__inner">
-                    {% if card.type == "name" %}
+                    {% if card.type == "text" %}
                     <div class="scan scan--missing"><h4 class="scan__name">{{card.data}}</h4></div>
                     {% else %}
                     <div class="scan">
@@ -104,6 +105,12 @@
 </main>
 
 <script>
+
+    function copy_to_clipboard() {
+        navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/share/{{share_id}}`);
+        // TODO: Maybe use a toast?
+        alert("Copied link to clipboard!");
+    }
 
 </script>
 

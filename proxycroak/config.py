@@ -1,5 +1,7 @@
 import os
 
+from dotenv import dotenv_values
+
 from proxycroak import const
 
 
@@ -12,7 +14,7 @@ def _create_database_uri(vendor, user, passwd, host, port, current_config):
 
 
 def _check_required_values(env):
-    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST", "SENTRY_DSN"]
+    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST", "SENTRY_DSN", "LOG_DIRECTORY"]
     for field in required_fields:
         if field not in env or env.get(field) in [None, ""]:
             raise Exception(f"[init:config] Missing required value '{field}' in environment!")
@@ -34,9 +36,11 @@ class BaseConfig:
     DB_USER = None
     DB_PASS = None
     DB_PORT = None
-    DB_URI = None
+    DB_URI = 2
 
     SENTRY_DSN = None
+
+    LOG_DIRECTORY = None
 
     @staticmethod
     def from_env(env):
@@ -67,4 +71,36 @@ class BaseConfig:
 
         newconfig.SENTRY_DSN = env.get("SENTRY_DSN")
 
+        newconfig.LOG_DIRECTORY = env.get("LOG_DIRECTORY")
+
         return newconfig
+
+
+def generate_config(mode=None):
+    # if mode is none, try to guess:
+    # If debug enabled: mode = dev
+    # if testing enabled: mode = test
+    # if neither enabled: mode = prod
+    if mode is None:
+        if os.getenv("DEBUG") == "true":
+            mode = "dev"
+        elif os.getenv("TESTING") == "true":
+            mode = "test"
+        else:
+            mode = "prod"
+
+    if mode not in ["dev", "prod", "test"]:
+        raise Exception(f"Invalid run mode '{mode}'! Valid modes are 'dev', 'prod', and 'test'!")
+
+    if mode == "dev":
+        env = dotenv_values(".env")
+    else:
+        # Load .env.prod or .env.test
+        env = dotenv_values(f".env.{mode}")
+
+    config_object = BaseConfig.from_env(env)
+
+    return config_object
+
+
+CONFIG = generate_config()

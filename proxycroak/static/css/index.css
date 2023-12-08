@@ -1929,6 +1929,10 @@ a.buyBtn {
     display: block
 }
 
+.white-svg {
+    filter: invert(98%) sepia(5%) saturate(6%) hue-rotate(109deg) brightness(105%) contrast(1);
+}
+
 @media only screen and (max-width: 640px) {
     .formatBtn {
         width: 100%;

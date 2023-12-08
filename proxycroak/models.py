@@ -46,3 +46,9 @@ class Card(db.Model):
     weaknesses: Mapped[str] = mapped_column(String(256), nullable=True)  # json
     set_id: Mapped[int] = mapped_column(ForeignKey("set.id"))
     set: Mapped["Set"] = relationship(back_populates="cards")
+
+
+class SharedDecklist(db.Model):
+    id: Mapped[str] = mapped_column(String(8), primary_key=True)
+    decklist: Mapped[str] = mapped_column(String(4192))
+    expires: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))

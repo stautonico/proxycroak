@@ -1,51 +1,31 @@
+import logging
 import os
+from datetime import datetime as dt
 
-from flask import Flask, render_template
-from dotenv import dotenv_values
+from flask.logging import default_handler
+from flask import Flask, render_template, request
 from flask_migrate import Migrate
 import sentry_sdk
 
-from proxycroak.config import BaseConfig
+from proxycroak.config import CONFIG
 from proxycroak.database import db
+from proxycroak.scheduled_jobs import scheduler
+from proxycroak.models import SharedDecklist
 
 
-def generate_config(mode="dev"):
-    if mode not in ["dev", "prod", "test"]:
-        raise Exception(f"Invalid run mode '{mode}'! Valid modes are 'dev', 'prod', and 'test'!")
+def create_app(mode=None):
+    if not os.path.exists(os.path.join(CONFIG.INSTANCE_FOLDER_PATH, "instance")):
+        os.mkdir(os.path.join(CONFIG.INSTANCE_FOLDER_PATH, "instance"))
 
-    if mode == "dev":
-        env = dotenv_values(".env")
-    else:
-        # Load .env.prod or .env.test
-        env = dotenv_values(f".env.{mode}")
-
-    config_object = BaseConfig.from_env(env)
-
-    return config_object
-
-
-def create_app(mode="dev"):
-
-    config = generate_config(mode)
-
-    if not os.path.exists(os.path.join(config.INSTANCE_FOLDER_PATH, "instance")):
-        os.mkdir(os.path.join(config.INSTANCE_FOLDER_PATH, "instance"))
-
-    sentry_sdk.init(
-        dsn=config.SENTRY_DSN,
-        traces_sample_rate=1.0,
-        profiles_sample_rate=1.0,
-        enable_tracing=True,
-        debug=config.DEBUG,
-        environment="development" if config.DEBUG else "testing" if config.TESTING else "production"
-    )
-
-    app = Flask(config.PROJECT_NAME, instance_path=config.INSTANCE_FOLDER_PATH, instance_relative_config=True)
+    app = Flask(CONFIG.PROJECT_NAME, instance_path=CONFIG.INSTANCE_FOLDER_PATH, instance_relative_config=True)
 
     configure_blueprints(app)
     configure_filter(app)
     configure_error_handlers(app)
-    configure_middleware(app, config)
+    configure_middleware(app)
+    configure_logging(app)
+    configure_additional(app)
+    configure_teardown(app)
 
     return app
 
@@ -75,9 +55,12 @@ def configure_error_handlers(app):
         return render_template("errors/404.html", meta=meta), 404
 
 
-def configure_middleware(app, config):
+def configure_middleware(app):
+    from proxycroak.models import Set, Card, SharedDecklist
+
     # Configure the database
-    app.config["SQLALCHEMY_DATABASE_URI"] = config.DB_URI
+    app.config["SQLALCHEMY_DATABASE_URI"] = CONFIG.DB_URI
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.init_app(app)
 
     with app.app_context():
@@ -86,4 +69,70 @@ def configure_middleware(app, config):
     # Configure flask-migrate for migration support
     migrate = Migrate(app, db)
 
-    from proxycroak.models import Set, Card
+    # idk if this is considered middleware, but we'll put it here anyway
+    sentry_sdk.init(
+        dsn=CONFIG.SENTRY_DSN,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+        enable_tracing=True,
+        # debug=CONFIG.DEBUG,
+        environment="development" if CONFIG.DEBUG else "testing" if CONFIG.TESTING else "production"
+    )
+
+    scheduler.init_app(app)
+
+
+def configure_logging(app):
+    handler = logging.FileHandler(os.path.join(CONFIG.LOG_DIRECTORY, "requests.log"))
+    handler.setLevel(logging.DEBUG if CONFIG.DEBUG else logging.INFO)
+    formatter = logging.Formatter('[%(levelname)s] - %(message)s')
+    handler.setFormatter(formatter)
+
+    app.logger.removeHandler(default_handler)
+    app.logger.addHandler(handler)
+    app.logger.setLevel(logging.DEBUG if CONFIG.DEBUG else logging.INFO)
+
+    @app.after_request
+    def after_request(response):
+        # If we're requesting a static asset, don't log it
+        if "static" not in request.path:
+            app.logger.info(
+                "(%s) - %s | %s | %s | %s | len: %s | %s",
+                dt.utcnow().strftime("%b/%d/%Y:%H:%M:%S.%f")[:-3],
+                request.remote_addr,
+                request.method,
+                request.path,
+                response.status,
+                response.content_length,
+                request.user_agent,
+            )
+
+        return response
+
+
+def configure_additional(app):
+    app.config["SCHEDULER_API_ENABLED"] = True
+    """Misc things to do when the app starts"""
+
+    # TODO: Find out how to do this. Its not working!
+    # def delete_expired_shares():
+    #     app = scheduler.app
+    #     with app.app_context():
+    #         # Get a list of all jobs
+    #         shares = SharedDecklist.query.filter(SharedDecklist.expires <= dt.now())
+    #
+    #
+    #     print("peen")
+    # #
+    # # # Add a job to check and delete expired shares
+    # scheduler.add_job(func=delete_expired_shares, trigger="interval", seconds=5, id="delete-expired-shares")
+    #
+    # scheduler.start()
+
+
+def configure_teardown(app):
+    """Things to do when the app shuts down"""
+
+    # @app.teardown_appcontext
+    # def stop_scheduler(exception=None):
+    #     scheduler.shutdown()
