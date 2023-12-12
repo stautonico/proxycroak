@@ -10,7 +10,7 @@ def _create_database_uri(vendor, user, passwd, host, port, current_config):
         if host == "memory":
             return "sqlite://"
 
-        return f"sqlite:///{current_config.INSTANCE_FOLDER_PATH}/instance/{host}"
+        return f"sqlite:///{current_config.INSTANCE_FOLDER_PATH}/instance/{host}?check_same_thread=False"
 
 
 def _check_required_values(env):

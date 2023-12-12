@@ -34,7 +34,7 @@ def proxies():
             "watermark": False,
             "legacy": False,
             "illustration": False,
-            "litemin": False,
+            "nomin": False,
             "jp": False,
             "exclude_secrets": False
         }
@@ -80,8 +80,9 @@ def proxies():
 
         # TODO: Find a better way to do this
 
-        for opt in ["lowres", "watermark", "legacy", "illustration", "litemin", "jp", "exclude_secrets"]:
+        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets"]:
             if f"options[{opt}]" in form_data:
+                res = form_data[f"options[{opt}]"] == "1"
                 options[opt] = form_data[f"options[{opt}]"] == "1"
 
         # TODO: Don't hardcode decks[0]
@@ -140,4 +141,4 @@ def proxies():
         db.session.add(sharedDecklist)
         db.session.commit()
 
-        return render_template("pages/proxies.html", meta=META, rows=output, errors=errors, share_id=random_id)
+        return render_template("pages/proxies.html", meta=META, rows=output, errors=errors, share_id=random_id, options=options)

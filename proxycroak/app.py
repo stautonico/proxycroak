@@ -9,8 +9,9 @@ import sentry_sdk
 
 from proxycroak.config import CONFIG
 from proxycroak.database import db
-from proxycroak.scheduled_jobs import scheduler
+from proxycroak.scheduler import scheduler
 from proxycroak.models import SharedDecklist
+from proxycroak.util.cards_db import update_sets
 
 
 def create_app(mode=None):
@@ -61,6 +62,7 @@ def configure_middleware(app):
     # Configure the database
     app.config["SQLALCHEMY_DATABASE_URI"] = CONFIG.DB_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config["SQLALCHEMY_CHECK_SAME_THREAD"] = False
     db.init_app(app)
 
     with app.app_context():
@@ -114,20 +116,28 @@ def configure_additional(app):
     app.config["SCHEDULER_API_ENABLED"] = True
     """Misc things to do when the app starts"""
 
-    # TODO: Find out how to do this. Its not working!
-    # def delete_expired_shares():
-    #     app = scheduler.app
-    #     with app.app_context():
-    #         # Get a list of all jobs
-    #         shares = SharedDecklist.query.filter(SharedDecklist.expires <= dt.now())
-    #
-    #
-    #     print("peen")
-    # #
-    # # # Add a job to check and delete expired shares
-    # scheduler.add_job(func=delete_expired_shares, trigger="interval", seconds=5, id="delete-expired-shares")
-    #
-    # scheduler.start()
+    def delete_expired_shares():
+        with app.app_context():
+            # Get a list of all jobs that are expired
+            shares = SharedDecklist.query.filter(SharedDecklist.expires <= dt.now()).all()
+            for share in shares:
+                # TODO: LOG
+                db.session.delete(share)
+
+            db.session.commit()
+
+    # Add a job to check and delete expired shares (runs once per day)
+    scheduler.add_job(func=delete_expired_shares, trigger="interval", hours=24, id="delete-expired-shares")
+
+    def update_cards_database():
+        with app.app_context():
+            update_sets()
+
+    # Add a job to check if any sets have updates. If they do, pull the changes (runs once per day)
+    scheduler.add_job(func=update_cards_database, trigger="interval", hours=24, id="update-sets")
+    # scheduler.add_job(func=update_cards_database, trigger="interval", seconds=5, id="update-sets")
+
+    scheduler.start()
 
 
 def configure_teardown(app):

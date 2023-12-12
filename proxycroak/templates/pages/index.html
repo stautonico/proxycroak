@@ -82,15 +82,15 @@
             </div>
 
             <div class="form__checkbox form__checkbox--textOnly">
-                <input id="bgCheck" type="checkbox" name="options[bgPic]" value="1"
+                <input id="illustrationCheck" type="checkbox" name="options[illustration]" value="1"
                        class="form__checkbox__input">
-                <label for="bgCheck" class="form__checkbox__label">Include illustration</label>
+                <label for="illustrationCheck" class="form__checkbox__label">Include illustration</label>
             </div>
 
             <div class="form__checkbox form__checkbox--textOnly">
-                <input id="liteminCheck" type="checkbox" name="options[litemin]" value="1"
+                <input id="nominCheck" type="checkbox" name="options[nomin]" value="1"
                        class="form__checkbox__input">
-                <label for="liteminCheck" class="form__checkbox__label">Don't minify text</label>
+                <label for="nominCheck" class="form__checkbox__label">Don't minify text</label>
             </div>
 
             <div class="form__checkbox">
@@ -137,7 +137,7 @@
     //         "watermark": false,
     //         "legacy": false,
     //         "illustration": false,
-    //         "litemin": false,
+    //         "nomin": false,
     //         "jp": false,
     //         "exclude_secrets": false,
     //     };
@@ -156,7 +156,7 @@
     //     9: watermark
     //     10: legacy
     //     11: illustration (text mode only, "bg")
-    //     12: litemin (text mode only, "mimify text")
+    //     12: nomin (text mode only, "mimify text")
     //     13:jp
     //     14: exclude secrets
     //     15: submit
@@ -226,7 +226,7 @@
     //             }
     //
     //             case 12: { // Minify text cards
-    //                 form_data["litemin"] = element.checked;
+    //                 form_data["nomin"] = element.checked;
     //                 break;
     //             }
     //

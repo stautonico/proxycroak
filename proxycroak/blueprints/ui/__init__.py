@@ -67,7 +67,7 @@ def share(sid):
         "watermark": False,
         "legacy": False,
         "illustration": False,
-        "litemin": False,
+        "nomin": False,
         "jp": False,
         "exclude_secrets": False
     }

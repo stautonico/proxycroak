@@ -1544,13 +1544,13 @@ a.resetBtn:hover {
     font-style: italic
 }
 
-.card__ability, .card__attack {
-    display: inline
-}
+/*.card__ability, .card__attack {*/
+/*    display: inline*/
+/*}*/
 
-.card__ability:not(:last-child):after, .card__attack:not(:last-child):after {
-    content: " -- "
-}
+/*.card__ability:not(:last-child):after, .card__attack:not(:last-child):after {*/
+/*    content: " -- "*/
+/*}*/
 
 .card--liteMin .card__ability, .card--liteMin .card__attack {
     display: block
@@ -1655,47 +1655,47 @@ a.resetBtn:hover {
 }
 
 .energy.energy--colorless {
-    background-image: url("https://assets.proxycroak.com/img/symbols/C_lg.png")
+    background-image: url("/static/img/icons/types/C_lg.png")
 }
 
 .energy.energy--darkness {
-    background-image: url("https://assets.proxycroak.com/img/symbols/D_lg.png")
+    background-image: url("/static/img/icons/types/D_lg.png")
 }
 
 .energy.energy--fairy {
-    background-image: url("https://assets.proxycroak.com/img/symbols/Y_lg.png")
+    background-image: url("/static/img/icons/types/Y_lg.png")
 }
 
 .energy.energy--fighting {
-    background-image: url("https://assets.proxycroak.com/img/symbols/F_lg.png")
+    background-image: url("/static/img/icons/types/F_lg.png")
 }
 
 .energy.energy--fire {
-    background-image: url("https://assets.proxycroak.com/img/symbols/R_lg.png")
+    background-image: url("/static/img/icons/types/R_lg.png")
 }
 
 .energy.energy--grass {
-    background-image: url("https://assets.proxycroak.com/img/symbols/G_lg.png")
+    background-image: url("/static/img/icons/types/G_lg.png")
 }
 
 .energy.energy--lightning {
-    background-image: url("https://assets.proxycroak.com/img/symbols/L_lg.png")
+    background-image: url("/static/img/icons/types/L_lg.png")
 }
 
 .energy.energy--metal {
-    background-image: url("https://assets.proxycroak.com/img/symbols/M_lg.png")
+    background-image: url("/static/img/icons/types/M_lg.png")
 }
 
 .energy.energy--psychic {
-    background-image: url("https://assets.proxycroak.com/img/symbols/P_lg.png")
+    background-image: url("/static/img/icons/types/P_lg.png")
 }
 
 .energy.energy--water {
-    background-image: url("https://assets.proxycroak.com/img/symbols/W_lg.png")
+    background-image: url("/static/img/icons/types/W_lg.png")
 }
 
 .energy.energy--dragon {
-    background-image: url("https://assets.proxycroak.com/img/symbols/N_lg.png")
+    background-image: url("/static/img/icons/types/N_lg.png")
 }
 
 .errors {

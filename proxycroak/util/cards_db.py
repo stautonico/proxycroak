@@ -2,6 +2,7 @@ import os
 from json import dumps
 from datetime import datetime
 from hashlib import sha256
+from time import sleep
 
 import pokemontcgsdk as tcgapi
 import requests
@@ -52,8 +53,9 @@ def generate_card_payload(ptcglcard):
         "rules": dumps(ptcglcard.rules) if ptcglcard.rules else None,
         "subtypes": dumps(ptcglcard.subtypes) if ptcglcard.subtypes else None,
         "supertype": ptcglcard.supertype,
-        "types": dumps(ptcglcard.subtypes) if ptcglcard.subtypes else None,
-        "weaknesses": "TODO: Convert weaknesses to json",
+        "types": dumps(ptcglcard.types) if ptcglcard.types else None,
+        "resistances": None,
+        "weaknesses": None,
         "set_id": ptcglcard.set.id
     }
 
@@ -135,13 +137,11 @@ def generate_card_payload(ptcglcard):
     return payload
 
 
-from time import sleep
-
-
 def update_sets():
     # Go through each set and check if we have it in the database
-    sets = tcgapi.Set.all()
-    # sets = [tcgapi.Set.find("base1")]
+    # sets = tcgapi.Set.all()
+    sets = [tcgapi.Set.find("swsh12"), tcgapi.Set.find("sv1"), tcgapi.Set.find("sv2"), tcgapi.Set.find("sv3"), tcgapi.Set.find("sv3pt5"), tcgapi.Set.find("sv4")]
+    added_new = False
 
     for s in sets:
         print(f"Working on {s.name}...")
@@ -155,6 +155,7 @@ def update_sets():
             db.session.add(new_set)
 
             add_new_cards_for_set(s.id)
+            added_new = True
         else:
             # If we do have the set, check if the new updated date is > the updated date in the database
             if in_db_set.updatedAt < datetime.strptime(s.updatedAt, "%Y/%m/%d %H:%M:%S"):
@@ -168,9 +169,11 @@ def update_sets():
                 # TODO: Log here
                 print("Set does not have an update!")
 
-        print(f"Done with {s.name}. Sleeping for 10 seconds...")
+        if added_new:
+            print(f"Done with {s.name}. Sleeping for 10 seconds...")
+            sleep(10)
+
         db.session.commit()
-        sleep(10)
 
 
 def make_new_card(card_obj):
@@ -181,7 +184,7 @@ def make_new_card(card_obj):
 
     if r.status_code == 200:
         convert_to_webp(r.content, os.path.join(image_folder_path, "small.webp"))
-        make_cropped_image(r.content, os.path.join(image_folder_path, "small_cropped.webp"), (22, 50, 224, 176))
+        # make_cropped_image(r.content, os.path.join(image_folder_path, "small_cropped.webp"), (22, 50, 224, 176))
     else:
         # TODO: Send a warning and log
         pass
@@ -190,7 +193,7 @@ def make_new_card(card_obj):
 
     if r.status_code == 200:
         convert_to_webp(r.content, os.path.join(image_folder_path, "large.webp"))
-        make_cropped_image(r.content, os.path.join(image_folder_path, "large_cropped.webp"), (60, 146, 674, 526))
+        # make_cropped_image(r.content, os.path.join(image_folder_path, "large_cropped.webp"), (60, 146, 674, 526))
     else:
         # TODO: Send a warning and log
         pass
@@ -240,5 +243,7 @@ def update_cards_for_set(set_id):
                 payload = generate_card_payload(c)
                 for k, v in payload.items():
                     setattr(in_db_card, k, v)
+
+            # TODO: Update images
         else:
             make_new_card(c)
