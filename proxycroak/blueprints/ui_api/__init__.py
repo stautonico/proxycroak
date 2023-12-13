@@ -1,15 +1,8 @@
-import datetime
-import random
-import string
+from flask import Blueprint, request, redirect, url_for
 
-from flask import Blueprint, request, render_template, redirect, url_for
-
-from proxycroak.util.decklist import parse_decklist
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
-from proxycroak.logging import logger
-from proxycroak.models import SharedDecklist
-from proxycroak.database import db
+from proxycroak.util.handle_proxies_page import handle_proxies_page
 
 blueprint = Blueprint("ui_api", __name__, url_prefix="/ui/api")
 
@@ -82,63 +75,6 @@ def proxies():
 
         for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets"]:
             if f"options[{opt}]" in form_data:
-                res = form_data[f"options[{opt}]"] == "1"
                 options[opt] = form_data[f"options[{opt}]"] == "1"
 
-        # TODO: Don't hardcode decks[0]
-        dl = data["decks[0]"].replace("\r", "")
-
-        # Remove empty lines
-        lines = dl.split("\n")
-
-        while "" in lines:
-            lines.remove("")
-
-        # TODO: The REALLY big ones will be handled by nginx I think
-        if len(lines) > 100:
-            logger.error(f"User provided decklist with length {len(lines)}", "decklist")
-            return render_template("errors/error.html",
-                                   errors=[f"Decklist too long! (Max lines: 100, you provided {len(lines):,})"],
-                                   meta={"title": "Error", "description": "Something went wrong along the way"})
-
-        # TODO: Don't hardcode decks[0]
-        # TODO: Include errors
-        if data["mode"] == "pic":
-            output, errors = handle_pic_mode(parse_decklist(data["decks[0]"]), options)
-        else :
-            output, errors = handle_text_mode(parse_decklist(data["decks[0]"]), options)
-
-        # Make sure this ID isn't used
-        counter = 0
-        while True:
-            random_id = ''.join(random.choices(string.ascii_uppercase +
-                                               string.digits, k=8))
-
-            shared_dl = SharedDecklist.query.get(random_id)
-
-            if not shared_dl:
-                break
-            else:
-                counter += 1
-
-            # THIS SHOULD NEVER HAPPEN, but it doesn't hurt to be safe
-            # In theory, this can go on FOREVER if we're unlucky enough,
-            # so after 100 tries, just fail
-            if counter == 100:
-                return render_template("errors/error.html",
-                                       errors=[
-                                           f"The chance of this error occuring is astronomically small. You should go play the lottery."],
-                                       meta={"title": "Error", "description": "Something went wrong along the way"})
-
-                # Save the decklist
-        sharedDecklist = SharedDecklist(
-            id=random_id,
-            # TODO: Don't hard code this
-            decklist=data["decks[0]"],
-            expires=datetime.datetime.now() + datetime.timedelta(days=6 * 30)
-        )
-
-        db.session.add(sharedDecklist)
-        db.session.commit()
-
-        return render_template("pages/proxies.html", meta=META, rows=output, errors=errors, share_id=random_id, options=options)
+        return handle_proxies_page(data, META, options)

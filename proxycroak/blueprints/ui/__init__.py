@@ -1,9 +1,19 @@
-from flask import Blueprint, render_template, send_from_directory, abort
+import base64
 
+from flask import Blueprint, render_template, send_from_directory, abort, request
+from sqlalchemy import asc
+import requests
+
+from proxycroak.const import SET_IDS, lookup_set_code_by_id
 from proxycroak.util.decklist import parse_decklist
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.util.cards_db import update_sets
-from proxycroak.models import SharedDecklist
+from proxycroak.models import SharedDecklist, Set
+from proxycroak.util.handle_proxies_page import handle_proxies_page
+from proxycroak.util.errors import make_invalid_dl_error
+
+
+from sentry_sdk import capture_exception
 
 blueprint = Blueprint("ui", __name__, url_prefix="/")
 
@@ -77,10 +87,106 @@ def share(sid):
     return render_template("pages/proxies.html", meta=META, rows=output, errors=errors, share_id=dl.id)
 
 
-@blueprint.route("/debug")
-def debug():
-    update_sets()
-    return "<h1>Done!</h1>"
+@blueprint.route("/set_codes")
+def set_codes():
+    META = {
+        "title": "Set Codes",
+        "description": "A table showing all of the PTCGO/PTCGL set codes to use in your deckists",
+        "tags": ["setcodes"]
+    }
+
+    sets = Set.query.order_by(asc(Set.releaseDate)).all()
+
+    # set (lol) the set codes for SVI+
+    # What this crazy conditional does:
+    # If we don't have a set id (SVI+), use the one from the const file
+    # OR
+    # If we do have one, but we're dealing with BRS, ASR, anything with a TG/GG
+    # AND
+    # if the word "trainer/galarian gallery" is in the name (to only do the TG/GG not the normal set)
+    # OR
+    # The set name is "Shiny Vault"
+    # then we grab from the const file
+    # TODO: Optimize?
+    for s in sets:
+        if not s.ptcgoCode \
+                or (s.ptcgoCode in ["BRS", "ASR", "LOR", "SIT", "CRZ"] \
+                    and (
+                            "trainer gallery" in s.name.lower() \
+                            or "galarian gallery" in s.name.lower())) \
+                or s.name == "Shiny Vault":
+            s.ptcgoCode = lookup_set_code_by_id(s.id) or s.id.upper()
+
+    return render_template("pages/set_codes.html", meta=META, sets=sets)
+
+
+@blueprint.route("/issues/cards")
+def card_issues():
+    META = {
+        "title": "Card Issues",
+        "description": "A table of all of the cards that are missing or contain some kind of issue",
+        "tags": ["issues", "cards"]
+    }
+
+    return render_template("pages/card_issues.html", meta=META)
+
+
+@blueprint.route("/import")
+def import_route():
+    META = {
+        "title": "Proxies",
+        "description": "A simple tool for deck testing: choose the format (pics or text), and print up to 3 decks made of combined Pokémon proxy cards.",
+        "tags": ["proxies"]
+    }
+
+    options = {
+        "lowres": False,
+        "watermark": False,
+        "legacy": False,
+        "illustration": False,
+        "nomin": False,
+        "jp": False,
+        "exclude_secrets": False
+    }
+
+    # TODO: This is unsafe due to users being able to get the real IP of the backend
+    #       as well as allowing the user to make an http request to any server of their choosing
+    # if "url" in request.args:
+    #     try:
+    #         r = requests.get(request.args["url"])
+    #         if "text/plain" in r.headers.get("Content-Type", ""):
+    #             print(r.text)
+    #         else:
+    #             # TODO: Return an error
+    #             pass
+    #     except Exception as e:
+    #         # TODO: Log here
+    #         capture_exception(e)
+    #         # TODO: Return error page
+    if "base64list" in request.args:
+        # print(request.args["list"])
+        try:
+            l = base64.b64decode(request.args["base64list"])
+            try:
+                decoded_list = l.decode("utf-8")
+            except Exception as e:
+                capture_exception(e)
+                try:
+                    decoded_list = l.decode("latin-1")
+                except Exception as e2:
+                    # TODO: Log here
+                    capture_exception(e2)
+                    return make_invalid_dl_error(request.args["base64list"])
+
+            return handle_proxies_page({"decks[0]": decoded_list, "mode": "pic"}, META)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(e)
+            # TODO: Log here
+            capture_exception(e)
+            return make_invalid_dl_error(request.args["base64list"])
+    return ""
 
 
 @blueprint.route("/static/<path:path>")

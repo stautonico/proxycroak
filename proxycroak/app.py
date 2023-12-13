@@ -83,6 +83,18 @@ def configure_middleware(app):
 
     scheduler.init_app(app)
 
+    # Check if maintenance mode is enabled
+    @app.before_request
+    def check_maintenance_mode():
+        if os.path.exists("MAINTENANCE_MODE"):
+            if not request.path.startswith("/static"):
+                META = {
+                    "title": "Maintenance",
+                    "description": "Proxycroak is currently under maintenance and should be back up and running soon!",
+                    "tags": ["maintenance"]
+                }
+                return render_template("pages/maintenance.html", meta=META)
+
 
 def configure_logging(app):
     handler = logging.FileHandler(os.path.join(CONFIG.LOG_DIRECTORY, "requests.log"))

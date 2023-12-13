@@ -1,1 +1,0 @@
-This page is displayed when the server is in maintenance mode

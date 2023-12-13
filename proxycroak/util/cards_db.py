@@ -140,7 +140,8 @@ def generate_card_payload(ptcglcard):
 def update_sets():
     # Go through each set and check if we have it in the database
     # sets = tcgapi.Set.all()
-    sets = [tcgapi.Set.find("swsh12"), tcgapi.Set.find("sv1"), tcgapi.Set.find("sv2"), tcgapi.Set.find("sv3"), tcgapi.Set.find("sv3pt5"), tcgapi.Set.find("sv4")]
+    sets = [tcgapi.Set.find("swsh12"), tcgapi.Set.find("sv1"), tcgapi.Set.find("sv2"), tcgapi.Set.find("sv3"),
+            tcgapi.Set.find("sv3pt5"), tcgapi.Set.find("sv4")]
     added_new = False
 
     for s in sets:
@@ -171,7 +172,7 @@ def update_sets():
 
         if added_new:
             print(f"Done with {s.name}. Sleeping for 10 seconds...")
-            sleep(10)
+            # sleep(10)
 
         db.session.commit()
 

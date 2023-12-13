@@ -1933,6 +1933,14 @@ a.buyBtn {
     filter: invert(98%) sepia(5%) saturate(6%) hue-rotate(109deg) brightness(105%) contrast(1);
 }
 
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
 @media only screen and (max-width: 640px) {
     .formatBtn {
         width: 100%;
