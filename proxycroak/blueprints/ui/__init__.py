@@ -2,16 +2,14 @@ import base64
 
 from flask import Blueprint, render_template, send_from_directory, abort, request
 from sqlalchemy import asc
-import requests
 
-from proxycroak.const import SET_IDS, lookup_set_code_by_id
+from proxycroak.const import lookup_set_code_by_id
 from proxycroak.util.decklist import parse_decklist
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
-from proxycroak.util.cards_db import update_sets
 from proxycroak.models import SharedDecklist, Set
 from proxycroak.util.handle_proxies_page import handle_proxies_page
 from proxycroak.util.errors import make_invalid_dl_error
-
+from proxycroak.logging import logger
 
 from sentry_sdk import capture_exception
 
@@ -69,6 +67,7 @@ def share(sid):
     dl = SharedDecklist.query.get(sid)
 
     if not dl:
+        logger.warn(f"User tried to access invalid share: id {sid}", "share")
         abort(404)
 
     # TODO: Save options?
@@ -174,19 +173,18 @@ def import_route():
                 try:
                     decoded_list = l.decode("latin-1")
                 except Exception as e2:
-                    # TODO: Log here
+                    logger.error(f"The provided decklist was neither utf-8 or latin-1. Unable to import. {e2}",
+                                 "import")
                     capture_exception(e2)
                     return make_invalid_dl_error(request.args["base64list"])
 
             return handle_proxies_page({"decks[0]": decoded_list, "mode": "pic"}, META)
         except Exception as e:
-            import traceback
-            traceback.print_exc()
-            print(e)
-            # TODO: Log here
+            logger.error(f"Something is wrong with the provided decklist. Base64 decoding failed: {e}", "import")
             capture_exception(e)
             return make_invalid_dl_error(request.args["base64list"])
-    return ""
+
+    abort(400)
 
 
 @blueprint.route("/static/<path:path>")

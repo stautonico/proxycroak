@@ -1,5 +1,3 @@
-import os
-
 from proxycroak.models import Card, Set
 from proxycroak.const import SET_IDS, lookup_set_code_by_id, minify_card_text
 from proxycroak.util.serialize import load_card
@@ -9,9 +7,6 @@ from proxycroak.util.card_to_html import type_to_html
 def handle_text_mode(parsed_decklist, options):
     errors = []
     output = [[]]
-
-    # TODO: Mimify text if option is enable
-    # TODO: Include cropped image if option is enabled
 
     img_name = "small.webp" if options["lowres"] else "large.webp"
 
@@ -99,8 +94,6 @@ def handle_text_mode(parsed_decklist, options):
                 atks.append(atk)
 
             loaded_card["attacks"] = atks
-
-        print(loaded_card["attacks"])
 
         if loaded_card["weaknesses"]:
             weaks = []

@@ -1,16 +1,18 @@
 import os
+from time import sleep
 from json import dumps
 from datetime import datetime
 from hashlib import sha256
-from time import sleep
 
 import pokemontcgsdk as tcgapi
 import requests
+from sentry_sdk import capture_exception
 
 from proxycroak.models import Set, Card
 from proxycroak.database import db
 from proxycroak.util.serialize import serialize_card
-from proxycroak.util.image import convert_to_webp, make_cropped_image
+from proxycroak.util.image import convert_to_webp
+from proxycroak.logging import logger
 
 
 def generate_set_payload(ptcglset):
@@ -43,7 +45,7 @@ def generate_card_payload(ptcglcard):
         "evolvesFrom": ptcglcard.evolvesFrom,
         "flavorText": ptcglcard.flavorText,
         "hp": ptcglcard.hp,
-        "image": "TODO: Generate image folder path when downloading image",
+        "image": "/set/by/later/code",
         "regulationMark": ptcglcard.regulationMark,
         "name": ptcglcard.name,
         "nationalPokedexNumbers": dumps(ptcglcard.nationalPokedexNumbers) if ptcglcard.nationalPokedexNumbers else None,
@@ -167,12 +169,11 @@ def update_sets():
 
                 update_cards_for_set(s.id)
             else:
-                # TODO: Log here
-                print("Set does not have an update!")
+                logger.info("Not updating any sets, none have updates", "cron:update_sets")
 
         if added_new:
-            print(f"Done with {s.name}. Sleeping for 10 seconds...")
-            # sleep(10)
+            logger.info(f"Done with {s.name}. Sleeping for 10 seconds...", "cron:update_sets")
+            sleep(10)
 
         db.session.commit()
 
@@ -187,8 +188,8 @@ def make_new_card(card_obj):
         convert_to_webp(r.content, os.path.join(image_folder_path, "small.webp"))
         # make_cropped_image(r.content, os.path.join(image_folder_path, "small_cropped.webp"), (22, 50, 224, 176))
     else:
-        # TODO: Send a warning and log
-        pass
+        logger.warn(f"Can't retrieve small image for {card_obj.name}. Status code: {r.status_code}",
+                    "cron:make_new_card")
 
     r = requests.get(card_obj.images.large)
 
@@ -196,8 +197,8 @@ def make_new_card(card_obj):
         convert_to_webp(r.content, os.path.join(image_folder_path, "large.webp"))
         # make_cropped_image(r.content, os.path.join(image_folder_path, "large_cropped.webp"), (60, 146, 674, 526))
     else:
-        # TODO: Send a warning and log
-        pass
+        logger.warn(f"Can't retrieve large image for {card_obj.name}. Status code: {r.status_code}",
+                    "cron:make_new_card")
 
     newcard = Card(**generate_card_payload(card_obj))
 
@@ -211,8 +212,9 @@ def add_new_cards_for_set(set_id):
     cards_in_set = tcgapi.Card.where(q=f"set.id:{set_id}")
 
     if not os.path.exists("proxycroak/static"):
-        # THIS IS A MAJOR ISSUE, SOUND THE ALARMS
-        # TODO: LOG, SENTRY, SMS, NOTIF, WHATEVER
+        capture_exception(Exception("FATAL: STATIC DIRECTORY DOESN'T EXIST! (add_new_cards_for_set)"))
+        logger.fatal(f"proxycroak/static DOES NOT EXIST OR IS INACCESSIBLE", "cron:add_new_cards_for_set")
+        # TODO: Send mobile notification
         exit(1)
 
     for c in cards_in_set:
@@ -223,8 +225,9 @@ def update_cards_for_set(set_id):
     cards_in_set = tcgapi.Card.where(q=f"set.id:{set_id}")
 
     if not os.path.exists("proxycroak/static"):
-        # THIS IS A MAJOR ISSUE, SOUND THE ALARMS
-        # TODO: LOG, SENTRY, SMS, NOTIF, WHATEVER
+        capture_exception(Exception("FATAL: STATIC DIRECTORY DOESN'T EXIST! (update_cards_for_set)"))
+        logger.fatal(f"proxycroak/static DOES NOT EXIST OR IS INACCESSIBLE", "cron:update_cards_for_set")
+        # TODO: Send mobile notification
         exit(1)
 
     for c in cards_in_set:

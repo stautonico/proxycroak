@@ -101,8 +101,8 @@
     <header class="header">
         <div class="topBar">
             <a href="{{ url_for('ui.index') }}" class="topBar__logo"><img id="mainLogo"
-                                                  src="/static/img/logo.svg"
-                                                  alt="Proxycroak"></a>
+                                                                          src="/static/img/logo.svg"
+                                                                          alt="Proxycroak"></a>
             <nav class="topBar__nav">
                 <ul class="topBar__nav__list">
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.features') }}">Features</a></li>
@@ -122,8 +122,9 @@
                 <p><strong>Proxycroak</strong> is based on a <a href="http://metadeck.me/" target="_blank">very good
                     idea</a> applied to the Pokémon TCG, thanks to some <a href="http://pokemontcg.io/"
                                                                            target="_blank">great API</a>. The rest
-                    has been originally designed and coded by <abbr title="Marco Escher">m.e.</abbr> and is now maintained
-                    and developed by <a href="mailto:steve@proxycroak.com">Steve</a>.</p>
+                    has been originally designed and coded by <abbr title="Marco Escher">m.e.</abbr> and is now
+                    maintained
+                    and developed by <a href="mailto:steve@proxycroak.com">Steve</a>. (build v{{ BUILD_VERSION }})</p>
                 <p>The information presented on this site about Pokémon and the Pokémon Trading Card Game, both literal
                     and graphical, is copyrighted by their respectful owners. This website is in no way affiliated with
                     TPCi, Nintendo, Creatures, or Game Freak.</p>

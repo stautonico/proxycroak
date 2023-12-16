@@ -1,4 +1,4 @@
-DATABASE_VENDORS = ["sqlite"]
+DATABASE_VENDORS = ["sqlite", "mysql"]
 
 # In theory, we should only need newer sets (SVI+) since all the rest have ptcgo codes
 SET_IDS = {
@@ -87,6 +87,7 @@ CARD_TEXT_REPLACEMENTS = {
     "Prize cards": "Prizes",
     "Prize card": "Prize"
 }
+
 
 def minify_card_text(text):
     for orig, rep in CARD_TEXT_REPLACEMENTS.items():

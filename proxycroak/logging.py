@@ -25,14 +25,14 @@ class Logger:
         # Don't try to create it, this might cause errors, just throw
         print(f"[INFO] Checking for logs directory {self.log_path}")
         if not os.path.exists(self.log_path):
-            raise Exception("[CRITICAL] Log directory does not exist!")
+            raise Exception("[FATAL] Log directory does not exist!")
 
         # Try to open the log file
         print(f"[INFO] Trying to open log file {os.path.join(self.log_path, log_file)}")
         try:
             self.file = open(os.path.join(self.log_path, log_file), "a")
         except Exception as e:
-            print(f"[CRITICAL] Failed to open log file: {e}")
+            print(f"[FATAL] Failed to open log file: {e}")
             capture_exception(e)
             exit(1)
 
@@ -54,15 +54,19 @@ class Logger:
         self._write("DEBUG", msg, category)
 
     def info(self, msg, category=None):
+        """Informational content"""
         self._write("INFO", msg, category)
 
     def warn(self, msg, category=None):
+        """Something went wrong, but its recoverable"""
         self._write("WARN", msg, category)
 
     def error(self, msg, category=None):
+        """Something went wrong, and the request cannot continue"""
         self._write("ERROR", msg, category)
 
     def fatal(self, msg, category=None):
+        """Something went wrong, and the entire app cannot continue"""
         self._write("FATAL", msg, category)
 
     def close(self):

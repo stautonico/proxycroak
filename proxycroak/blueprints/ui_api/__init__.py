@@ -1,8 +1,9 @@
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for, abort
 
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
 from proxycroak.util.handle_proxies_page import handle_proxies_page
+from proxycroak.logging import logger
 
 blueprint = Blueprint("ui_api", __name__, url_prefix="/ui/api")
 
@@ -35,32 +36,36 @@ def proxies():
         if "mode" in form_data:
             data["mode"] = form_data["mode"]
         else:
-            # TODO: Fail with error page
-            pass
+            # TODO: Provide a proper error page
+            logger.error("User did not provide a mode", "proxies")
+            abort(400)
 
         if "activeDeck" in form_data:
             data["activeDeck"] = form_data["activeDeck"]
         else:
-            # TODO: Fail with error page
-            pass
+            logger.error("User did not provide an active deck", "proxies")
+            # TODO: Provide a proper error page
+            abort(400)
 
         has_active_deck = False
 
-        if "activeDeck[0]" in form_data:
-            data["activeDeck[0]"] = form_data["activeDeck[0]"]
-            has_active_deck = True
 
-        if "activeDeck[1]" in form_data:
-            data["activeDeck[1]"] = form_data["activeDeck[1]"]
-            has_active_deck = True
-
-        if "activeDeck[2]" in form_data:
-            data["activeDeck[2]"] = form_data["activeDeck[2]"]
-            has_active_deck = True
-
-        if not has_active_deck:
-            # TODO: Fail with error page
-            pass
+        # if "activeDeck[0]" in form_data:
+        #     data["activeDeck[0]"] = form_data["activeDeck[0]"]
+        #     has_active_deck = True
+        #
+        # if "activeDeck[1]" in form_data:
+        #     data["activeDeck[1]"] = form_data["activeDeck[1]"]
+        #     has_active_deck = True
+        #
+        # if "activeDeck[2]" in form_data:
+        #     data["activeDeck[2]"] = form_data["activeDeck[2]"]
+        #     has_active_deck = True
+        #
+        # if not has_active_deck:
+        #     logger.error("User did not provide an any decks", "proxies")
+        #     # TODO: Provide a proper error page
+        #     abort(400)
 
         if "decks[0]" in form_data:
             data["decks[0]"] = form_data["decks[0]"]
