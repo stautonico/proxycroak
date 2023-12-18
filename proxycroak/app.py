@@ -2,10 +2,6 @@ import logging
 import os
 from datetime import datetime as dt
 
-print(os.environ)
-print(os.getcwd())
-print(os.listdir())
-
 from flask.logging import default_handler
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
