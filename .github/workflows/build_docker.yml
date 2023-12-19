@@ -20,9 +20,9 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.AUTH_TOKEN}}
 
-      - name: "Build Inventory Image"
+      - name: "Build Images"
         run: |
-          docker build -t proxycroak-nginx --tag ghcr.io/proxycroak-nginx/store:latest nginx
-          docker built -t proxycroak-web   --tag ghcr.io/proxycroak-web/store:latest .
+          docker build --tag ghcr.io/proxycroak-nginx/store:latest nginx
+          docker built --tag ghcr.io/proxycroak-web/store:latest .
           docker push ghcr.io/proxycroak-web/store:latest
           docker push ghcr.io/proxycroak-nginx/store:latest
