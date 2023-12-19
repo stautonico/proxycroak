@@ -118,24 +118,24 @@ def generate_config(mode=None):
     # If debug enabled: mode = dev
     # if testing enabled: mode = test
     # if neither enabled: mode = prod
-    # if mode is None:
-    #     if os.getenv("DEBUG"):
-    #         mode = "dev"
-    #     elif os.getenv("TESTING"):
-    #         mode = "test"
-    #     else:
-    #         mode = "prod"
-    #
-    # if mode not in ["dev", "prod", "test"]:
-    #     raise Exception(f"Invalid run mode '{mode}'! Valid modes are 'dev', 'prod', and 'test'!")
-    #
-    # if mode == "dev":
-    #     env = dotenv_values(".env")
-    # else:
-    #     # Load .env.prod or .env.test
-    #     env = dotenv_values(f".env.{mode}")
+    if mode is None:
+        if os.getenv("DEBUG"):
+            mode = "dev"
+        elif os.getenv("TESTING"):
+            mode = "test"
+        else:
+            mode = "prod"
 
-    config_object = BaseConfig.from_env(os.environ)
+    if mode not in ["dev", "prod", "test"]:
+        raise Exception(f"Invalid run mode '{mode}'! Valid modes are 'dev', 'prod', and 'test'!")
+
+    if mode == "dev":
+        env = dotenv_values(".env")
+    else:
+        # Load .env.prod or .env.test
+        env = dotenv_values(f".env.{mode}")
+
+    config_object = BaseConfig.from_env({**env, **os.environ})
 
     return config_object
 
