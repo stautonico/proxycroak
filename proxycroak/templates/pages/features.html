@@ -9,8 +9,9 @@
             decklist. There are two available modes: Pics and Text.</p>
         <p><strong>Pics mode</strong> retrieves all the card images from a single decklist and places them on a classic
             3-column grid, ready to print.</p>
-        <p><strong>Text mode</strong> combines up to 3 decklists together in a single, minified <em>meta-deck</em> to
-            save time, ink and… sleeves! A <em>must-use</em> feature for competitive deck testing.</p>
+<!--        <p><strong>Text mode</strong> combines up to 3 decklists together in a single, minified <em>meta-deck</em> to-->
+<!--            save time, ink and… sleeves! A <em>must-use</em> feature for competitive deck testing.</p>-->
+        <p><strong>Text mode</strong> allows you to save some ink by just printing the text on the card in a simplified format, or include a small illustration of the card for convenience.</p>
         <br>
         <h4 id="bookmarklet" class="size--h4 text--divider">Single Click Bookmarklet</h4>
         <p>Create proxy decks from everywhere, with a single click! (Not available on Firefox, thanks Firefox ☹)</p>
@@ -19,9 +20,9 @@
 				window.open(`{{ request.host_url }}import?base64list=${btoa(txt)}`);
 			}})" class="btn">+ Proxycroak</a>
         </div>
-        <p><strong>Drag this button to your Bookmarks bar!</strong> When you see a decklist you want to proxy, select it
-            and click the bookmarklet.</p>
+        <p><strong>Drag this button to your Bookmarks bar!</strong> When you see a decklist you want to proxy, copy it to clipboard and click the bookmarklet.</p>
         <br>
+        <!--
         <h4 id="generate-from-url" class="size--h4 text--divider">Generate from URL</h4>
         <p>You can also generate proxy decks straight from any external URL (as long as it's a text file, like <a
                 href="http://pastebin.com" target="_blank">pastebin.com</a>'s raw format) and share them to the world!
@@ -35,6 +36,7 @@
         <p>You can also share your proxy decks with the “Export as” button. There are currently two available options:
             <strong>Image</strong> (Pics mode only) and <strong>Shareable URL</strong>. Great for messaging boards,
             Facebook groups, video streaming and more!</p>
+            -->
     </div>
 </main>
 {% endblock %}

@@ -456,3 +456,4 @@ proxycroak/static/img/cards/*
 docker-compose.yml
 VERSION
 env.secrets
+test_decklist.txt
