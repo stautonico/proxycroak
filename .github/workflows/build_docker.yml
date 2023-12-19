@@ -44,7 +44,7 @@ jobs:
 
 
       - name: Extract metadata (tags, labels) for nginx container
-        id: meta
+        id: metatwo
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx
@@ -56,5 +56,5 @@ jobs:
           context: nginx
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:latest
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.metatwo.outputs.labels }}
 
