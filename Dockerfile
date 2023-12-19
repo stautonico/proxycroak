@@ -11,7 +11,7 @@ WORKDIR /app
 RUN mkdir -p /app/logs
 RUN mkdir -p /app/instance
 
-RUN addgroup --system app && adduser --system --group app
+RUN addgroup --gid 1000 --system app && adduser --uid 1000 --gid 1000 --system --group app
 
 COPY requirements.txt requirements.txt
 
