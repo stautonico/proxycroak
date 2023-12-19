@@ -7,7 +7,7 @@ on:
       - dev
 
 jobs:
-  push-store-image:
+  docker-build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -20,9 +20,27 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.AUTH_TOKEN}}
 
-      - name: "Build Images"
-        run: |
-          docker build --tag ghcr.io/proxycroak-nginx/store:latest nginx
-          docker built --tag ghcr.io/proxycroak-web/store:latest .
-          docker push ghcr.io/proxycroak-web/store:latest
-          docker push ghcr.io/proxycroak-nginx/store:latest
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: dhcr.io/proxycroak
+
+      - name: Build and push Docker web image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker nginx image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: nginx
+          file: ./nginx/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
