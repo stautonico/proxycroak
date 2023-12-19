@@ -20,6 +20,7 @@ RUN pip install --no-cache-dir gunicorn mysql-connector-python
 
 COPY proxycroak proxycroak
 COPY wsgi.py wsgi.py
+COPY manage.py manage.py
 
 # Create the version filthe documentatione (baked into the container)
 RUN echo "$(date +'%Y.%m.%d')" > /app/VERSION
@@ -30,4 +31,4 @@ RUN chown -R app:app /app
 
 USER app
 
-CMD ["gunicorn", "-w", "1", "--bind", "0.0.0.0:5000", "wsgi:application", "--error-logfile", "-", "--access-logfile", "-"]
+CMD ["gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi:application", "--error-logfile", "-", "--access-logfile", "-"]
