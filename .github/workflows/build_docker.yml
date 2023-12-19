@@ -6,9 +6,17 @@ on:
       - main
       - dev
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
-  docker-build-and-push:
+  build-and-push-images:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@main
@@ -16,31 +24,37 @@ jobs:
       - name: "Login to GitHub Container Registry"
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.AUTH_TOKEN}}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.AUTH_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for web container
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/proxycroak
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web
 
       - name: Build and push Docker web image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:latest
           labels: ${{ steps.meta.outputs.labels }}
 
+
+      - name: Extract metadata (tags, labels) for nginx container
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx
+
+
       - name: Build and push Docker nginx image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        uses: docker/build-push-action@v4
         with:
           context: nginx
-          file: ./nginx/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:latest
           labels: ${{ steps.meta.outputs.labels }}
 
