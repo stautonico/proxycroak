@@ -1,0 +1,120 @@
+{% extends "layouts/base.html" %}
+
+
+{% block content %}
+
+<style>
+    .tg {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tg td {
+        border: 1px solid black;
+        color: black;
+        padding: 10px 5px;
+        word-break: normal;
+        background-color: #d2f7ff;
+        text-align: center;
+        vertical-align: center;
+    }
+
+    .tg th {
+        background-color: #00add3;
+        color: #fff;
+        font-weight: bold;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        border: 1px solid black;
+    }
+
+    input {
+        background-color: #dfdfdf;
+        border-color: inherit;
+
+        transition: color 250ms ease-in-out,
+        background-color 250ms ease-in-out,
+        border-color 250ms ease-in-out;
+    }
+
+    input:focus {
+        color: inherit;
+        background: inherit;
+        border-color: inherit;
+
+        outline: none;
+    }
+</style>
+
+
+<main class="main main--alignTop">
+    <div class="row">
+        <label for="tableSearch">Search for sets...</label>
+        <input
+                style="border: 1px solid black; padding: 1em; width: 100%; border-radius: 10px;"
+                type="text"
+                id="tableSearch"
+                onkeyup="filterTable()"
+                placeholder="Search for sets..."
+        >
+        <br><br>
+
+        <table class=" tg" id="table">
+            <thead>
+            <tr>
+                <th colspan="3">Set Codes</th>
+            </tr>
+            <tr>
+                <th>Set name</th>
+                <th>Set Code</th>
+                <th>Alt Set Code</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for set in sets %}
+            <tr>
+                <td>{{set.name}}</td>
+                <td>{{set.ptcgoCode}}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+    function filterTable() {
+        // Declare variables
+        let input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("tableSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows
+        for (i = 0; i < tr.length; i++) {
+            // Get all cells in the current row
+            td = tr[i].getElementsByTagName("td");
+
+            // Loop through all cells in the current row
+            for (j = 0; j < td.length; j++) {
+                // Check if the filter matches the content of any cell
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    // If there's a match, display the row and exit the inner loop
+                    tr[i].style.display = "";
+                    break;
+                } else {
+                    // If no match is found in any cell, hide the row
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+</script>
+
+{% endblock %}

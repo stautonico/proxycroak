@@ -1,0 +1,371 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<main class="main main--alignTop">
+    <div class="row">
+        <h1 class="text--title text--center">Changelog</h1>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2023-12-01">2023-12-01</h4>
+            <p>
+                <strong>Announcements:</strong>
+            <ul class="list">
+
+                <li>Welcome back! My name is Steve and I will be taking over development of Proxycroak from now on!
+                    Marco has done a great job with this tool so far, but life happens and people get busy. I asked
+                    Marco if it was okay that I take over, and he was glad to pass the website over to someone who will
+                    continue to work on it. I will continue to maintain and improve this website for the coming years.
+                    If you have any questions about the future of Proxycroak, feel free to <a
+                            href="mailto:steve@proxycroak.com">email me</a> or contact me on <br/> <a
+                            target="_blank"
+                            href="{{ DISCORD_URL }}">our discord server <img
+                            src="/static/img/discord.svg"
+                            alt="(Discord logo)"
+                            style="height: 1em; position: relative; top: 0.15em"></a>.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2019-05-25">2019-05-25</h4>
+            <p>
+                <strong>Announcements:</strong>
+            <ul class="list">
+
+                <li>Proxycroak has been discontinued indefinitely. The service will continue to work and self-update
+                    itself from the <a href="https://pokemontcg.io">Pokemon TCG API</a>, but there won't be any new
+                    announcements or features until further notice. Some occasional bugfixes might still occur, and
+                    support over <a
+                            onclick="alert('This email is no longer valid, please check the post from 2023-12-01')"
+                            href="#">email</a> or <a
+                            href="https://www.facebook.com/proxycroak">Facebook</a> will always be available.
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2019-03-30">2019-03-30</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <em>Detective Pikachu</em> (DET).</li>
+                <li>Added support for both modes for Japanese <em>Double Blaze</em> (SM10), <em>GG End</em> (SM10A).
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2019-01-31">2019-01-31</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <a href="/sets/team-up"><em>Team
+                    Up</em></a> (TUP/TEU).
+                </li>
+                <li>Added support for both modes for Japanese <em>Full Metal Wall</em> (SM9B).</li>
+                <li>Added some missing SMP promos.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2019-01-16">2019-01-16</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for Japanese <em>GX Ultra Shiny</em> (SM8B), <em>Tag Bolt</em>
+                    (SM9/TEU/TUP), <em>Night Unison</em> (SM9A), <em>Eevee-GX Starter Sets</em> (SMI), <em>Trainer
+                        Battle Deck</em> (SMK).
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-11-01">2018-11-01</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <a href="/sets/lost-thunder"><em>Lost
+                    Thunder</em></a> (LOT/LTH).
+                </li>
+                <li>Added support for both modes for Japanese <a href="/share/yHyHx9"><em>Dark
+                    Order</em></a> (SM8A).
+                </li>
+                <li>Added some missing SMP promos.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-08-30">2018-08-30</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for Japanese <a href="/share/Pvw9GR"><em>Super-Burst
+                    Impact</em></a> (SM8), which will eventually converge in the English set <em>Lost Thunder</em>
+                    (LOT/LTH).
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-08-03">2018-08-03</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <em>Celestial Storm</em> (CES/CST), Japanese <em>Thunderclap
+                    Spark</em> (SM7A) and Japanese <em>Fairy Rise</em> (SM7B), which will eventually both converge in
+                    the English set <em>Lost Thunder</em> (LOT/LTH).
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-05-29">2018-05-29</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for Japanese <em>Champion Road</em> (SM6B) and Japanese <em>Sky-Splitting
+                    Eminence</em> (SM6B), which will eventually both converge in the English set <em>Celestial
+                    Storm</em>.
+                </li>
+            </ul>
+            </p>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>“Include JP cards” option is now default, added “Exclude JP cards” option.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-05-04">2018-05-04</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <em>Forbidden Light</em> (FOL/FLI).</li>
+                <li>Removed support for Japanese <em>Forbidden Light</em> and <em>Ultra Force</em> cards.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-04-06">2018-04-06</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for Japanese <em>Dragon Storm</em> (SM6a). The English set name is
+                    still unknown so we'll have to stick with the JP set code 😉
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-03-24">2018-03-24</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for Japanese <em>Forbidden Light</em> (FOL/FLI). Please note that cards
+                    from japanese sub-set <em>Ultra Force</em> are also included under the same set code.
+                </li>
+                <li>Updated support for <em>SM Black Star Promos</em> (SMP) up to this date.</li>
+                <li>Added the Unown sub-set from <em>EX: Unseen Forces</em>.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Added “Exclude secret cards” option.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2018-02-03">2018-02-03</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for both modes for English <em>Ultra Prism</em> (UPR/ULP) and the Japanese <em>Ultra
+                    Force</em> subset, which will be included in Forbidden Light (so use FLI/FOL as the set code).
+                </li>
+                <li>Removed support for Japanese <em>Ultra Prism</em> cards.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-12-28">2017-12-28</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Improved styles for single-deck Text mode with background images.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for Japanese <em>Ultra Prism</em> (UPR/ULP) for both modes. Use “♢”, “Prism” or “Prism
+                    star” to query the new Prism star cards (<a href="/share/5MJqrV">see
+                        example</a>)
+                </li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-12-24">2017-12-24</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>API images are now cached for faster load times.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Bugfixes:</strong>
+            <ul class="list">
+                <li>Fixed a bug that caused image export to “miss” some cards.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Other:</strong>
+            <ul class="list">
+                <li>Proxycroak turns 1! 🎂</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-11-22">2017-11-22</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for <em>SM Black Star Promos</em> (SMP) up to this date.</li>
+                <li>Added support for <em><a
+                        href="https://bulbapedia.bulbagarden.net/wiki/Yellow_A_Alternate_cards_(TCG)" target="_blank">Yellow
+                    Alternate cards</a></em>. In order to use them, simply add “a” after the full card statement: e.g.
+                    <a href="/import?list=1 Shaymin-EX ROS 77a">1 Shaymin-EX ROS 77a</a> (please
+                    note that both set code and card number are required for this to work).
+                </li>
+            </ul>
+            </p>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Hi-res scans are now default.</li>
+                <li>The script is a little more “tolerant” with letter case 😉.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Bugfixes:</strong>
+            <ul class="list">
+                <li>Fixed a bug that caused SHL cards not to display if the set code was specified;</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-11-03">2017-11-03</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for <em>Crimson Invasion</em> (CRI) for both modes.</li>
+                <li>Removed support for Japanese <em>Crimson Invasion</em> cards.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-10-10">2017-10-10</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for <em>Shining Legends</em> (SHL) for both modes.</li>
+                <li>Removed support for Japanese <em>Shining Legends</em> cards.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-10-02">2017-10-02</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Added “Export as Image” for Pics mode;</li>
+                <li>Added “Export as URL” for both modes.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for Japanese <em>Shining Legends</em> (SHL) and Japanese <em>Crimson Invasion</em>
+                    (CRI) for both modes.
+                </li>
+                <li>DP-era Unown cards (e.g. Unown G GE) now work also with uppercase letters.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-08-04">2017-08-04</h4>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for <em>Burning Shadows</em> (BUS) for both modes.</li>
+                <li>Removed support for Japanese <em>Burning Shadows</em> cards.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-07-15">2017-07-15</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Added “Background images” for Text mode;</li>
+                <li>Added “Include JP sets” for both modes, to support the Japanese counterparts of English sets ahead
+                    of their release.
+                </li>
+            </ul>
+            </p>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added support for Japanese <em>Burning Shadows</em> (BUS) for both modes.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-05-05">2017-05-05</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Added hi-res, no watermark and legacy support options;</li>
+                <li>The “Known bugs” page has been renamed to “Help”.</li>
+            </ul>
+            </p>
+            <p>
+                <strong>Cards:</strong>
+            <ul class="list">
+                <li>Added hi-res cards from <em>Guardians Rising</em> (GRI) for both modes;</li>
+                <li>Improved support for olders sets.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-02-04">2017-02-04</h4>
+            <p>
+                <strong>Features:</strong>
+            <ul class="list">
+                <li>Common cards grouping on text mode;</li>
+                <li>Decklist editing from proxy deck view;</li>
+                <li>Basic error reporting;</li>
+                <li><a href="/features#bookmarklet">Single click Bookmarklet.</a></li>
+            </ul>
+            </p>
+            <p><strong>Cards:</strong> added hi-res cards from <em>Sun&Moon</em> (SM) for both modes.</p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-01-30">2017-01-30</h4>
+            <p><strong>Cards:</strong> added low-res cards from <em>Sun&Moon</em> (SM), Pics mode only.</p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2017-01-02">2017-01-02</h4>
+            <p><strong>Features:</strong> added <a href="/features#generate-from-url">“Generate from URL”</a> feature.
+            </p>
+            <p><strong>Cards:</strong> added <em>Snorlax-GX SMP SM05</em> and <em>Giratina XYP XY184</em>.</p>
+        </div>
+        <div class="changelog__event">
+            <h4 class="size--h4 text--divider" id="2016-12-24">2016-12-24</h4>
+            <p>Project publicly launched! 🎉</p>
+        </div>
+    </div>
+</main>
+{% endblock %}

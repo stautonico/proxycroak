@@ -1,0 +1,38 @@
+###############
+# Base config #
+###############
+#PROJECT_NAME="proxycroak"
+
+#PROJECT_ROOT=os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+########################
+# Environment settings #
+########################
+#DEBUG=False
+#TESTING=False
+
+####################
+# Backend settings #
+####################
+SECRET_KEY="<secret_key_here>" # Required
+#INSTANCE_FOLDER_PATH="/tmp"
+
+#####################
+# Database settings #
+#####################
+DB_VENDOR= # Required
+DB_HOST= # Required
+#DB_USER=
+#DB_PASS=
+#DB_PORT=
+
+####################
+# Logging settings #
+####################
+SENTRY_DSN= # Required
+LOG_DIRECTORY= # Required
+
+#############################
+# Global const for frontend #
+#############################
+DISCORD_URL= # Required

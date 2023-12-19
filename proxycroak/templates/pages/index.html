@@ -1,0 +1,275 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<main class="main main--home">
+    <form class="form" autocomplete="off" id="mainform" method="post" action="{{ url_for('ui_api.proxies') }}">
+        <!--  TODO: Find a way to change the mode? -->
+        <input id="format-pic" type="radio" name="mode" value="pic"
+               class="format input--hidden">
+        <input id="format-text" type="radio" name="mode" value="text"
+               class="format input--hidden">
+
+        <div id="form__step1">
+            <div class="form__head">
+                <h1 class="form__title form__title--start">Print Pokémon proxy cards</h1>
+                <h4 class="form__subtitle">Choose the format of your proxy deck:</h4>
+            </div>
+            <div class="formatBtns">
+                <label for="format-pic" class="formatBtn">
+                    <img src="/static/img/format-pic.svg" class="formatBtn__pic">
+                    <h2 class="formatBtn__title">Pics</h2>
+<!--                    <p class="formatBtn__desc">Just 1 deck</p>-->
+                </label>
+                <label for="format-text" class="formatBtn">
+                    <img src="/static/img/format-text.svg" class="formatBtn__pic">
+                    <h2 class="formatBtn__title">Text</h2>
+<!--                    <p class="formatBtn__desc">Up to 3 decks combined!</p>-->
+                </label>
+            </div>
+        </div>
+
+        <div id="form__step2">
+            <div class="form__head">
+                <h1 class="form__title form__title--format-pic">Type your decklist</h1>
+<!--                <h1 class="form__title form__title&#45;&#45;format-text">Type your decklist(s)</h1>-->
+                <h1 class="form__title form__title--format-text">Type your decklist</h1>
+                <h4 class="form__subtitle">For best results, use the PTCGO/PTCGL format<br>(e.g. 4 Toxicroak STS 59)
+                </h4>
+            </div>
+            <input id="activeDeck1" type="radio" name="activeDeck" value="1" class="input--hidden"
+                   checked="checked">
+            <input id="activeDeck2" type="radio" name="activeDeck" value="2" class="input--hidden">
+            <input id="activeDeck3" type="radio" name="activeDeck" value="3" class="input--hidden">
+
+            <!-- TODO: Work on improving having multiple decklists -->
+<!--            <div class="deckBtns">-->
+<!--                <label for="activeDeck1" class="deckBtn deckBtn1">Deck 1</label>-->
+<!--                <label for="activeDeck2" class="deckBtn deckBtn2">Deck 2</label>-->
+<!--                <label for="activeDeck3" class="deckBtn deckBtn3">Deck 3</label>-->
+<!--            </div>-->
+
+            <textarea id="deck1" name="decks[0]" class="deck" required
+                      placeholder="Don't forget set code (in all caps) and number!"></textarea>
+<!--            <textarea id="deck2" name="decks[1]" class="deck"-->
+<!--                      placeholder="Don't forget set code (in all caps) and number!"></textarea>-->
+<!--            <textarea id="deck3" name="decks[2]" class="deck"-->
+<!--                      placeholder="Don't forget set code (in all caps) and number!"></textarea>-->
+
+            <?php if (false): ?>
+            <div class="form__checkbox form__checkbox--picsOnly">
+                <input id="lowresCheck" type="checkbox" name="options[lowres]" value="1"
+                       class="form__checkbox__input">
+                >
+                <label for="lowresCheck" class="form__checkbox__label">Low-res pics</label>
+            </div>
+            <?php endif; ?>
+
+            <?php if (false): ?>
+            <div class="form__checkbox form__checkbox--picsOnly">
+                <input id="watermarkCheck" type="checkbox" name="options[watermark]" value="1"
+                       class="form__checkbox__input">
+                <label for="watermarkCheck" class="form__checkbox__label">Add watermark</label>
+            </div>
+            <?php endif; ?>
+
+            <div class="form__checkbox">
+                <input id="legacyCheck" type="checkbox" name="options[legacy]" value="1"
+                       class="form__checkbox__input">
+                <label for="legacyCheck" class="form__checkbox__label">Legacy support <span
+                        class="tooltip tooltip--help"
+                        data-tooltip-content="Check this option if you have RSE-era Pokémon ex in your decklist">?</span></label>
+            </div>
+
+            <div class="form__checkbox form__checkbox--textOnly">
+                <input id="illustrationCheck" type="checkbox" name="options[illustration]" value="1"
+                       class="form__checkbox__input">
+                <label for="illustrationCheck" class="form__checkbox__label">Include illustration</label>
+            </div>
+
+            <div class="form__checkbox form__checkbox--textOnly">
+                <input id="nominCheck" type="checkbox" name="options[nomin]" value="1"
+                       class="form__checkbox__input">
+                <label for="nominCheck" class="form__checkbox__label">Don't minify text</label>
+            </div>
+
+            <div class="form__checkbox">
+                <input id="jpCheck" type="checkbox" name="options[excludeJp]" value="1"
+                       class="form__checkbox__input">
+                <label for="jpCheck" class="form__checkbox__label">Exclude JP sets</label>
+                <span class="tooltip tooltip--help"
+                      data-tooltip-content="Check this option if you want to exclude Japanese sets from your results">?</span>
+            </div>
+
+            <div class="form__checkbox">
+                <input id="excludeSecret" type="checkbox" name="options[excludeSecret]" value="1"
+                       class="form__checkbox__input">
+                <label for="excludeSecret" class="form__checkbox__label">Exclude secret cards <span
+                        class="text--super">BETA</span></label>
+                <span class="tooltip tooltip--help"
+                      data-tooltip-content="Check this option to exclude secret cards">?</span>
+            </div>
+
+            <input id="listView" type="hidden" name="options[listView]"
+                   class="form__checkbox__input">
+
+            <input type="submit" name="submit" value="Generate" class="btn submitBtn">
+            <a href="#" id="reset" class="btn resetBtn">Change mode</a>
+        </div>
+    </form>
+</main>
+
+<script>
+    const reset = document.getElementById("reset");
+    const form = document.getElementById("mainform");
+
+    // TODO: Write form validator
+
+    // TODO: Use a custom form handler
+    // function handleFormSubmit(e) {
+    //     e.preventDefault();
+    //
+    //     let form_data = {
+    //         "mode": "pic",
+    //         "active_deck": 1,
+    //         "decks": {1: "", 2: "", 3: ""},
+    //         "lowres": false,
+    //         "watermark": false,
+    //         "legacy": false,
+    //         "illustration": false,
+    //         "nomin": false,
+    //         "jp": false,
+    //         "exclude_secrets": false,
+    //     };
+    //
+    //     /*
+    //     Form inputs:
+    //     0: Pic mode
+    //     1: Text mode
+    //     2: Active deck #1 (checked?)
+    //     3: Active deck #2 (checked?)
+    //     4: Active deck #3 (checked?)
+    //     5: Active deck #1 (content)
+    //     6: Active deck #2 (content)
+    //     7: Active deck #3 (content)
+    //     8: lowres
+    //     9: watermark
+    //     10: legacy
+    //     11: illustration (text mode only, "bg")
+    //     12: nomin (text mode only, "mimify text")
+    //     13:jp
+    //     14: exclude secrets
+    //     15: submit
+    //      */
+    //
+    //     for (let i = 0; i < e.target.length; i++) {
+    //         let element = e.target[i];
+    //         switch (i) {
+    //             case 0: { // Pic mode
+    //                 if (element.checked) form_data["mode"] = "pic";
+    //                 break;
+    //             }
+    //
+    //             case 1: { // Text mode
+    //                 if (element.checked) form_data["mode"] = "text";
+    //                 break;
+    //             }
+    //
+    //             case 2: { // Deck 1 Active
+    //                 if (element.checked) form_data["active_deck"] = 1;
+    //                 break;
+    //             }
+    //
+    //             case 3: { // Deck 2 Active
+    //                 if (element.checked) form_data["active_deck"] = 2;
+    //                 break;
+    //             }
+    //
+    //             case 4: { // Deck 3 Active
+    //                 if (element.checked) form_data["active_deck"] = 3;
+    //                 break;
+    //             }
+    //
+    //             case 5: { // Active deck 1 content
+    //                 form_data["decks"][1] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 6: { // Active deck 2 content
+    //                 form_data["decks"][2] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 7: { // Active deck 3 content
+    //                 form_data["decks"][3] = element.value;
+    //                 break;
+    //             }
+    //
+    //             case 8: { // Low res images mode
+    //                 form_data["lowres"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 9: { // Watermark
+    //                 form_data["watermark"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 10: { // Legacy support
+    //                 form_data["legacy"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 11: { // Illustration for text mode cards
+    //                 form_data["illustration"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 12: { // Minify text cards
+    //                 form_data["nomin"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 13: { // Exclude JP sets
+    //                 form_data["jp"] = element.checked;
+    //                 break;
+    //             }
+    //
+    //             case 14: { // Exclude secret cards
+    //                 form_data["exclude_secrets"] = element.checked;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //
+    //
+    //     console.log(form_data);
+    // }
+
+    function resetAll(e) {
+        e.preventDefault();
+        document.getElementById('form__step2').style.transitionDelay = '0s';
+        document.getElementById('form__step2').style.opacity = '0';
+        var inputs = document.querySelectorAll('[name*="decks"],[name="mode"]');
+        setTimeout(function () {
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+            document.getElementById('form__step2').style.opacity = '';
+            document.getElementById('form__step2').style.transitionDelay = '';
+        }, 400);
+    }
+
+    // if (typeof adsbygoogle !== 'undefined') {
+    //     [].forEach.call(document.querySelectorAll('.adsbygoogle'), function () {
+    //         (adsbygoogle = window.adsbygoogle || []).push({});
+    //     });
+    // }
+
+
+    if (reset) {
+        reset.addEventListener('click', resetAll);
+    }
+</script>
+
+{% endblock %}

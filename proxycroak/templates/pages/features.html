@@ -1,0 +1,40 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<main class="main main--alignTop">
+    <div class="row">
+        <h1 class="text--title text--center">Features</h1>
+        <h4 class="size--h4 text--divider">How it works</h4>
+        <p><strong>Proxycroak</strong> is a simple tool to print Pokémon proxy cards for playtesting, straight from a
+            decklist. There are two available modes: Pics and Text.</p>
+        <p><strong>Pics mode</strong> retrieves all the card images from a single decklist and places them on a classic
+            3-column grid, ready to print.</p>
+        <p><strong>Text mode</strong> combines up to 3 decklists together in a single, minified <em>meta-deck</em> to
+            save time, ink and… sleeves! A <em>must-use</em> feature for competitive deck testing.</p>
+        <br>
+        <h4 id="bookmarklet" class="size--h4 text--divider">Single Click Bookmarklet</h4>
+        <p>Create proxy decks from everywhere, with a single click! (Not available on Firefox, thanks Firefox ☹)</p>
+        <div class="bookmarklet">
+            <a href="javascript:navigator.clipboard.readText().then((txt)=>{if (txt.length < 10) {alert('Please copy a decklist to clipboard first!')} else {
+				window.open(`{{ request.host_url }}import?base64list=${btoa(txt)}`);
+			}})" class="btn">+ Proxycroak</a>
+        </div>
+        <p><strong>Drag this button to your Bookmarks bar!</strong> When you see a decklist you want to proxy, select it
+            and click the bookmarklet.</p>
+        <br>
+        <h4 id="generate-from-url" class="size--h4 text--divider">Generate from URL</h4>
+        <p>You can also generate proxy decks straight from any external URL (as long as it's a text file, like <a
+                href="http://pastebin.com" target="_blank">pastebin.com</a>'s raw format) and share them to the world!
+        </p>
+        <p>Simply include it as a parameter <em>?url=</em> to our import link <em>http://proxycroak.com/import</em>,
+            like this:</p>
+        <p><a href="http://proxycroak.com/import?url=http://proxycroak.com/sample_list.txt">http://proxycroak.com/import?url=http://proxycroak.com/sample_list.txt</a>
+        </p>
+        <br>
+        <h4 id="export-as" class="size--h4 text--divider">Export as…</h4>
+        <p>You can also share your proxy decks with the “Export as” button. There are currently two available options:
+            <strong>Image</strong> (Pics mode only) and <strong>Shareable URL</strong>. Great for messaging boards,
+            Facebook groups, video streaming and more!</p>
+    </div>
+</main>
+{% endblock %}
