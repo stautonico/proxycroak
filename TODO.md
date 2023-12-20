@@ -39,6 +39,7 @@
 - [X] Set discord link on the changelog page
 - [X] Write dotenv.template
 - [X] Write dockerfile to build a docker container to serve the app
+- [X] Bots are spamming the database with random shit. There needs to be some kind of validation for creating a shared deck
 
 ## NOT DOING
 - [X] Add todo/known issues page? (Already exists in help page)

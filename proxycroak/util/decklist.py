@@ -157,10 +157,16 @@ def parse_decklist(decklist: str):
                 elif line[0] == "*":
                     output.append(parse_old_line(line))
                 else:
-                    # We have an invalid line, ignore it
+                    # We have an invalid line, create an error
+                    logger.warn(f"User provided an invalid line: {line}", "decklist:parse_decklist")
+                    output.append({"error": "Unable to parse line", "line": line})
                     continue
             else:
                 if line[0] in "123456789":
                     output.append(parse_new_line(line))
+                else:
+                    logger.warn(f"User provided an invalid line: {line}", "decklist:parse_decklist")
+                    output.append({"error": "Unable to parse line", "line": line})
+                    continue
 
     return output
