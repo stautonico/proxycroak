@@ -13,10 +13,8 @@
 - [ ] Redesign features page?
 - [ ] Make a database table for card issues so that the table can be automatically generated
 - [ ] Make some kind of utility to add records to the above table (manage.py like program)
-- [ ] Refactor all the text on the website that changed (such as links, email addrs, and changed features like "up to
-  3 decklists")
-- [ ] Write dockerfile to build a docker container to serve the app
 - [ ] Add the sentry feedback form thing to error pages
+- [ ] Using leading zeros in the card count breaks things
 
 ## IP
 - [~] Implement "generate from URL options"
@@ -25,6 +23,8 @@
 - [X] Implement single click bookmarklet
 - [X] Implement sentry support
 - [X] Implement logging
+- [X] Refactor all the text on the website that changed (such as links, email addrs, and changed features like "up to
+  3 decklists")
 
 
 
@@ -38,6 +38,7 @@
   page automatically
 - [X] Set discord link on the changelog page
 - [X] Write dotenv.template
+- [X] Write dockerfile to build a docker container to serve the app
 
 ## NOT DOING
 - [X] Add todo/known issues page? (Already exists in help page)
