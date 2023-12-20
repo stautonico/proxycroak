@@ -51,31 +51,33 @@ def handle_proxies_page(data, meta, opts=None):
     else:
         output, errors = handle_text_mode(parsed_list, options)
 
-    # Make sure this ID isn't used
-    counter = 0
-    while True:
-        random_id = ''.join(random.choices(string.ascii_uppercase +
-                                           string.digits, k=8))
 
-        shared_dl = SharedDecklist.query.get(random_id)
-
-        if not shared_dl:
-            break
-        else:
-            counter += 1
-
-        # THIS SHOULD NEVER HAPPEN, but it doesn't hurt to be safe
-        # In theory, this can go on FOREVER if we're unlucky enough,
-        # so after 100 tries, just fail
-        if counter == 100:
-            return render_template("errors/error.html",
-                                   errors=[
-                                       f"The chance of this error occuring is astronomically small. You should go play the lottery."],
-                                   meta={"title": "Error", "description": "Something went wrong along the way"})
-
+    random_id = None
     # Save the decklist if we have at least 1 valid line
     # Checking if we have at least one valid line prevents random bot spam from filling up the database
-    if len(output) > 0:
+    if len(output[0]) > 0:
+        # Make sure this ID isn't used
+        counter = 0
+        while True:
+            random_id = ''.join(random.choices(string.ascii_uppercase +
+                                               string.digits, k=8))
+
+            shared_dl = SharedDecklist.query.get(random_id)
+
+            if not shared_dl:
+                break
+            else:
+                counter += 1
+
+            # THIS SHOULD NEVER HAPPEN, but it doesn't hurt to be safe
+            # In theory, this can go on FOREVER if we're unlucky enough,
+            # so after 100 tries, just fail
+            if counter == 100:
+                return render_template("errors/error.html",
+                                       errors=[
+                                           f"The chance of this error occuring is astronomically small. You should go play the lottery."],
+                                       meta={"title": "Error", "description": "Something went wrong along the way"})
+
         shared_decklist = SharedDecklist(
             id=random_id,
             # TODO: Don't hard code this

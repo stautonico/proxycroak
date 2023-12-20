@@ -28,10 +28,10 @@
                 <span class="btn__icon"><img width="16" src="/static/img/icons/edit.svg" class="white-svg"/></span>
                 <span class="btn__text">Edit Deck</span>
             </div>
-            <div onclick="copy_to_clipboard()" id="share-deck" class="btn">
+            <button onclick="copy_to_clipboard()" id="share-deck" {{ 'disabled' if not share_id }} class="btn">
                 <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
                 <span class="btn__text">Share Deck</span>
-            </div>
+            </button>
 
             <!--
             <div id="export-deck" class="btn btn--dropdown" data-toggle="#export-dropdown"
