@@ -15,18 +15,20 @@
 - [ ] Make some kind of utility to add records to the above table (manage.py like program)
 - [ ] Add the sentry feedback form thing to error pages
 - [ ] Using leading zeros in the card count breaks things
+- [ ] TODO: Include the build number in the version file? (the container hash maybe?). This is to be specific with which
+  build is currently active. This is to prevent stupid issues with caching on cloudflare.
 
 ## IP
+
 - [~] Implement "generate from URL options"
 
 ## FIRST PASS DONE
+
 - [X] Implement single click bookmarklet
 - [X] Implement sentry support
 - [X] Implement logging
 - [X] Refactor all the text on the website that changed (such as links, email addrs, and changed features like "up to
   3 decklists")
-
-
 
 ## DONE
 
@@ -39,11 +41,12 @@
 - [X] Set discord link on the changelog page
 - [X] Write dotenv.template
 - [X] Write dockerfile to build a docker container to serve the app
-- [X] Bots are spamming the database with random shit. There needs to be some kind of validation for creating a shared deck
+- [X] Bots are spamming the database with random shit. There needs to be some kind of validation for creating a shared
+  deck
 
 ## NOT DOING
-- [X] Add todo/known issues page? (Already exists in help page)
 
+- [X] Add todo/known issues page? (Already exists in help page)
 
 ## MISSING CARDS:
 

@@ -327,11 +327,11 @@ ul.list li:last-child {
     transition: all .3s
 }
 
-.btn:hover {
+.btn:not(:disabled):hover {
     background: #ed6888
 }
 
-.btn:active {
+.btn:not(:disabled):active {
     color: rgba(255, 255, 255, .5);
     background: #e73a64
 }
@@ -1939,6 +1939,26 @@ a.buyBtn {
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+button:disabled {
+  background-color: #ccc; /* Grey background */
+  color: #666; /* Dark grey text color */
+  cursor: not-allowed; /* Change cursor to not-allowed */
+}
+
+/* Apply styles to disabled input fields */
+input:disabled {
+  background-color: #eee; /* Light grey background */
+  color: #666; /* Dark grey text color */
+  cursor: not-allowed; /* Change cursor to not-allowed */
+}
+
+/* Apply styles to disabled links */
+a:disabled {
+  color: #ccc; /* Light grey text color */
+  cursor: not-allowed; /* Change cursor to not-allowed */
+  text-decoration: none; /* Remove underline */
 }
 
 @media only screen and (max-width: 640px) {
