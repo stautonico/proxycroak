@@ -73,16 +73,18 @@ def handle_proxies_page(data, meta, opts=None):
                                        f"The chance of this error occuring is astronomically small. You should go play the lottery."],
                                    meta={"title": "Error", "description": "Something went wrong along the way"})
 
-            # Save the decklist
-    sharedDecklist = SharedDecklist(
-        id=random_id,
-        # TODO: Don't hard code this
-        decklist=data["decks[0]"],
-        expires=datetime.datetime.now() + datetime.timedelta(days=6 * 30)
-    )
+    # Save the decklist if we have at least 1 valid line
+    # Checking if we have at least one valid line prevents random bot spam from filling up the database
+    if len(output) > 0:
+        shared_decklist = SharedDecklist(
+            id=random_id,
+            # TODO: Don't hard code this
+            decklist=data["decks[0]"],
+            expires=datetime.datetime.now() + datetime.timedelta(days=6 * 30)
+        )
 
-    db.session.add(sharedDecklist)
-    db.session.commit()
+        db.session.add(shared_decklist)
+        db.session.commit()
 
     return render_template("pages/proxies.html", meta=meta, rows=output, errors=errors, share_id=random_id,
                            options=options)
