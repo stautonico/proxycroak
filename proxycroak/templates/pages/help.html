@@ -1,6 +1,13 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+<style>
+    code {
+        background-color: #f1f1f1;
+        margin: 0.25em;
+    }
+</style>
+
 <main class="main main--alignTop">
     <div class="row">
         <h1 class="text--title text--center">Help</h1>
@@ -34,7 +41,9 @@
         <ul class="list">
             <li>Some cards are missing or have an issue; here's the <a href="/issues/cards">full list</a>.</li>
             <li>Cards heavily word-filled get cut off in Text mode.</li>
-            <li>Items, supporters, and stadiums are missing their body text in text mode.</li>
+            <li>Items, supporters, special energies, and stadiums are missing their body text in text mode.</li>
+            <li>Many basic energies don't work (e.g. <code>"Basic {P} Energy SVE 5"</code>, <code>"2 Basic {P} Energy CRZ 156"</code>)</li>
+            <li>Leading zeros in any numbers breaks things (for example writing <code>"04 Toxicroak STS 59"</code> instead of <code>"4 Toxicroak STS 59"</code>)</li>
         </ul>
     </div>
 </main>

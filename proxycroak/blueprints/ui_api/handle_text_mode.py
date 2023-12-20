@@ -89,7 +89,7 @@ def handle_text_mode(parsed_decklist, options):
                 atk["cost"] = atkout
 
                 if not options["nomin"]:
-                    atk["text"] = minify_card_text(atk["text"])
+                    atk["text"] = minify_card_text(atk["text"] or "")
 
                 atks.append(atk)
 

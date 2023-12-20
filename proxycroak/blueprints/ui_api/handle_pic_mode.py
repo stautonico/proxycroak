@@ -14,6 +14,10 @@ def handle_pic_mode(parsed_decklist, options):
     for card in parsed_decklist:
         card_obj = None
 
+        if "error" in card:
+            errors.append({"card": card["line"], "message": "Invalid line"})
+            continue
+
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
@@ -45,7 +49,8 @@ def handle_pic_mode(parsed_decklist, options):
                 card_obj = Card.query.filter_by(name=card["card_name"], number=card["card_num"]).first()
                 if not card_obj:
                     # Try fuzzy matching the card name
-                    card_obj = Card.query.filter(Card.name.like(card["card_name"]) | Card.name.like(f"%{card['card_num']}%")).first()
+                    card_obj = Card.query.filter(
+                        Card.name.like(card["card_name"]) | Card.name.like(f"%{card['card_num']}%")).first()
 
                     if not card_obj:
                         # TODO: Hard-code error messages somewhere else
