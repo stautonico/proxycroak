@@ -8,6 +8,8 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
+ARG CODE_HASH
+
 RUN mkdir -p /app/logs
 RUN mkdir -p /app/instance
 
@@ -23,7 +25,7 @@ COPY wsgi.py wsgi.py
 COPY manage.py manage.py
 
 # Create the version filthe documentatione (baked into the container)
-RUN echo "$(date +'%Y.%m.%d')" > /app/VERSION
+RUN echo -n "$(date +'%Y.%m.%d')\n$CODE_HASH" > /app/VERSION
 
 EXPOSE 5000
 

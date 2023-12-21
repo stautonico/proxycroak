@@ -132,6 +132,14 @@ def parse_decklist(decklist: str):
 
     lines = decklist.split("\n")
 
+    # For each line, remove any leading spaces in the line
+    newlines = []
+
+    for line in lines:
+        newlines.append(line.lstrip())
+
+    lines = newlines
+
     # Strip out empty lines
     while "" in lines:
         lines.remove("")
@@ -162,7 +170,14 @@ def parse_decklist(decklist: str):
                     output.append({"error": "Unable to parse line", "line": line})
                     continue
             else:
-                if line[0] in "123456789":
+                # If we're dealing with the "header" line, ignore it
+                pattern = re.compile(r'(?:[^\W_]|[ \'-])*( - |: )\d*', re.UNICODE)
+                match = pattern.match(line)
+
+                if match:
+                    continue
+
+                if line[0] in "1234567890":
                     output.append(parse_new_line(line))
                 else:
                     logger.warn(f"User provided an invalid line: {line}", "decklist:parse_decklist")

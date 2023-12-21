@@ -28,9 +28,10 @@
                 <span class="btn__icon"><img width="16" src="/static/img/icons/edit.svg" class="white-svg"/></span>
                 <span class="btn__text">Edit Deck</span>
             </div>
-            <button onclick="copy_to_clipboard()" id="share-deck" {{ 'disabled' if not share_id }} class="btn">
-                <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
-                <span class="btn__text">Share Deck</span>
+            <button onclick="copy_to_clipboard()" id="share-deck" {{
+            'disabled' if not share_id }} class="btn">
+            <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
+            <span class="btn__text">Share Deck</span>
             </button>
 
             <!--
@@ -152,23 +153,23 @@
                             <div class="card__attack"><strong>
                                 [
                                 {% if atk.cost|length == 0 or atk.cost == "Free" %}
-                                    #
+                                #
                                 {% else %}
-                                    {% for cost in atk.cost %}
-                                        {{ cost|safe }}
-                                    {% endfor %}
+                                {% for cost in atk.cost %}
+                                {{ cost|safe }}
+                                {% endfor %}
                                 {% endif %}
 
                                 , {{ atk.name }}
 
                                 {% if atk.damage %}
-                                    , {{atk.damage}}
+                                , {{atk.damage}}
                                 {% endif %}
 
                                 {% if atk.text %}
-                                    ]</strong> {{ atk.text }}
+                                ]</strong> {{ atk.text }}
                                 {% else %}
-                                    ]</strong>
+                                ]</strong>
                                 {% endif %}
 
                             </div>
@@ -178,9 +179,9 @@
 
                             {% if card.data.supertype == "Pokémon" and card.data.rules %}
                             <div class="card__text">
-                            {% for rule in card.data.rules %}
+                                {% for rule in card.data.rules %}
                                 {{ rule }}&nbsp;
-                            {% endfor %}
+                                {% endfor %}
                             </div>
                             {% endif %}
                         </div>
@@ -189,7 +190,7 @@
                             <div class="card__foot__left">
                                 {% if card.data.supertype == "Pokémon" %}
                                 {% if card.data.weaknesses %}
-                                    <span class="card__wrc">
+                                <span class="card__wrc">
                                         W [
                                         {% for w in card.data.weaknesses %}
                                             {{ w.type|safe }}
@@ -199,7 +200,7 @@
                                 {% endif %}
 
                                 {% if card.data.resistances %}
-                                    <span class="card__wrc">
+                                <span class="card__wrc">
                                         R [
                                         {% for r in card.data.resistances %}
                                             {{ r.type|safe }}
@@ -253,6 +254,20 @@
         // TODO: Maybe use a toast?
         alert("Copied link to clipboard!");
     }
+
+    let localShares = localStorage.getItem("shares");
+
+    if (localShares === null) {
+        localShares = [];
+    } else {
+        localShares = JSON.parse(localShares);
+    }
+
+    if (!localShares.includes("{{share_id}}")) {
+        localShares.push("{{share_id}}");
+    }
+
+    localStorage.setItem("shares", JSON.stringify(localShares));
 
 </script>
 

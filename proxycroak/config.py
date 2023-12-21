@@ -39,6 +39,10 @@ def _check_required_values(env):
     try:
         with open("VERSION", "r") as f:
             content = f.read()
+
+            # We expect 2 lines
+            version, build_num = content.split("\n")
+
             if content.count(".") != 2:
                 raise Exception()
     except Exception as e:
@@ -73,6 +77,7 @@ class BaseConfig:
     DISCORD_URL = None
 
     BUILD_VERSION = None
+    BUILD_HASH = None
 
     @staticmethod
     def from_env(env):
@@ -108,7 +113,8 @@ class BaseConfig:
         newconfig.DISCORD_URL = env.get("DISCORD_URL")
 
         with open("VERSION", "r") as f:
-            newconfig.BUILD_VERSION = f.read().strip("\n")
+            # We expect 2 lines
+            newconfig.BUILD_VERSION, newconfig.BUILD_HASH = f.read().split("\n")
 
         return newconfig
 
