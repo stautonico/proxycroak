@@ -190,14 +190,17 @@ def configure_additional(app):
     # Configure global variables that are available in any template
     @app.context_processor
     def inject_global_vars():
-        return dict(DISCORD_URL=CONFIG.DISCORD_URL, BUILD_VERSION=CONFIG.BUILD_VERSION)
+        return dict(
+            DISCORD_URL=CONFIG.DISCORD_URL,
+            BUILD_VERSION=CONFIG.BUILD_VERSION,
+            BUILD_HASH=CONFIG.BUILD_HASH,
+        )
 
 
 def configure_teardown(app):
     """Things to do when the app shuts down"""
 
     logger.info("Configuring teardown...", "init")
-
 
     # @app.teardown_appcontext
     # def stop_scheduler(exception=None):

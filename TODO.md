@@ -14,9 +14,8 @@
 - [ ] Make a database table for card issues so that the table can be automatically generated
 - [ ] Make some kind of utility to add records to the above table (manage.py like program)
 - [ ] Add the sentry feedback form thing to error pages
-- [ ] Using leading zeros in the card count breaks things
-- [ ] TODO: Include the build number in the version file? (the container hash maybe?). This is to be specific with which
-  build is currently active. This is to prevent stupid issues with caching on cloudflare.
+- [ ] AUTOMATED TESTING
+- [ ] Maybe don't create the share by default. Only create the share when the "share deck" button is clicked
 
 ## IP
 
@@ -43,6 +42,11 @@
 - [X] Write dockerfile to build a docker container to serve the app
 - [X] Bots are spamming the database with random shit. There needs to be some kind of validation for creating a shared
   deck
+- [X] Leading spaces in the decklist breaks the entire thing
+- [X] TODO: Include the build number in the version file? (the container hash maybe?). This is to be specific with which
+  build is currently active. This is to prevent stupid issues with caching on cloudflare.
+- [X] Using leading zeros in the card count breaks things
+
 
 ## NOT DOING
 

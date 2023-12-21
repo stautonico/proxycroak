@@ -14,6 +14,10 @@ def handle_text_mode(parsed_decklist, options):
     for card in parsed_decklist:
         card_obj = None
 
+        if "error" in card:
+            errors.append({"card": card["line"], "message": "Invalid line"})
+            continue
+
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
