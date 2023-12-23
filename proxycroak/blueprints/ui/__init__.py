@@ -169,7 +169,7 @@ def import_route():
             try:
                 decoded_list = l.decode("utf-8")
             except Exception as e:
-                capture_exception(e)
+                # capture_exception(e)
                 try:
                     decoded_list = l.decode("latin-1")
                 except Exception as e2:
