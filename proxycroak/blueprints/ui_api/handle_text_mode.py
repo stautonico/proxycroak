@@ -3,78 +3,17 @@ from proxycroak.const import SET_IDS, lookup_set_code_by_id, minify_card_text
 from proxycroak.util.serialize import load_card
 from proxycroak.util.card_to_html import type_to_html
 
+from proxycroak.blueprints.ui_api.proxies_base import proxies_base
 
-def printif(msg, card):
-    print(card)
-    if card["card_name"].lower() == "forest seal stone":
-        print(msg)
 
 
 def handle_text_mode(parsed_decklist, options):
-    errors = []
-    output = [[]]
+    final_output = [[]]
 
-    img_name = "small.webp" if options["lowres"] else "large.webp"
+    output, errors = proxies_base(parsed_decklist, options)
 
-    # TODO: Can this be optimized without 100,000 if statements
-    for card in parsed_decklist:
-        printif(f"Working on: {card}", card)
-
-        card_obj = None
-
-        if "error" in card:
-            errors.append({"card": card["line"], "message": "Invalid line"})
-            continue
-
-        if card["set_id"] in SET_IDS:
-            set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
-        else:
-            set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
-
-        printif(f"Do we have a set obj?: {set_obj}", card)
-
-        if not set_obj:
-            # If we couldn't find it, it's possible that the user never provided a set
-            # so try to find a similar card (same number and name)
-            # Try to find similar card
-            card_obj = Card.query.filter_by(name=card["card_name"], number=card["card_num"]).first()
-            if not card_obj:
-                # TODO: Hard-code error messages somewhere else
-                errors.append({
-                    "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
-                    "message": "No results found (card misspelled or unavailable)"
-                })
-                continue
-            else:
-                errors.append({
-                    "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
-                    "message": "No exact match found, showing closest one"
-                })
-
-        if not card_obj:
-            card_obj = Card.query.filter_by(set_id=set_obj.id, name=card["card_name"], number=card["card_num"]).first()
-
-            if not card_obj:
-                # Try to find similar card
-                card_obj = Card.query.filter_by(name=card["card_name"], number=card["card_num"]).first()
-                if not card_obj:
-                    # Try fuzzy matching the card name
-                    card_obj = Card.query.filter(
-                        Card.name.like(card["card_name"]) | Card.name.like(f"%{card['card_num']}%")).first()
-
-                    if not card_obj:
-                        # TODO: Hard-code error messages somewhere else
-                        errors.append({
-                            "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
-                            "message": "No results found (card misspelled or unavailable)"
-                        })
-                        continue
-                    else:
-                        errors.append({
-                            "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
-                            "message": "No exact match found, showing closest one"
-                        })
-
+    cleaned_output = []
+    for card, card_obj in output:
         loaded_card = load_card(card_obj)
 
         # TODO: Optimize
@@ -144,10 +83,13 @@ def handle_text_mode(parsed_decklist, options):
         if loaded_card["set"].ptcgoCode is None:
             loaded_card["set"].ptcgoCode = lookup_set_code_by_id(loaded_card["set_id"])
 
-        for x in range(card["amnt"]):
-            if len(output[-1]) != 3:
-                output[-1].append({"type": "text", "data": loaded_card})
-            else:
-                output.append([{"type": "text", "data": loaded_card}])
+        cleaned_output.append([card, loaded_card])
 
-    return output, errors
+    for card, card_obj in cleaned_output:
+        for x in range(card["amnt"]):
+            if len(final_output[-1]) != 3:
+                final_output[-1].append({"type": "text", "data": card_obj})
+            else:
+                final_output.append([{"type": "text", "data": card_obj}])
+
+    return final_output, errors

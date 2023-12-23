@@ -19,6 +19,7 @@
 - [ ] The build hash doesn't work in github actions
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
+- [ ] Create alt set codes for some sets (like PR-SW should also have SSP (at least according to limitlesstcg))
 
 ## IP
 

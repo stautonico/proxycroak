@@ -46,6 +46,17 @@ def handle_proxies_page(data, meta, opts=None):
     if parsed_list is [] or parsed_list is None:
         return make_invalid_dl_error(data['decks[0]'])
 
+    # Total up the requested cards. If its > 100, fail
+    total = 0
+    for i in parsed_list:
+        if "amnt" in i:
+            total += i["amnt"]
+
+    if total > 100:
+        return render_template("errors/error.html",
+                               errors=[f"Decklist too long! (Max Cards: 100, you requested {total:,})"],
+                               meta={"title": "Error", "description": "Something went wrong along the way"})
+
     if data["mode"] == "pic":
         output, errors = handle_pic_mode(parsed_list, options)
     else:
