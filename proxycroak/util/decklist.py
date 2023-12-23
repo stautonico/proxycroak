@@ -68,13 +68,11 @@ def parse_new_line(line: str):
                     card_num = "SV" + str(int(card_num) - 73).zfill(3)
                     set_id = "SHF-SV"
 
-        print(f"{amnt} | {set_id} | {card_num} | {card_name}")
-
         return {
             "amnt": int(amnt),
-            "set_id": set_id,
-            "card_num": card_num,
-            "card_name": card_name
+            "set_id": set_id.lstrip(),
+            "card_num": card_num.lstrip(),
+            "card_name": card_name.lstrip()
         }
     except Exception as e:
         # Something went wrong when trying to parse a decklist, and its probably the user's fault
@@ -110,9 +108,9 @@ def parse_old_line(line):
 
     return {
         "amnt": int(amnt),
-        "set_id": set_id,
-        "card_num": card_num,
-        "card_name": card_name
+        "set_id": set_id.lstrip(),
+        "card_num": card_num.lstrip(),
+        "card_name": card_name.lstrip()
     }
 
 

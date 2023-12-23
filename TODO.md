@@ -16,6 +16,9 @@
 - [ ] Add the sentry feedback form thing to error pages
 - [ ] AUTOMATED TESTING
 - [ ] Maybe don't create the share by default. Only create the share when the "share deck" button is clicked
+- [ ] The build hash doesn't work in github actions
+- [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
+- [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
 
 ## IP
 
@@ -46,6 +49,7 @@
 - [X] TODO: Include the build number in the version file? (the container hash maybe?). This is to be specific with which
   build is currently active. This is to prevent stupid issues with caching on cloudflare.
 - [X] Using leading zeros in the card count breaks things
+- [X] Items, special energies, supporters, and stadiums don't work in text mode
 
 
 ## NOT DOING

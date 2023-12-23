@@ -123,7 +123,7 @@
                                         <div class="energy energy--"></div>
                                     </div>
                                     {% else %}
-                                    <div class="card__subtype">{{card.data.subtype}}</div>
+                                    <div class="card__subtype">{{card.data.subtypes[0]}}</div>
                                     {% endif %}
                                     <!-- if missing TODO: show missing warning -->
                                     <!-- endif -->
@@ -133,6 +133,7 @@
 
                         <!-- TODO: If not copy/missing -->
                         <div class="card__body">
+                            {% if card.data.supertype == "Pokémon" %}
                             {% if card.data.abilities %}
                             {% for a in card.data.abilities %}
                             <div class="card__ability">
@@ -183,6 +184,15 @@
                                 {{ rule }}&nbsp;
                                 {% endfor %}
                             </div>
+                            {% endif %}
+                            {% else %}
+                            {% if card.data.rules %}
+                            <div class="card__text">
+                                {% for rule in card.data.rules %}
+                                {{ rule }}&nbsp;<br/><br/>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                             {% endif %}
                         </div>
 

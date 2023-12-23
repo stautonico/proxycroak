@@ -4,6 +4,12 @@ from proxycroak.util.serialize import load_card
 from proxycroak.util.card_to_html import type_to_html
 
 
+def printif(msg, card):
+    print(card)
+    if card["card_name"].lower() == "forest seal stone":
+        print(msg)
+
+
 def handle_text_mode(parsed_decklist, options):
     errors = []
     output = [[]]
@@ -12,6 +18,8 @@ def handle_text_mode(parsed_decklist, options):
 
     # TODO: Can this be optimized without 100,000 if statements
     for card in parsed_decklist:
+        printif(f"Working on: {card}", card)
+
         card_obj = None
 
         if "error" in card:
@@ -22,6 +30,8 @@ def handle_text_mode(parsed_decklist, options):
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
             set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
+
+        printif(f"Do we have a set obj?: {set_obj}", card)
 
         if not set_obj:
             # If we couldn't find it, it's possible that the user never provided a set
@@ -123,7 +133,14 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["retreatCost"] = rcs
 
-        # If we have a SVI+ set code, set it from our dict
+        if loaded_card["rules"]:
+            rules = []
+            for rule in loaded_card["rules"]:
+                rules.append(minify_card_text(rule) if not options["nomin"] else rule)
+
+            loaded_card["rules"] = rules
+
+        # If we have an SVI+ set code, set it from our dict
         if loaded_card["set"].ptcgoCode is None:
             loaded_card["set"].ptcgoCode = lookup_set_code_by_id(loaded_card["set_id"])
 
