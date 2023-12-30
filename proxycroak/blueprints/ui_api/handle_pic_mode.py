@@ -1,6 +1,6 @@
 import os
-
 from proxycroak.blueprints.ui_api.proxies_base import proxies_base
+
 
 
 def handle_pic_mode(parsed_decklist, options):
