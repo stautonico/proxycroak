@@ -20,6 +20,7 @@
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
 - [ ] Create alt set codes for some sets (like PR-SW should also have SSP (at least according to limitlesstcg))
+- [ ] Combine the "build" and "notify" jobs into one workflow so that the notification only happens if the build succeeds 
 
 ## IP
 
