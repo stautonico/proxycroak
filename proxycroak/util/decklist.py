@@ -102,15 +102,16 @@ def parse_old_line(line):
         # TODO: OLD LINE FORMAT DOESN'T SUPPORT TG
 
         amnt = elements.pop(0)
-        set_id = elements.pop(-2)
-        card_num = elements.pop(-1)
-        card_name = " ".join(elements)
+        set_id = elements.pop(-2).lstrip()
+        card_num = elements.pop(-1).lstrip().replace("\r", "")
+        card_name = " ".join(elements).lstrip()
+
 
     return {
         "amnt": int(amnt),
-        "set_id": set_id.lstrip(),
-        "card_num": card_num.lstrip(),
-        "card_name": card_name.lstrip()
+        "set_id": set_id,
+        "card_num": card_num,
+        "card_name": card_name
     }
 
 
@@ -157,6 +158,10 @@ def parse_decklist(decklist: str):
     for line in lines:
         # Shouldn't happen but check anyway
         if line != "":
+            # TODO: This is just a hack to get prism star and star to work
+            line = line.replace("{*}", "◇") # Hack for prism star
+            line = line.replace(" Star ", " ★ ") # Hack for star
+            line = line.replace(" Delta ", " δ ") # Hack for delta species
             if dlformat == "old":
                 if line[0] == "#" or line[:2] == "**":
                     continue

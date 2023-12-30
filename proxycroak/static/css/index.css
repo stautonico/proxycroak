@@ -1942,24 +1942,45 @@ a.buyBtn {
 }
 
 button:disabled {
-  background-color: #ccc; /* Grey background */
-  color: #666; /* Dark grey text color */
-  cursor: not-allowed; /* Change cursor to not-allowed */
+    background-color: #ccc; /* Grey background */
+    color: #666; /* Dark grey text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
 }
 
 /* Apply styles to disabled input fields */
 input:disabled {
-  background-color: #eee; /* Light grey background */
-  color: #666; /* Dark grey text color */
-  cursor: not-allowed; /* Change cursor to not-allowed */
+    background-color: #eee; /* Light grey background */
+    color: #666; /* Dark grey text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
 }
 
 /* Apply styles to disabled links */
 a:disabled {
-  color: #ccc; /* Light grey text color */
-  cursor: not-allowed; /* Change cursor to not-allowed */
-  text-decoration: none; /* Remove underline */
+    color: #ccc; /* Light grey text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    text-decoration: none; /* Remove underline */
 }
+
+@keyframes changelog__event__zoom {
+    0% {
+        transform: scale(1);
+        background: none;
+    }
+    50% {
+        transform: scale(1.1); /* Zoom in at 50% of the animation */
+    }
+    100% {
+        transform: scale(1); /* Zoom out at 100% of the animation */
+        background: #eee;
+    }
+}
+
+.changelog__event:target {
+    animation: changelog__event__zoom 500ms ease-in-out; /* Adjust duration as needed */
+    background: #eee;
+    padding: 1em;
+}
+
 
 @media only screen and (max-width: 640px) {
     .formatBtn {
