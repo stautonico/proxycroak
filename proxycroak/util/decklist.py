@@ -1,6 +1,9 @@
 import re
 
+from sentry_sdk import capture_exception
+
 from proxycroak.logging import logger
+
 
 def parse_new_line(line: str):
     try:
@@ -81,38 +84,42 @@ def parse_new_line(line: str):
 
 
 def parse_old_line(line):
-    elements = line.split(" ")
+    try:
+        elements = line.split(" ")
 
-    # Check if we have a basic energy without a set
-    expr = r"^\* ([\d]+) ((?:Basic)?[\w\s]+(?:Energy))(?: \d+)?$"
-    matches = re.search(expr, line)
-    if matches:
-        # This is a basic energy without a set
-        amnt, card_name = matches.groups()
-        set_id = None
-        card_num = None
-    else:
-        # Element 0: Ignore
-        # Element 1: Amount
-        # Element -2: Set ID
-        # Element -1: The card number
-        # Every other element combined: The card name
-        elements.pop(0)
+        # Check if we have a basic energy without a set
+        expr = r"^\* ([\d]+) ((?:Basic)?[\w\s]+(?:Energy))(?: \d+)?$"
+        matches = re.search(expr, line)
+        if matches:
+            # This is a basic energy without a set
+            amnt, card_name = matches.groups()
+            set_id = None
+            card_num = None
+        else:
+            # Element 0: Ignore
+            # Element 1: Amount
+            # Element -2: Set ID
+            # Element -1: The card number
+            # Every other element combined: The card name
+            elements.pop(0)
 
-        # TODO: OLD LINE FORMAT DOESN'T SUPPORT TG
+            # TODO: OLD LINE FORMAT DOESN'T SUPPORT TG
 
-        amnt = elements.pop(0)
-        set_id = elements.pop(-2).lstrip()
-        card_num = elements.pop(-1).lstrip().replace("\r", "")
-        card_name = " ".join(elements).lstrip()
+            amnt = elements.pop(0)
+            set_id = elements.pop(-2).lstrip()
+            card_num = elements.pop(-1).lstrip().replace("\r", "")
+            card_name = " ".join(elements).lstrip()
 
-
-    return {
-        "amnt": int(amnt),
-        "set_id": set_id,
-        "card_num": card_num,
-        "card_name": card_name
-    }
+            return {
+                "amnt": int(amnt),
+                "set_id": set_id,
+                "card_num": card_num,
+                "card_name": card_name
+            }
+    except Exception as e:
+        # Something went wrong when trying to parse a decklist, and its probably the user's fault
+        logger.warn(f"Something went wrong when parsing line: {line}", "decklist:parse_old_line")
+        return {"error": "Unable to parse line", "line": line}
 
 
 def parse_decklist(decklist: str):
@@ -159,9 +166,10 @@ def parse_decklist(decklist: str):
         # Shouldn't happen but check anyway
         if line != "":
             # TODO: This is just a hack to get prism star and star to work
-            line = line.replace("{*}", "◇") # Hack for prism star
-            line = line.replace(" Star ", " ★ ") # Hack for star
-            line = line.replace(" Delta ", " δ ") # Hack for delta species
+            line = line.replace("{*}", "◇")  # Hack for prism star
+            line = line.replace(" Star ", " ★ ")  # Hack for star
+            line = line.replace(" Delta ", " δ ")  # Hack for delta species
+            line = line.rstrip()  # Clear out spaces from the right side
             if dlformat == "old":
                 if line[0] == "#" or line[:2] == "**":
                     continue
