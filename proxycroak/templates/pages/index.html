@@ -56,14 +56,16 @@
             <!--            <textarea id="deck3" name="decks[2]" class="deck"-->
             <!--                      placeholder="Don't forget set code (in all caps) and number!"></textarea>-->
 
-            <!--
+            <button class="btn" onclick="openModal(event)">Find Cards</button>
+            <span class="tooltip tooltip--help"
+                  data-tooltip-content="Search cards by name if you're having difficulty finding what you're looking for">?</span>
+
+
             <div class="form__checkbox form__checkbox--picsOnly">
                 <input id="lowresCheck" type="checkbox" name="options[lowres]" value="1"
                        class="form__checkbox__input">
-                >
                 <label for="lowresCheck" class="form__checkbox__label">Low-res pics</label>
             </div>
-            -->
 
 
             <!--
@@ -124,11 +126,44 @@
             <a href="#" id="reset" class="btn resetBtn">Change mode</a>
         </div>
     </form>
+
+    <div class="steve--modal" id="steve--modal">
+        <div class="steve--modal-content">
+            <span class="close" onclick="closeModal(event)">&times;</span>
+            <div id="findCardsForm">
+                <p>Enter the name (or part of the name) of the card you're looking for, and click it to insert it into your decklist.</p>
+                <input type="text" placeholder="Enter card name..." id="searchCardName">
+                <button id="findButton" onclick="findCards()">Find</button>
+            </div>
+
+            <div id="imagesPreview"></div>
+        </div>
+    </div>
+
 </main>
 
 <script>
     const reset = document.getElementById("reset");
     const form = document.getElementById("mainform");
+
+    const decklist = document.getElementById("deck1");
+
+    const modal = document.getElementById("steve--modal");
+
+    const cardNameInput = document.getElementById("searchCardName");
+    const imagesPreview = document.getElementById("imagesPreview");
+
+    function openModal(e) {
+        e.preventDefault();
+        modal.style.display = "block";
+        modal.style.opacity = "1";
+    }
+
+    function closeModal(e) {
+        e.preventDefault();
+        modal.style.display = "none";
+        modal.style.opacity = "0";
+    }
 
     // TODO: Write form validator
 
@@ -253,6 +288,33 @@
     //     console.log(form_data);
     // }
 
+    async function findCards() {
+        imagesPreview.innerHTML = "";
+        let value = cardNameInput.value;
+
+        if (value) {
+            let result = await fetch("/ui/api/search?" + new URLSearchParams({
+                name: value
+            }),
+                {
+                    method: "GET",
+
+                }
+            );
+
+            let json = await result.json();
+            for (let card of json) {
+                let newimg = document.createElement("img");
+                newimg.src = `${card.image}/large.webp`;
+                newimg.onclick = () => {
+                    makeCardLine(card)
+                };
+                newimg.classList = "imagesPreviewElement";
+                imagesPreview.appendChild(newimg);
+            }
+        }
+    }
+
     function resetAll(e) {
         e.preventDefault();
         document.getElementById('form__step2').style.transitionDelay = '0s';
@@ -265,6 +327,36 @@
             document.getElementById('form__step2').style.opacity = '';
             document.getElementById('form__step2').style.transitionDelay = '';
         }, 400);
+    }
+
+    async function getSetById(set_id) {
+        try {
+            let result = await fetch(`/ui/api/set/${set_id}`,
+                {
+                    method: "GET",
+
+                }
+            );
+
+            let json = await result.json();
+
+            return json;
+
+        } catch {
+            return null;
+        }
+    }
+
+    async function makeCardLine(card) {
+        let set = await getSetById(card.set_id);
+        let line = `1 ${card.name} ${set.ptcgoCode} ${card.number}`
+
+        const lastLine = decklist.value.split('\n').pop();
+        const needsNewline = lastLine.trim() !== '';
+
+        decklist.value += (needsNewline ? '\n' : '') + line;
+
+        alert(`Inserted 1x ${card.name} into your decklist!`);
     }
 
     // if (typeof adsbygoogle !== 'undefined') {

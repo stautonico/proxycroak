@@ -1,8 +1,10 @@
-from flask import Blueprint, request, redirect, url_for, abort
+from flask import Blueprint, request, redirect, url_for, abort, jsonify
 
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
+from proxycroak.models import Card, Set
 from proxycroak.util.handle_proxies_page import handle_proxies_page
+from proxycroak.util.serialize import serialize_card, recursive_json_loads, seralize_set
 from proxycroak.logging import logger
 
 blueprint = Blueprint("ui_api", __name__, url_prefix="/ui/api")
@@ -49,7 +51,6 @@ def proxies():
 
         has_active_deck = False
 
-
         # if "activeDeck[0]" in form_data:
         #     data["activeDeck[0]"] = form_data["activeDeck[0]"]
         #     has_active_deck = True
@@ -83,3 +84,23 @@ def proxies():
                 options[opt] = form_data[f"options[{opt}]"] == "1"
 
         return handle_proxies_page(data, META, options)
+
+
+@blueprint.route("/search", methods=["GET"])
+def search():
+    print(request.args.to_dict())
+
+    entries = Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()
+
+    return jsonify([recursive_json_loads(serialize_card(e)) for e in entries])
+
+
+@blueprint.route("/set/<string:set_id>", methods=["GET"])
+def set_get(set_id):
+    try:
+        s = Set.query.get(set_id)
+
+        return jsonify(seralize_set(s))
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "set not found"}), 404
