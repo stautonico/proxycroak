@@ -1,4 +1,4 @@
-import os
+from sqlalchemy import or_
 
 from proxycroak.models import Card, Set
 from proxycroak.const import SET_IDS
@@ -19,7 +19,9 @@ def proxies_base(parsed_decklist, options):
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
-            set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
+            set_obj = Set.query.filter(
+                or_(Set.ptcgoCode == card["set_id"], Set.alternatePtcgoCode == card["set_id"])).first()
+            # set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
 
         if not set_obj:
             # If we couldn't find it, it's possible that the user never provided a set

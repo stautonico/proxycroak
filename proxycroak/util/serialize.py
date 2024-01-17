@@ -49,6 +49,22 @@ def serialize_card(card):
     return output
 
 
+def seralize_set(set):
+    output = {
+        "id": set.id,
+        "legalities": set.legalities,
+        "name": set.name,
+        "printedTotal": set.printedTotal,
+        "ptcgoCode": set.ptcgoCode,
+        "releaseDate": set.releaseDate,
+        "series": set.series,
+        "total": set.total,
+        "updatedAt": set.updatedAt,
+    }
+
+    return output
+
+
 # TODO: I don't like the name of this, but we'll leave it as this until I come up with something better
 def load_card(card):
     output = {}

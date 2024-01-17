@@ -13,6 +13,7 @@ class Set(db.Model):
     name: Mapped[str] = mapped_column(String(256), nullable=True)
     printedTotal: Mapped[int] = mapped_column(Integer)
     ptcgoCode: Mapped[str] = mapped_column(String(64), nullable=True)
+    alternatePtcgoCode: Mapped[str] = mapped_column(String(64), nullable=True)
     releaseDate: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
     series: Mapped[str] = mapped_column(String(128), nullable=True)
     total: Mapped[int] = mapped_column(Integer)
