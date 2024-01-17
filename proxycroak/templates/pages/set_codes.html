@@ -76,7 +76,7 @@
             <tr>
                 <td>{{set.name}}</td>
                 <td>{{set.ptcgoCode}}</td>
-                <td></td>
+                <td>{% if set.alternatePtcgoCode %}{{set.alternatePtcgoCode}}{% endif %}</td>
             </tr>
             {% endfor %}
             </tbody>
