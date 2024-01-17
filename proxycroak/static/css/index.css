@@ -2064,6 +2064,10 @@ a:disabled {
     background: #868686;
 }
 
+.displayOnlyCheckbox[readonly] {
+    pointer-events: none;
+}
+
 @media only screen and (max-width: 640px) {
     .formatBtn {
         width: 100%;

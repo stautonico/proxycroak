@@ -59,6 +59,7 @@
             <button class="btn" onclick="openModal(event)">Find Cards</button>
             <span class="tooltip tooltip--help"
                   data-tooltip-content="Search cards by name if you're having difficulty finding what you're looking for">?</span>
+            <span class="text--super">BETA</span>
 
 
             <div class="form__checkbox form__checkbox--picsOnly">
@@ -131,9 +132,12 @@
         <div class="steve--modal-content">
             <span class="close" onclick="closeModal(event)">&times;</span>
             <div id="findCardsForm">
-                <p>Enter the name (or part of the name) of the card you're looking for, and click it to insert it into your decklist.</p>
-                <input type="text" placeholder="Enter card name..." id="searchCardName">
-                <button id="findButton" onclick="findCards()">Find</button>
+                <p>Enter the name (or part of the name) of the card you're looking for, and click it to insert it into
+                    your decklist.</p>
+                <form onsubmit="findCards(event)">
+                    <input type="text" placeholder="Enter card name..." id="searchCardName">
+                    <button id="findButton" type="submit">Find</button>
+                </form>
             </div>
 
             <div id="imagesPreview"></div>
@@ -164,6 +168,12 @@
         modal.style.display = "none";
         modal.style.opacity = "0";
     }
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal(event);
+        }
+    });
 
     // TODO: Write form validator
 
@@ -288,7 +298,8 @@
     //     console.log(form_data);
     // }
 
-    async function findCards() {
+    async function findCards(event) {
+        event.preventDefault();
         imagesPreview.innerHTML = "";
         let value = cardNameInput.value;
 
@@ -303,14 +314,20 @@
             );
 
             let json = await result.json();
-            for (let card of json) {
-                let newimg = document.createElement("img");
-                newimg.src = `${card.image}/large.webp`;
-                newimg.onclick = () => {
-                    makeCardLine(card)
-                };
-                newimg.classList = "imagesPreviewElement";
-                imagesPreview.appendChild(newimg);
+
+            if (json.length === 0) {
+                imagesPreview.innerHTML = "<center><span style='color: red'>No cards found!</span></center>"
+            } else {
+
+                for (let card of json) {
+                    let newimg = document.createElement("img");
+                    newimg.src = `${card.image}/large.webp`;
+                    newimg.onclick = () => {
+                        makeCardLine(card)
+                    };
+                    newimg.classList = "imagesPreviewElement";
+                    imagesPreview.appendChild(newimg);
+                }
             }
         }
     }

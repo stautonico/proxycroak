@@ -1,4 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, abort, jsonify
+from sentry_sdk import capture_exception
 
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
@@ -88,11 +89,14 @@ def proxies():
 
 @blueprint.route("/search", methods=["GET"])
 def search():
-    print(request.args.to_dict())
+    try:
+        entries = Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()
 
-    entries = Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()
-
-    return jsonify([recursive_json_loads(serialize_card(e)) for e in entries])
+        return jsonify([recursive_json_loads(serialize_card(e)) for e in entries])
+    except Exception as e:
+        logger.warn(f"Something went wrong when trying to search for cards: '{e}'", "ui_api::search")
+        capture_exception(e)
+        return jsonify([])
 
 
 @blueprint.route("/set/<string:set_id>", methods=["GET"])
