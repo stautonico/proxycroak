@@ -97,9 +97,9 @@ def minify_card_text(text):
     return text
 
 
-def lookup_set_code_by_id(setcode):
+def lookup_set_code_by_id(set_id):
     for key, val in SET_IDS.items():
-        if val == setcode:
+        if val == set_id:
             return key
 
     return None
