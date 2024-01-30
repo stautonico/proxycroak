@@ -7,6 +7,7 @@ from proxycroak.models import Card, Set
 from proxycroak.util.handle_proxies_page import handle_proxies_page
 from proxycroak.util.serialize import serialize_card, recursive_json_loads, seralize_set
 from proxycroak.logging import logger
+from proxycroak import const
 
 blueprint = Blueprint("ui_api", __name__, url_prefix="/ui/api")
 
@@ -91,7 +92,6 @@ def proxies():
 def search():
     try:
         entries = Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()
-
         return jsonify([recursive_json_loads(serialize_card(e)) for e in entries])
     except Exception as e:
         logger.warn(f"Something went wrong when trying to search for cards: '{e}'", "ui_api::search")
@@ -103,6 +103,10 @@ def search():
 def set_get(set_id):
     try:
         s = Set.query.get(set_id)
+
+        # If the set doesn't have a ptcgo code, grab it from the const table
+        if not s.ptcgoCode:
+            s.ptcgoCode = const.lookup_set_code_by_id(s.id)
 
         return jsonify(seralize_set(s))
     except Exception as e:
