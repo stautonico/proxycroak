@@ -7,6 +7,7 @@ SET_IDS = {
     "OBF": "sv3",
     "MEW": "sv3pt5",
     "PAR": "sv4",
+    "PAF": "sv4pt5",
 
     # Exceptions for GG and TGs
     "BRS-TG": "swsh9tg",

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /ui/api/*
+Disallow: /share/*
+Disallow: /import
