@@ -190,3 +190,14 @@ def import_route():
 @blueprint.route("/static/<path:path>")
 def static_asset(path):
     return send_from_directory("static", path)
+
+
+# Meta stuff
+@blueprint.route("/robots.txt")
+def robotstxt():
+    return send_from_directory("static/meta", "robots.txt")
+
+
+@blueprint.route("/.well-known/<path:path>")
+def well_known(path):
+    return send_from_directory("static/meta/.well-known", path)

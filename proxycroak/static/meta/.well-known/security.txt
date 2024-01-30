@@ -1,0 +1,6 @@
+Contact: mailto:security@proxycroak.com?subject=Proxycroak%20security%20issue
+Contact: security@proxycroak.com
+Expires: Fri, 1 Apr 2025 12:01 -0400
+Encryption: https://proxycroak.com/.well-known/public_pgp.txt
+Preferred-Languages: en
+Canonical: https://proxycroak.com/.well-known/security.txt

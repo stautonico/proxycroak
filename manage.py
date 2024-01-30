@@ -1,8 +1,11 @@
 import argparse
 import os, sys
+import dotenv
 
 from proxycroak.app import create_app
 from proxycroak.util import cards_db
+
+dotenv.load_dotenv(".env")
 
 BASE_DIR = os.path.join(os.path.dirname(__file__))
 if BASE_DIR not in sys.path:

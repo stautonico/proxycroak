@@ -20,7 +20,7 @@
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
 - [ ] Create alt set codes for some sets (like PR-SW should also have SSP (at least according to limitlesstcg))
-- [ ] Combine the "build" and "notify" jobs into one workflow so that the notification only happens if the build succeeds 
+- [ ] Combine the "build" and "notify" jobs into one workflow so that the notification only happens if the build succeeds
 
 ## IP
 
@@ -52,7 +52,8 @@
   build is currently active. This is to prevent stupid issues with caching on cloudflare.
 - [X] Using leading zeros in the card count breaks things
 - [X] Items, special energies, supporters, and stadiums don't work in text mode
-
+- [X] Include robots.txt
+- [X] Include security.txt
 
 ## NOT DOING
 
