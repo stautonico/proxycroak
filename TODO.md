@@ -16,7 +16,8 @@
 - [ ] Add the sentry feedback form thing to error pages
 - [ ] AUTOMATED TESTING
 - [ ] Maybe don't create the share by default. Only create the share when the "share deck" button is clicked
-- [ ] The build hash doesn't work in github actions
+- [ ] The build hash is a stupid system, find a way to match it in dev and in prod (it doesn't rn)
+
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
 
@@ -33,6 +34,7 @@
 - [X] Implement logging
 - [X] Refactor all the text on the website that changed (such as links, email addrs, and changed features like "up to
   3 decklists")
+- [X] The build hash doesn't work in github actions
 
 ## DONE
 
