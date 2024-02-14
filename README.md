@@ -17,7 +17,7 @@
   </p>
 </p>
 
-![Stargazers](https://img.shields.io/github/stars/stautonico/proxycroak?style=social) ![Issues](https://img.shields.io/github/issues/stautonico/proxycroak) ![License](https://img.shields.io/github/license/stautonico/proxycroak) 
+![Stargazers](https://img.shields.io/github/stars/stautonico/proxycroak?style=social) ![Issues](https://img.shields.io/github/issues/stautonico/proxycroak) ![Contributors](https://img.shields.io/github/contributors/stautonico/proxycroak)
 
 ## Table Of Contents
 
@@ -33,7 +33,7 @@ I came across proxycroak while looking for a service to print proxies for older 
 discovered that it had been discontinued. Seeing such an excellent service go unmaintained was a shame. I emailed the 
 original developer and asked if I could work on the project. They agreed, and since January 2024, I have rewritten, upgraded, 
 and maintained proxycroak. I plan to continue to work on this project for the foreseeable future and serve it to the 
-community ad-free as my way of giving back to the Pokemon community.
+community ad-free as my way of giving back to the Pokémon community.
 
 ## Built With
 
