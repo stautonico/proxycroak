@@ -4,14 +4,14 @@
     <img src="proxycroak/static/img/favicons/favicon-196x196.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Proxycroak</h3>
+<h3 align="center">Proxycroak</h3>
 
   <p align="center">
     A Pokémon TCG Proxying Service
     <br/>
-    <a href="https://github.com/stautonico/proxycroak/issues">Report Bug</a>
+    <a href="https://github.com/stautonico/proxycroak/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=%5BBUG%5D+">Report Bug</a>
     .
-    <a href="https://github.com/stautonico/proxycroak/issues">Request Feature</a>
+    <a href="https://github.com/stautonico/proxycroak/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=%5BFEAT%5D+">Request Feature</a>
     ·
     <a href="https://discord.gg/zqpkWSjP">Join the discord</a>
   </p>
@@ -29,10 +29,11 @@
 
 ## About The Project
 
-I came across proxycroak while looking for a service to print proxies for older cards. I enjoyed using it but soon 
-discovered that it had been discontinued. Seeing such an excellent service go unmaintained was a shame. I emailed the 
-original developer and asked if I could work on the project. They agreed, and since January 2024, I have rewritten, upgraded, 
-and maintained proxycroak. I plan to continue to work on this project for the foreseeable future and serve it to the 
+I came across proxycroak while looking for a service to print proxies for older cards. I enjoyed using it but soon
+discovered that it had been discontinued. Seeing such an excellent service go unmaintained was a shame. I emailed the
+original developer and asked if I could work on the project. They agreed, and since January 2024, I have rewritten,
+upgraded,
+and maintained proxycroak. I plan to continue to work on this project for the foreseeable future and serve it to the
 community ad-free as my way of giving back to the Pokémon community.
 
 ## Built With
@@ -43,8 +44,12 @@ community ad-free as my way of giving back to the Pokémon community.
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/stautonico/proxycroak/issues/new) to discuss it, or directly create a pull request after you edit the *README.md* file with necessary changes.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any
+contributions you make are **greatly appreciated**.
+
+* If you have suggestions for adding or removing projects, feel free
+  to [open an issue](https://github.com/stautonico/proxycroak/issues/new) to discuss it, or directly create a pull
+  request after you edit the *README.md* file with necessary changes.
 * Please make sure you check your spelling and grammar.
 * Create individual PR for each suggestion.
 * Please also read through the [Code Of Conduct](CODE_OF_CONDUCT.md) before posting your first idea as well.
@@ -68,4 +73,5 @@ Distributed under the GNU GPL-3 License. See LICENSE for more information.
 * **Marco Escher** - *Original Developer*
 
 ## Acknowledgements
+
 * [CONTRIBUTING.md & CODE_OF_CONDUCT.md](https://generator.contributing.md/)
