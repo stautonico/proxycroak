@@ -451,12 +451,9 @@ pip-selfcheck.json
 
 # Any images from the TCG API should be ignored
 proxycroak/static/img/cards/*
-!proxycroak/static/img/cards
 
 docker-compose.yml
 VERSION
 test_decklist.txt
 test.html
-*.secrets!/env.secrets
-!/env.secrets
 env.secrets
