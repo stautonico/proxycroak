@@ -23,46 +23,34 @@ jobs:
       statuses: read
 
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@main
 
-      - name: "Login to GitHub Container Registry"
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for web container
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web
+      - name: Build the web and nginx docker images
+        run: |
+          CODE_HASH=$(find proxycroak  \( -type d -name .mypy_cache -prune \) -o \( -type d -name __pycache__ -prune \) -o \( -type f -not -name "*.log" -not -name "*.webp" -exec sha256sum {} \; \) | sort | sha256sum | awk '{print $1}')
+          echo $CODE_HASH
+          # Build the nginx container
+          docker build -t proxycroak-nginx nginx
+          # Build the proxycroak flask app
+          docker build -t proxycroak-web . --build-arg CODE_HASH=$CODE_HASH
 
-      - name: Build and push Docker web image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:latest
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Tag the Docker images
+        run: |
+          docker tag proxycroak-web ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:latest
+          docker tag proxycroak-nginx ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:latest
 
-
-      - name: Extract metadata (tags, labels) for nginx container
-        id: metatwo
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx
-
-
-      - name: Build and push Docker nginx image
-        uses: docker/build-push-action@v4
-        with:
-          context: nginx
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:latest
-          labels: ${{ steps.metatwo.outputs.labels }}
-
+      - name: Push Docker Images to GHCR
+        run: |
+          docker push ${{ env.REGISTRY}}/${{ github.actor }}/proxycroak-web:latest
+          docker push ${{ env.REGISTRY}}/${{ github.actor }}/proxycroak-nginx:latest
 
       - name: Extract PR Info
         uses: 8BitJonny/gh-get-current-pr@master
