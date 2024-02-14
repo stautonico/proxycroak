@@ -5,7 +5,7 @@
 First off, thanks for taking the time to contribute! ❤️
 
 All types of contributions are encouraged and valued. See the [Table of Contents](#table-of-contents) for different ways
-to help and details about how this project handles them. Please make sure to read the relevant section before making
+eo help and details about how this project handles them. Please make sure to read the relevant section before making
 your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all involved. The
 community looks forward to your contributions. 🎉
 
@@ -33,7 +33,7 @@ community looks forward to your contributions. 🎉
 This project and everyone participating in it is governed by the
 [Proxycroak Code of Conduct](CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
-to .
+to info@proxycroak.com.
 
 ## I Have a Question
 
@@ -225,7 +225,7 @@ format: `<commit-type>(<commit-scope>)<optional:!>: <optional:#issue-number> <de
     - *frontend*
     - *docker* - Anything related to the docker containers (Dockerfile, docker-compose.yml, etc.)
     - *tools* - Anything related to utilities the program includes (manage.py, etc.)
-    - *other* - Anything that does not fit into any of the other 5 categories
+    - *other* - Anything that does not fit into any of the other 4 categories
 - **!** - If your commit contains any breaking changes, please include an exclamation point (`!`) after the parenthesis.
 - **issue-number** - If your commit is directly related to a specific GitHub issue, plese include the number (including
   the `#`)

@@ -69,8 +69,9 @@ Distributed under the GNU GPL-3 License. See LICENSE for more information.
 
 ## Authors
 
-* **Steve Tautonico** - *Owner*
+* **[Steve Tautonico](https://github.com/stautonico)** - *Owner*
 * **Marco Escher** - *Original Developer*
+* **[Nyxxide](https://github.com/nyxxide)** - *Documentation Maintainer*
 
 ## Acknowledgements
 
