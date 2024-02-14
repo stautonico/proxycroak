@@ -19,8 +19,8 @@
 - [ ] The build hash doesn't work in github actions
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
-- [ ] Create alt set codes for some sets (like PR-SW should also have SSP (at least according to limitlesstcg))
-- [ ] Combine the "build" and "notify" jobs into one workflow so that the notification only happens if the build succeeds
+
+
 
 ## IP
 
@@ -36,6 +36,8 @@
 
 ## DONE
 
+- [X] Create alt set codes for some sets (like PR-SW should also have SSP (at least according to limitlesstcg))
+- [X] Combine the "build" and "notify" jobs into one workflow so that the notification only happens if the build succeeds
 - [X] Implement some kind of bg job that runs on a timer to update the database
 - [X] Make a background job that deletes expired shares
 - [X] Convert the full list of set codes from a google sheet to a webpage with a table

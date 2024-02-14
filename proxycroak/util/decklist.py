@@ -110,12 +110,12 @@ def parse_old_line(line):
             card_num = elements.pop(-1).lstrip().replace("\r", "")
             card_name = " ".join(elements).lstrip()
 
-            return {
-                "amnt": int(amnt),
-                "set_id": set_id,
-                "card_num": card_num,
-                "card_name": card_name
-            }
+        return {
+            "amnt": int(amnt),
+            "set_id": set_id,
+            "card_num": card_num,
+            "card_name": card_name
+        }
     except Exception as e:
         # Something went wrong when trying to parse a decklist, and its probably the user's fault
         logger.warn(f"Something went wrong when parsing line: {line}", "decklist:parse_old_line")

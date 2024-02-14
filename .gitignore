@@ -457,3 +457,4 @@ docker-compose.yml
 VERSION
 env.secrets
 test_decklist.txt
+test.html
