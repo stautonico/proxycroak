@@ -11,19 +11,28 @@
         {% endif %}
 
     </title>
-    <meta name="Description" content="{{meta.description}}"/>
+    <meta name="title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
+    <meta name="description" content="{{meta.description}}" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{request.url}}" />
+    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
+    <meta property="og:description" content="{{meta.description}}" />
+    <meta property="og:image" content="/static/img/favicons/favicon-192.png" />
+    <meta property="og:site_name" content="Proxycroak"/>
     <!-- TODO: Dynamically set locale? -->
     <meta property="og:locale" content="en_US"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <meta property="og:url" content="{{request.url}}"/>
-    <meta property="og:site_name" content="Proxycroak"/>
+
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content="{{request.url}}" />
+    <meta property="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
+    <meta property="twitter:description" content="{{meta.description}}" />
+    <meta property="twitter:image" content="/static/img/favicons/favicon-196x196.png" />
+
     <!-- TODO: SET THIS -->
-    <meta property="og:image" content=""/>
-    <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <!-- TODO: SET THIS -->
-    <meta name="twitter:image" content=""/>
     <script type='application/ld+json'>
         {
             "@context": "http:\/\/schema.org",

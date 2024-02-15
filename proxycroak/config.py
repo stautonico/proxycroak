@@ -21,7 +21,7 @@ def _create_database_uri(vendor, user, passwd, host, port, current_config):
 
 
 def _check_required_values(env):
-    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST", "SENTRY_DSN", "LOG_DIRECTORY", "DISCORD_URL"]
+    required_fields = ["SECRET_KEY", "DB_VENDOR", "DB_HOST", "SENTRY_DSN", "LOG_DIRECTORY", "DISCORD_URL", "ENVIRONMENT"]
     for field in required_fields:
         if field not in env or env.get(field) in [None, ""]:
             print(f"[init:config:FATAL] Missing required value '{field}' in environment!")
@@ -57,8 +57,11 @@ class BaseConfig:
 
     PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
+
     DEBUG = False
     TESTING = False
+
+    ENVIRONMENT = None
 
     SECRET_KEY = "<secret_key_here>"
     INSTANCE_FOLDER_PATH = "/tmp"
@@ -89,12 +92,20 @@ class BaseConfig:
 
         newconfig.DEBUG = env.get("DEBUG", BaseConfig.DEBUG == "true")
 
+        # Validate the environment
+        environment = env.get("ENVIRONMENT").lower()
+
+        if environment not in const.ENVIRONMENTS:
+            raise Exception(
+                f"[init:config] invalid environment: '{env['ENVIRONMENT'].lower()}'. Valid environments: {', '.join(const.ENVIRONMENTS)}")
+
+
         newconfig.TESTING = env.get("TESTING", BaseConfig.TESTING == "true")
 
         newconfig.INSTANCE_FOLDER_PATH = env.get("INSTANCE_FOLDER_PATH", BaseConfig.INSTANCE_FOLDER_PATH)
         if env["DB_VENDOR"].lower() not in const.DATABASE_VENDORS:
             raise Exception(
-                f"[init:config] invalid database vendor: '{env['DB_VENDOR'].lower()}'. Valid db vendors: {' '.join(const.DATABASE_VENDORS)}")
+                f"[init:config] invalid database vendor: '{env['DB_VENDOR'].lower()}'. Valid db vendors: {', '.join(const.DATABASE_VENDORS)}")
 
         newconfig.DB_VENDOR = env["DB_VENDOR"].lower()
         newconfig.DB_HOST = env["DB_HOST"]

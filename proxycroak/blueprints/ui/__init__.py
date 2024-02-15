@@ -19,7 +19,7 @@ blueprint = Blueprint("ui", __name__, url_prefix="/")
 @blueprint.route("/")
 def index():
     meta = {"title": "",
-            "description": "A simple tool for deck testing: choose the format (pics or text), and print up to 3 decks made of combined Pokémon proxy cards.",
+            "description": "Proxycroak is a simple tool to print Pokémon proxy cards for playtesting, straight from a decklist.",
             "tags": ["home"]}
     return render_template("pages/index.html", meta=meta)
 
