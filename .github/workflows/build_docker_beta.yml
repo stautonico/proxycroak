@@ -38,8 +38,8 @@ jobs:
 
       - name: Tag the Docker images
         run: |
-          docker tag proxycroak-web ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:beta
-          docker tag proxycroak-nginx ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:beta
+          docker tag proxycroak-web:beta ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:beta
+          docker tag proxycroak-nginx:beta ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:beta
 
       - name: Push Docker Images to GHCR
         run: |
