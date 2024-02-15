@@ -453,7 +453,10 @@ pip-selfcheck.json
 proxycroak/static/img/cards/*
 
 docker-compose.yml
+docker-compose.beta.yml
+env.secrets
+beta.env.secrets
+
 VERSION
 test_decklist.txt
 test.html
-env.secrets

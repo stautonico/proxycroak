@@ -1,0 +1,76 @@
+name: Deploy beta images to GHCR
+
+on:
+  push:
+    branches:
+      - beta
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      checks: read
+      deployments: read
+      pull-requests: read
+      repository-projects: read
+      statuses: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the web and nginx docker images
+        run: ./build_docker_beta.sh
+
+      - name: Tag the Docker images
+        run: |
+          docker tag proxycroak-web ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-web:beta
+          docker tag proxycroak-nginx ${{ env.REGISTRY }}/${{ github.actor }}/proxycroak-nginx:beta
+
+      - name: Push Docker Images to GHCR
+        run: |
+          docker push ${{ env.REGISTRY}}/${{ github.actor }}/proxycroak-web:beta
+          docker push ${{ env.REGISTRY}}/${{ github.actor }}/proxycroak-nginx:beta
+
+# Maybe we'll send beta announcements in the future, but not now
+
+#      - name: Extract PR Info
+#        uses: 8BitJonny/gh-get-current-pr@master
+#        id: PR
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          sha: ${{ github.event.pull_request.head.sha }}
+#          filterOutClosed: false
+#          filterOutDraft: true
+#
+#
+#      - name: Send Discord notification
+#        if: success() && steps.PR.outputs.number
+#        env:
+#          prTitle: ${{ steps.PR.outputs.pr_title }}
+#          prBody: ${{ steps.PR.outputs.pr_body }}
+#
+#        uses: tsickert/discord-webhook@v5.3.0
+#        with:
+#          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+#          content: "<@&1190582363340685424> **New release!**"
+#          embed-title: "Proxycroak ${{env.prTitle}}"
+#          embed-description: "${{env.prBody}}"
+#          embed-url: "https://proxycroak.com/changelog#${{env.prTitle}}"
+#          embed-thumbnail-url: "https://proxycroak.com/static/img/favicons/favicon-196x196.png"
+#          embed-color: "5763719"
+
