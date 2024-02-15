@@ -1,5 +1,5 @@
 DATABASE_VENDORS = ["sqlite", "mysql"]
-ENVIRONMENTS = ["development", "testing", "production", "beta"]
+ENVIRONMENTS = ["development", "testing", "production", "beta", "tools"]
 
 # In theory, we should only need newer sets (SVI+) since all the rest have ptcgo codes
 SET_IDS = {

@@ -18,49 +18,67 @@ def recursive_json_loads(obj):
         return obj
 
 
-def serialize_card(card):
-    output = {
-        "id": card.id,
-        "abilities": card.abilities,
-        "artist": card.artist,
-        "ancientTrait": card.ancientTrait,
-        "attacks": card.attacks,
-        "convertedRetreatCost": card.convertedRetreatCost,
-        "evolvesFrom": card.evolvesFrom,
-        "flavorText": card.flavorText,
-        "hp": card.hp,
-        "image": card.image,
-        "regulationMark": card.regulationMark,
-        "legalities": card.legalities,
-        "name": card.name,
-        "nationalPokedexNumbers": card.nationalPokedexNumbers,
-        "number": card.number,
-        "rarity": card.rarity,
-        "resistances": card.resistances,
-        "retreatCost": card.retreatCost,
-        "rules": card.rules,
-        "subtypes": card.subtypes,
-        "supertype": card.supertype,
-        "types": card.types,
-        "weaknesses": card.weaknesses,
-        "set_id": card.set_id
-    }
+def serialize_card(card, unreleased_card=False):
+    if unreleased_card:
+        output = {
+            "id": card.id,
+            "image": card.image,
+            "name": card.name,
+            "number": card.number,
+            "set_id": card.set_id
+        }
+    else:
+        output = {
+            "id": card.id,
+            "abilities": card.abilities,
+            "artist": card.artist,
+            "ancientTrait": card.ancientTrait,
+            "attacks": card.attacks,
+            "convertedRetreatCost": card.convertedRetreatCost,
+            "evolvesFrom": card.evolvesFrom,
+            "flavorText": card.flavorText,
+            "hp": card.hp,
+            "image": card.image,
+            "regulationMark": card.regulationMark,
+            "legalities": card.legalities,
+            "name": card.name,
+            "nationalPokedexNumbers": card.nationalPokedexNumbers,
+            "number": card.number,
+            "rarity": card.rarity,
+            "resistances": card.resistances,
+            "retreatCost": card.retreatCost,
+            "rules": card.rules,
+            "subtypes": card.subtypes,
+            "supertype": card.supertype,
+            "types": card.types,
+            "weaknesses": card.weaknesses,
+            "set_id": card.set_id
+        }
 
     return output
 
 
-def seralize_set(set):
-    output = {
-        "id": set.id,
-        "legalities": set.legalities,
-        "name": set.name,
-        "printedTotal": set.printedTotal,
-        "ptcgoCode": set.ptcgoCode,
-        "releaseDate": set.releaseDate,
-        "series": set.series,
-        "total": set.total,
-        "updatedAt": set.updatedAt,
-    }
+def seralize_set(set, unreleased=False):
+    if unreleased:
+        output = {
+            "id": set.id,
+            "name": set.name,
+            "ptcgoCode": set.ptcgoCode,
+            "alternatePtcgoCode": set.alternatePtcgoCode,
+            "updatedAt": set.updatedAt
+        }
+    else:
+        output = {
+            "id": set.id,
+            "legalities": set.legalities,
+            "name": set.name,
+            "printedTotal": set.printedTotal,
+            "ptcgoCode": set.ptcgoCode,
+            "releaseDate": set.releaseDate,
+            "series": set.series,
+            "total": set.total,
+            "updatedAt": set.updatedAt,
+        }
 
     return output
 
