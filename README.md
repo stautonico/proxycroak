@@ -69,7 +69,7 @@ Distributed under the GNU GPL-3 License. See LICENSE for more information.
 
 ## Authors
 
-* **[Steve Tautonico](https://github.com/stautonico)** - *Owner*
+* **[Steve Tautonico](https://github.com/stautonico)** - *Maintainer*
 * **Marco Escher** - *Original Developer*
 * **[Nyxxide](https://github.com/nyxxide)** - *Documentation Maintainer*
 
