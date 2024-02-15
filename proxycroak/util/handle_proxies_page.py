@@ -21,7 +21,8 @@ def handle_proxies_page(data, meta, opts=None):
         "illustration": False,
         "nomin": False,
         "jp": False,
-        "exclude_secrets": False
+        "exclude_secrets": False,
+        "hideUnreleased": False
     }
 
     # TODO: Don't hardcode decks[0]

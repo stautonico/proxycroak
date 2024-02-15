@@ -49,6 +49,24 @@ class Card(db.Model):
     set: Mapped["Set"] = relationship(back_populates="cards")
 
 
+class UnreleasedSet(db.Model):
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    name: Mapped[str] = mapped_column(String(256), nullable=True)
+    ptcgoCode: Mapped[str] = mapped_column(String(64), nullable=True)
+    alternatePtcgoCode: Mapped[str] = mapped_column(String(64), nullable=True)
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
+    cards: Mapped[List["UnreleasedCard"]] = relationship(back_populates="set")
+
+
+class UnreleasedCard(db.Model):
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    image: Mapped[str] = mapped_column(String(128), nullable=True)
+    name: Mapped[str] = mapped_column(String(128), nullable=True)
+    number: Mapped[str] = mapped_column(String(8), nullable=True)
+    set_id: Mapped[int] = mapped_column(ForeignKey("unreleased_set.id"))
+    set: Mapped["UnreleasedSet"] = relationship(back_populates="cards")
+
+
 class SharedDecklist(db.Model):
     id: Mapped[str] = mapped_column(String(8), primary_key=True)
     decklist: Mapped[str] = mapped_column(String(4192))

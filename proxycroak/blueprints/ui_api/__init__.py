@@ -3,7 +3,7 @@ from sentry_sdk import capture_exception
 
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
-from proxycroak.models import Card, Set
+from proxycroak.models import Card, Set, UnreleasedSet, UnreleasedCard
 from proxycroak.util.handle_proxies_page import handle_proxies_page
 from proxycroak.util.serialize import serialize_card, recursive_json_loads, seralize_set
 from proxycroak.logging import logger
@@ -34,7 +34,8 @@ def proxies():
             "illustration": False,
             "nomin": False,
             "jp": False,
-            "exclude_secrets": False
+            "exclude_secrets": False,
+            "hideUnreleased": False,
         }
 
         if "mode" in form_data:
@@ -81,7 +82,7 @@ def proxies():
 
         # TODO: Find a better way to do this
 
-        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets"]:
+        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets", "hideUnreleased"]:
             if f"options[{opt}]" in form_data:
                 options[opt] = form_data[f"options[{opt}]"] == "1"
 
@@ -91,8 +92,14 @@ def proxies():
 @blueprint.route("/search", methods=["GET"])
 def search():
     try:
-        entries = Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()
-        return jsonify([recursive_json_loads(serialize_card(e)) for e in entries])
+        print(f"Searching for {request.args.to_dict()['name']}")
+        entries = [recursive_json_loads(serialize_card(e)) for e in
+                   Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()]
+
+        unreleased_entires = [recursive_json_loads(serialize_card(e, True)) for e in UnreleasedCard.query.filter(
+            UnreleasedCard.name.ilike(f"%{request.args.to_dict()['name']}%")).all()]
+
+        return jsonify([*entries, *unreleased_entires])
     except Exception as e:
         logger.warn(f"Something went wrong when trying to search for cards: '{e}'", "ui_api::search")
         capture_exception(e)
@@ -102,13 +109,21 @@ def search():
 @blueprint.route("/set/<string:set_id>", methods=["GET"])
 def set_get(set_id):
     try:
+        unreleased_mode = False
+
         s = Set.query.get(set_id)
+
+        if not s:
+            s = UnreleasedSet.query.get(set_id)
+            unreleased_mode = True
+            if not s:
+                return jsonify({"error": "set not found"}), 404
 
         # If the set doesn't have a ptcgo code, grab it from the const table
         if not s.ptcgoCode:
             s.ptcgoCode = const.lookup_set_code_by_id(s.id)
 
-        return jsonify(seralize_set(s))
+        return jsonify(seralize_set(s, unreleased_mode))
     except Exception as e:
         print(e)
         return jsonify({"error": "set not found"}), 404
