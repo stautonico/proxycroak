@@ -8,7 +8,7 @@ echo $CODE_HASH
 
 
 # Build the nginx container
-docker build -t proxycroak-nginx-beta nginx -f nginx/Dockerfile.beta
+docker build -t proxycroak-nginx:beta nginx -f nginx/Dockerfile.beta
 
 # Build the proxycroak flask app
-docker build -t proxycroak-web-beta . -f Dockerfile.beta --build-arg CODE_HASH=$CODE_HASH
+docker build -t proxycroak-web:beta . -f Dockerfile.beta --build-arg CODE_HASH=$CODE_HASH
