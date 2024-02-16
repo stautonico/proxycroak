@@ -25,7 +25,7 @@ def serialize_card(card, unreleased_card=False):
             "image": card.image,
             "name": card.name,
             "number": card.number,
-            "set_id": card.set_id
+            "set_id": card.set_id,
         }
     else:
         output = {

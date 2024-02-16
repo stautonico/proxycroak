@@ -10,6 +10,7 @@
 ########################
 #DEBUG=False
 #TESTING=False
+ENVIRONMENT= # Required
 
 ####################
 # Backend settings #

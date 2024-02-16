@@ -106,5 +106,9 @@ def handle_proxies_page(data, meta, opts=None):
         db.session.add(shared_decklist)
         db.session.commit()
 
+    from pprint import pprint
+
+    pprint(output)
+
     return render_template("pages/proxies.html", meta=meta, rows=output, errors=errors, share_id=random_id,
                            options=options, make_meme_title=make_meme_title)
