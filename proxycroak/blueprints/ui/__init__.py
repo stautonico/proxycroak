@@ -78,7 +78,8 @@ def share(sid):
         "illustration": False,
         "nomin": False,
         "jp": False,
-        "exclude_secrets": False
+        "exclude_secrets": False,
+        "hideUnreleased": False,
     }
 
     output, errors = handle_pic_mode(parse_decklist(dl.decklist), options)
