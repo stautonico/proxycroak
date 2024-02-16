@@ -100,6 +100,8 @@ class BaseConfig:
             raise Exception(
                 f"[init:config] invalid environment: '{env['ENVIRONMENT'].lower()}'. Valid environments: {', '.join(const.ENVIRONMENTS)}")
 
+        newconfig.ENVIRONMENT = env.get("ENVIRONMENT").lower()
+
         newconfig.TESTING = env.get("TESTING", BaseConfig.TESTING == "true")
 
         newconfig.INSTANCE_FOLDER_PATH = env.get("INSTANCE_FOLDER_PATH", BaseConfig.INSTANCE_FOLDER_PATH)
