@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /ui/api/*
 Disallow: /share/*
 Disallow: /import
+
+Sitemap: https://proxycroak.com/static/sitemap.xml
