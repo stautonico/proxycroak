@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block content %}
+
+<main id="main" class="main main--home">
+    <div class="main__content">
+        <div class="main__head">
+            {% if errors|length > 0 %}
+            <div class="row errors">
+                <div class="error">
+                    <div class="error__head">Errors:</div>
+                    <ul class="error__lines">
+                        {% for error in errors %}
+                        <li class="error__line">{{error}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <form class="form" autocomplete="off" id="signupform" method="post" action="{{ url_for('auth.login') }}">
+            <div class="form__head">
+                <h1 class="form__title form__title--start">Login to your account</h1>
+            </div>
+
+            <!--    <form class="generated-form" method="POST" action="/auth/signup" enctype="application/x-www-form-urlencoded"-->
+            <!--          target="_self">-->
+            <label for="username">Username or email</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <input type="submit" value="Submit" id="submit">
+        </form>
+    </div>
+</main>
+
+<script>
+</script>
+
+{% endblock %}

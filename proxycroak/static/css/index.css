@@ -2068,6 +2068,10 @@ a:disabled {
     pointer-events: none;
 }
 
+#signupform input {
+    border: 1px solid black;
+}
+
 @media only screen and (max-width: 640px) {
     .formatBtn {
         width: 100%;

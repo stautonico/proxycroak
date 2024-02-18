@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block content %}
+
+<main id="main" class="main main--home">
+    <div class="main__content">
+        <form class="form" autocomplete="off" id="signupform" method="post" action="{{ url_for('auth.resend_activation') }}">
+            <div class="form__head">
+                <h1 class="form__title form__title--start" id="msg">This activation link has expired</h1>
+                <h4 class="form__subtitle">Enter the email you signed up with to send a new activation link.</h4>
+                <h4 class="form__subtitle">({{ censored_email }})</h4>
+            </div>
+
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <input type="hidden" id="token" name="token" value="{{ token }}">
+
+            <input type="submit" value="Submit" id="submit">
+
+        </form>
+    </div>
+</main>
+
+<script>
+
+
+
+</script>
+
+{% endblock %}

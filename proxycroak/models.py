@@ -1,7 +1,8 @@
 from typing import List
 import datetime
 
-from sqlalchemy import Integer, String, ForeignKey, DateTime
+from flask_login import UserMixin
+from sqlalchemy import Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from proxycroak.database import db
@@ -71,3 +72,23 @@ class SharedDecklist(db.Model):
     id: Mapped[str] = mapped_column(String(8), primary_key=True)
     decklist: Mapped[str] = mapped_column(String(4192))
     expires: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
+
+
+class User(UserMixin, db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=datetime.datetime.now)
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.datetime.now, onupdate=datetime.datetime.now)
+    password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True, unique=True)
+    password_reset_expires: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    account_activation_token: Mapped[str] = mapped_column(String(64), nullable=True, unique=True)
+    account_activation_expires: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    account_activated: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    account_activated_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    def get_id(self):
+        return f"{self.id}"

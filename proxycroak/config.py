@@ -83,6 +83,8 @@ class BaseConfig:
     BUILD_VERSION = None
     BUILD_HASH = None
 
+    SENDGRID_API_KEY = None
+
     @staticmethod
     def from_env(env):
         _check_required_values(env)
@@ -129,6 +131,8 @@ class BaseConfig:
             with open("VERSION", "r") as f:
                 # We expect 2 lines
                 newconfig.BUILD_VERSION, newconfig.BUILD_HASH = f.read().split("\n")
+
+        newconfig.SENDGRID_API_KEY = env.get("SENDGRID_API_KEY")
 
         return newconfig
 

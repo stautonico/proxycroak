@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block content %}
+
+<main id="main" class="main main--home">
+    <div class="main__content">
+        <form class="form">
+            <div class="form__head">
+                <h1 class="form__title form__title--start" id="msg">Account successfully activated. Redirecting home in
+                    5 seconds...</h1>
+                <a href="{{ url_for('ui.index') }}"><i>Or click here to redirect now</i></a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    const message = document.getElementById("msg");
+
+    function countdown() {
+        let count = 5;
+
+        let interval = setInterval(() => {
+            message.innerText = `Account successfully activated. Redirecting home in ${count} second${count === 1 ? '' : 's'}...`;
+
+            count--;
+
+            if (count === 0) {
+                clearInterval(interval);
+                window.location.href = "/";
+            }
+
+        }, 1000)
+
+    }
+
+    window.onload = () => {
+        countdown();
+    }
+
+
+</script>
+
+{% endblock %}

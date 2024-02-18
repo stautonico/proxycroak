@@ -5,6 +5,7 @@ from datetime import datetime as dt
 from flask.logging import default_handler
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
+from flask_login import LoginManager
 import sentry_sdk
 
 from proxycroak.config import CONFIG
@@ -22,6 +23,7 @@ def create_app(mode=None):
 
     logger.info("Successfully built config. Starting to init app...", "init")
     app = Flask(CONFIG.PROJECT_NAME, instance_path=CONFIG.INSTANCE_FOLDER_PATH, instance_relative_config=True)
+    app.secret_key = CONFIG.SECRET_KEY
 
     configure_blueprints(app)
     configure_filter(app)
@@ -38,10 +40,11 @@ def create_app(mode=None):
 
 def configure_blueprints(app):
     logger.info("Configuring blueprints...", "init")
-    from proxycroak.blueprints import ui, ui_api
+    from proxycroak.blueprints import ui, ui_api, auth
 
     app.register_blueprint(ui.blueprint)
     app.register_blueprint(ui_api.blueprint)
+    app.register_blueprint(auth.blueprint)
 
 
 def configure_filter(app):
@@ -88,7 +91,7 @@ def configure_error_handlers(app):
 def configure_middleware(app):
     logger.info("Configuring middleware...", "init")
 
-    from proxycroak.models import Set, Card, SharedDecklist
+    from proxycroak.models import Set, Card, SharedDecklist, UnreleasedSet, UnreleasedCard, User
 
     # Configure the database
     app.config["SQLALCHEMY_DATABASE_URI"] = CONFIG.DB_URI
@@ -113,6 +116,13 @@ def configure_middleware(app):
     )
 
     scheduler.init_app(app)
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     # Check if maintenance mode is enabled
     @app.before_request

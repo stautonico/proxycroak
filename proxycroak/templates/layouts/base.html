@@ -11,26 +11,26 @@
         {% endif %}
 
     </title>
-    <meta name="title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
-    <meta name="description" content="{{meta.description}}" />
+    <meta name="title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <meta name="description" content="{{meta.description}}"/>
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{request.url}}" />
-    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
-    <meta property="og:description" content="{{meta.description}}" />
-    <meta property="og:image" content="/static/img/favicons/favicon-196x196.png" />
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{request.url}}"/>
+    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <meta property="og:description" content="{{meta.description}}"/>
+    <meta property="og:image" content="/static/img/favicons/favicon-196x196.png"/>
     <meta property="og:site_name" content="Proxycroak"/>
     <!-- TODO: Dynamically set locale? -->
     <meta property="og:locale" content="en_US"/>
 
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:url" content="{{request.url}}" />
-    <meta property="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}" />
-    <meta property="twitter:description" content="{{meta.description}}" />
-    <meta property="twitter:image" content="/static/img/favicons/favicon-196x196.png" />
+    <meta property="twitter:card" content="summary"/>
+    <meta property="twitter:url" content="{{request.url}}"/>
+    <meta property="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
+    <meta property="twitter:description" content="{{meta.description}}"/>
+    <meta property="twitter:image" content="/static/img/favicons/favicon-196x196.png"/>
 
     <!-- TODO: SET THIS -->
     <script type='application/ld+json'>
@@ -118,7 +118,13 @@
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.features') }}">Features</a></li>
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.changelog') }}">Changelog</a></li>
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.help') }}">Help</a></li>
-                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="topBar__nav__item"><a href="#">Pastebin</a></li>
+                    <li class="topBar__nav__item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% else %}
+                    <li class="topBar__nav__item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <li class="topBar__nav__item"><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
