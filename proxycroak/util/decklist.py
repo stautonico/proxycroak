@@ -40,36 +40,46 @@ def parse_new_line(line: str):
             card_num = elements.pop(-1).replace("\r", "")
             card_name = " ".join(elements)
 
-            # TODO: Bullshit hack
-            if "tg" in card_num.lower():
-                # Remove the "tg"
-                card_num = card_num[2:]
-                card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
-            if "gg" in card_num.lower():
-                # Remove the "tg"
-                card_num = card_num[2:]
-                card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
+            # print(f"amnt: '{amnt}', set_id: '{set_id}', card_num: '{card_num}', card_name: '{card_name}'")
 
-            # If we're using PTCGL format (CRZ-GG 6 instead of CRZ GG06), we need to change the card num to include the GG
-            if "tg" in set_id.lower():
-                card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
-            elif "gg" in set_id.lower():
-                card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
-            elif "pr-sw" in set_id.lower() and "SWSH" not in card_num:
-                card_num = "SWSH" + ("0" if int(card_num) < 10 else "") + card_num
+            # TODO: Bullshit hack
+            # if "tg" in card_num.lower():
+            #     # Remove the "tg"
+            #     card_num = card_num[2:]
+            #     card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
+            # if "gg" in card_num.lower():
+            #     # Remove the "tg"
+            #     card_num = card_num[2:]
+            #     card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
+            #
+            # # If we're using PTCGL format (CRZ-GG 6 instead of CRZ GG06), we need to change the card num to include the GG
+            # if "tg" in set_id.lower():
+            #     card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
+            # elif "gg" in set_id.lower():
+            #     card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
+            # elif "pr-sw" in set_id.lower() and "SWSH" not in card_num:
+            #     card_num = "SWSH" + ("0" if int(card_num) < 10 else "") + card_num
 
             # TODO: More bullshit hacks
-            if set_id.lower() == "hif":
-                if int(card_num) > 69:
-                    # We're in the hidden fates shiny vault
-                    card_num = "SV" + str(int(card_num) - 69)
-
-            if set_id.lower() == "shf":
-                if int(card_num) > 73:
-                    # We're in the shining fates shiny vault
-                    # Calculate the padding for this (should be 3 digits)
-                    card_num = "SV" + str(int(card_num) - 73).zfill(3)
-                    set_id = "SHF-SV"
+            # if set_id.lower() == "hif":
+            #     card_num = card_num.replace("SV", "")
+            #     if int(card_num) > 69:
+            #         # We're in the hidden fates shiny vault
+            #         card_num = str(int(card_num) - 69)
+            #
+            #     card_num = "SV" + card_num
+            #
+            # if set_id.lower() == "shf" and "SV" in card_num:
+            #     set_id = "SHF-SV"
+            #     card_num = card_num.replace("SV", "")
+            #     if int(card_num) > 73:
+            #         # We're in the shining fates shiny vault
+            #         # Calculate the padding for this (should be 3 digits)
+            #         card_num = str(int(card_num) - 73).zfill(3)
+            #
+            #     card_num = "SV" + card_num
+            if set_id.lower() == "shf" and "SV" in card_num:
+                set_id = "SHF-SV"
 
         return {
             "amnt": int(amnt),
@@ -78,6 +88,7 @@ def parse_new_line(line: str):
             "card_name": card_name.lstrip()
         }
     except Exception as e:
+        print(e)
         # Something went wrong when trying to parse a decklist, and its probably the user's fault
         logger.warn(f"Something went wrong when parsing line: {line}", "decklist:parse_new_line")
         return {"error": "Unable to parse line", "line": line}
@@ -166,9 +177,6 @@ def parse_decklist(decklist: str):
         # Shouldn't happen but check anyway
         if line != "":
             # TODO: This is just a hack to get prism star and star to work
-            line = line.replace("{*}", "◇")  # Hack for prism star
-            line = line.replace(" Star ", " ★ ")  # Hack for star
-            line = line.replace(" Delta ", " δ ")  # Hack for delta species
             line = line.rstrip()  # Clear out spaces from the right side
             if dlformat == "old":
                 if line[0] == "#" or line[:2] == "**":
@@ -182,8 +190,10 @@ def parse_decklist(decklist: str):
                     continue
             else:
                 # If we're dealing with the "header" line, ignore it
-                pattern = re.compile(r'(?:[^\W_]|[ \'-])*( - |: )\d*', re.UNICODE)
-                match = pattern.match(line)
+                # TODO: Fix later
+                # pattern = re.compile(r'(?:[^\W_]|[ \'-])*( - |: )\d*', re.UNICODE)
+                # match = pattern.match(line)
+                match = False
 
                 if match:
                     continue
@@ -194,5 +204,21 @@ def parse_decklist(decklist: str):
                     logger.warn(f"User provided an invalid line: {line}", "decklist:parse_decklist")
                     output.append({"error": "Unable to parse line", "line": line})
                     continue
+
+            line = line.replace("{*}", "◇")  # Hack for prism star
+            line = line.replace(" Star ", " ★ ")  # Hack for star
+            line = line.replace(" Delta ", " δ ")  # Hack for delta species
+
+    # TODO: Optimize
+    for i in output:
+        if i["card_name"] in ["{*}", "star", "delta"]:
+            card_name = i["card_name"]
+            split = card_name.split(" ")
+            if card_name[-1].lower() in ["{*}", "star", "delta"]:
+                split[-1] = split[-1].replace("{*}", "◇")
+                split[-1] = split[-1].lower().replace("star", "★")
+                split[-1] = split[-1].lower().replace("delta", "δ")
+
+            i["card_name"] = " ".join(split)
 
     return output

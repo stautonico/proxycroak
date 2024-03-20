@@ -1,17 +1,20 @@
 import logging
 import os
 from datetime import datetime as dt
+from datetime import datetime, timedelta
 
 from flask.logging import default_handler
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_login import LoginManager
 import sentry_sdk
+from sqlalchemy import and_
+from flask_toastr import Toastr
 
 from proxycroak.config import CONFIG
 from proxycroak.database import db
 from proxycroak.scheduler import scheduler
-from proxycroak.models import SharedDecklist
+from proxycroak.models import SharedDecklist, User
 from proxycroak.util.cards_db import update_sets
 from proxycroak.logging import logger
 
@@ -115,10 +118,14 @@ def configure_middleware(app):
         environment=CONFIG.ENVIRONMENT
     )
 
-    scheduler.init_app(app)
+    if scheduler.state == 0:
+        scheduler.init_app(app)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
+
+    toastr = Toastr()
+    toastr.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -185,17 +192,37 @@ def configure_additional(app):
             db.session.commit()
 
     # Add a job to check and delete expired shares (runs once per day)
-    scheduler.add_job(func=delete_expired_shares, trigger="interval", hours=24, id="delete-expired-shares")
+    if not scheduler.get_job("delete-expired-shares"):
+        scheduler.add_job(func=delete_expired_shares, trigger="interval", hours=24, id="delete-expired-shares")
+
+    def delete_unactivated_users():
+        with app.app_context():
+            # Get a full list of users whose creation date is > 24 hours and are not activated
+            # This is to prevent bots from eating up a bunch of sought after usernames
+
+            # 24 hours ago
+            threshold = datetime.utcnow() - timedelta(hours=24)
+            users = User.query.filter(and_(User.created_at <= threshold, User.account_activated == False)).all()
+            for user in users:
+                db.session.delete(user)
+                # TODO: Log deletion
+
+            db.session.commit()
+
+    if not scheduler.get_job("delete-unactivated-users"):
+        scheduler.add_job(func=delete_unactivated_users, trigger="interval", hours=12, id="delete-unactivated-users")
 
     def update_cards_database():
         with app.app_context():
             update_sets()
 
     # Add a job to check if any sets have updates. If they do, pull the changes (runs once per day)
-    scheduler.add_job(func=update_cards_database, trigger="interval", hours=24, id="update-sets")
+    if not scheduler.get_job("update-sets"):
+        scheduler.add_job(func=update_cards_database, trigger="interval", hours=24, id="update-sets")
     # scheduler.add_job(func=update_cards_database, trigger="interval", seconds=5, id="update-sets")
 
-    scheduler.start()
+    if scheduler.state == 0:
+        scheduler.start()
 
     # Configure global variables that are available in any template
     @app.context_processor

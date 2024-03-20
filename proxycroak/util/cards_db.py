@@ -45,7 +45,7 @@ def generate_card_payload(ptcglcard):
         "evolvesFrom": ptcglcard.evolvesFrom,
         "flavorText": ptcglcard.flavorText,
         "hp": ptcglcard.hp,
-        "image": "/set/by/later/code",
+        "image": f"/static/img/cards/{ptcglcard.set_id}/{ptcglcard.id}",
         "regulationMark": ptcglcard.regulationMark,
         "name": ptcglcard.name,
         "nationalPokedexNumbers": dumps(ptcglcard.nationalPokedexNumbers) if ptcglcard.nationalPokedexNumbers else None,

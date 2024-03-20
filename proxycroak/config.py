@@ -84,6 +84,7 @@ class BaseConfig:
     BUILD_HASH = None
 
     SENDGRID_API_KEY = None
+    MAILGUN_API_KEY = None
 
     @staticmethod
     def from_env(env):
@@ -132,7 +133,8 @@ class BaseConfig:
                 # We expect 2 lines
                 newconfig.BUILD_VERSION, newconfig.BUILD_HASH = f.read().split("\n")
 
-        newconfig.SENDGRID_API_KEY = env.get("SENDGRID_API_KEY")
+        # newconfig.SENDGRID_API_KEY = env.get("SENDGRID_API_KEY")
+        newconfig.MAILGUN_API_KEY = env.get("MAILGUN_API_KEY")
 
         return newconfig
 

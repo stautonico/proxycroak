@@ -869,6 +869,22 @@ ul.list li:last-child {
     align-items: center
 }
 
+.main--login {
+    text-align: center;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    align-items: center
+}
+
+.main--forgot-password {
+    text-align: center;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    align-items: center
+}
+
 .form {
     width: 100%
 }
@@ -1999,7 +2015,7 @@ a:disabled {
 
 /* Modal Content */
 .steve--modal-content {
-    background-color: #fefefe;
+    background-color: #ffffff;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
@@ -2044,24 +2060,49 @@ a:disabled {
     transform: scale(1.05);
 }
 
-#findCardsForm input {
-    border: 1px solid black;
-    padding: 0.25em;
+#searchCardName {
+    appearance: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    box-shadow: 0 0px 50px 10px rgba(53, 61, 69, .05), 0 20px 60px rgba(53, 61, 69, .05);
+    transition: box-shadow .7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: #fff;
+    display: inline-block;
 }
 
-#findCardsForm #findButton {
-    padding: 0.25em;
-    background: lightgray;
-    border: 1px solid black;
-    border-radius: 10px;
+#searchCardName:focus {
+    outline: none;
+    box-shadow: 0 0px 50px 10px rgba(53, 61, 69, .05), 0 30px 70px rgba(53, 61, 69, .2)
 }
 
-#findCardsForm #findButton:hover {
-    background: #b5b5b5;
+.login-input {
+    appearance: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    box-shadow: 0 0px 50px 10px rgba(53, 61, 69, .05), 0 20px 60px rgba(53, 61, 69, .05);
+    transition: box-shadow .7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: #fff;
+    display: inline-block;
 }
 
-#findCardsForm #findButton:active {
-    background: #868686;
+.login-input:focus {
+    outline: none;
+    box-shadow: 0 0px 50px 10px rgba(53, 61, 69, .05), 0 30px 70px rgba(53, 61, 69, .2)
+}
+
+.login-button {
+    width: auto;
+    text-align: center;
+    background: #00add3;
+    border-radius: 5px;
+    margin-top: 20px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: inline-block;
 }
 
 .displayOnlyCheckbox[readonly] {
@@ -2070,6 +2111,19 @@ a:disabled {
 
 #signupform input {
     border: 1px solid black;
+}
+
+.findCardButton {
+    width: auto;
+    text-align: center;
+    background: #00add3;
+    border-radius: 5px;
+    margin-top: 20px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    transition: all .7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: inline-block;
 }
 
 @media only screen and (max-width: 640px) {

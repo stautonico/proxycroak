@@ -92,7 +92,6 @@ def proxies():
 @blueprint.route("/search", methods=["GET"])
 def search():
     try:
-        print(f"Searching for {request.args.to_dict()['name']}")
         entries = [recursive_json_loads(serialize_card(e)) for e in
                    Card.query.filter(Card.name.ilike(f"%{request.args.to_dict()['name']}%")).all()]
 

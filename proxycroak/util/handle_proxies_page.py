@@ -43,6 +43,7 @@ def handle_proxies_page(data, meta, opts=None):
 
     # TODO: Don't hardcode decks[0]
     # TODO: Include errors
+
     parsed_list = parse_decklist(data["decks[0]"])
     if parsed_list is [] or parsed_list is None:
         return make_invalid_dl_error(data['decks[0]'])
@@ -68,7 +69,6 @@ def handle_proxies_page(data, meta, opts=None):
         output, errors = handle_pic_mode(parsed_list, options)
     else:
         output, errors = handle_text_mode(parsed_list, options)
-
 
     random_id = None
     # Save the decklist if we have at least 1 valid line
@@ -107,8 +107,6 @@ def handle_proxies_page(data, meta, opts=None):
         db.session.commit()
 
     from pprint import pprint
-
-    pprint(output)
 
     return render_template("pages/proxies.html", meta=meta, rows=output, errors=errors, share_id=random_id,
                            options=options, make_meme_title=make_meme_title)

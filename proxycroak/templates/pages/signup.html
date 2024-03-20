@@ -3,69 +3,64 @@
 
 {% block content %}
 
-<main id="main" class="main main--home">
-    <div class="main__content">
-        <div class="main__head">
-            {% if errors|length > 0 %}
-            <div class="row errors">
-                <div class="error">
-                    <div class="error__head">Errors:</div>
-                    <ul class="error__lines">
-                        {% for error in errors %}
-                        <li class="error__line">{{error}}</li>
-                        {% endfor %}
-                    </ul>
+    <main id="main" class="main main--login">
+        <div class="main__content">
+            <div class="main__head">
+                {% if errors|length > 0 %}
+                    <div class="row errors">
+                        <div class="error">
+                            <div class="error__head">Errors:</div>
+                            <ul class="error__lines">
+                                {% for error in errors %}
+                                    <li class="error__line">{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <form class="form" autocomplete="off" id="signupform" method="post" action="{{ url_for('auth.signup') }}">
+                <div class="form__head">
+                    <h1 class="form__title form__title--start">Create an Account</h1>
                 </div>
-            </div>
-            {% endif %}
+
+                <label for="email">Email</label><br>
+                <input type="text" id="email" name="email" class="login-input" required><br><br>
+
+                <label for="username">Username</label><br>
+                <input type="text" id="username" name="username" class="login-input" required><br><br>
+
+                <label for="password">Password</label><br>
+                <input type="password" id="password" name="password" class="login-input" required><br><br>
+
+                <label for="confirmPassword">Confirm Password</label><br>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="login-input" required><br><br>
+
+                <input type="submit" value="Register" id="submit" class="btn login-button">
+            </form>
         </div>
-
-        <form class="form" autocomplete="off" id="signupform" method="post" action="{{ url_for('auth.signup') }}">
-            <div class="form__head">
-                <h1 class="form__title form__title--start">Create an account</h1>
-            </div>
-
-            <!--    <form class="generated-form" method="POST" action="/auth/signup" enctype="application/x-www-form-urlencoded"-->
-            <!--          target="_self">-->
-            <label for="email">Email</label><br>
-            <input type="text" id="email" name="email" required><br><br>
-
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
-
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-
-            <label for="confirmPassword">Confirm Password:</label><br>
-            <input type="password" id="confirmPassword" name="confirmPassword"
-                   onchange="checkMatchingPassword()" required><br>
-            <span id="confirmPasswordError" style="color: red;"></span>
-            <br><br>
+    </main>
 
 
-            <input type="submit" value="Submit" id="submit" disabled>
-        </form>
-    </div>
-</main>
+    <script>
+        const passwordField = document.getElementById("password");
+        const confirmPasswordField = document.getElementById("confirmPassword");
+        const confirmPasswordError = document.getElementById("confirmPasswordError");
+        const submitButton = document.getElementById("submit");
 
-<script>
-    const passwordField = document.getElementById("password");
-    const confirmPasswordField = document.getElementById("confirmPassword");
-    const confirmPasswordError = document.getElementById("confirmPasswordError");
-    const submitButton = document.getElementById("submit");
-
-    const checkMatchingPassword = () => {
-        if (passwordField.value === confirmPasswordField.value) {
-            console.log("Password matches!");
-            submitButton.disabled = false;
-            confirmPasswordError.innerText = "";
-        } else {
-            console.log("PASSWORD DOES NOT MATCH!");
-            submitButton.disabled = true;
-            confirmPasswordError.innerText = "Passwords don't match!";
+        const checkMatchingPassword = () => {
+            if (passwordField.value === confirmPasswordField.value) {
+                console.log("Password matches!");
+                submitButton.disabled = false;
+                confirmPasswordError.innerText = "";
+            } else {
+                console.log("PASSWORD DOES NOT MATCH!");
+                submitButton.disabled = true;
+                confirmPasswordError.innerText = "Passwords don't match!";
+            }
         }
-    }
 
-</script>
+    </script>
 
 {% endblock %}

@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proxycroak
         {% if meta.title %}
-        | {{meta.title}}
+            | {{ meta.title }}
         {% endif %}
 
     </title>
-    <meta name="title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <meta name="description" content="{{meta.description}}"/>
+    <meta name="title" content="Proxycroak {% if title %} | {{ meta.title }}{% endif %}"/>
+    <meta name="description" content="{{ meta.description }}"/>
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{request.url}}"/>
-    <meta property="og:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <meta property="og:description" content="{{meta.description}}"/>
+    <meta property="og:url" content="{{ request.url }}"/>
+    <meta property="og:title" content="Proxycroak {% if title %} | {{ meta.title }}{% endif %}"/>
+    <meta property="og:description" content="{{ meta.description }}"/>
     <meta property="og:image" content="/static/img/favicons/favicon-196x196.png"/>
     <meta property="og:site_name" content="Proxycroak"/>
     <!-- TODO: Dynamically set locale? -->
@@ -27,9 +27,9 @@
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary"/>
-    <meta property="twitter:url" content="{{request.url}}"/>
-    <meta property="twitter:title" content="Proxycroak {% if title %} | {{meta.title}}{% endif %}"/>
-    <meta property="twitter:description" content="{{meta.description}}"/>
+    <meta property="twitter:url" content="{{ request.url }}"/>
+    <meta property="twitter:title" content="Proxycroak {% if title %} | {{ meta.title }}{% endif %}"/>
+    <meta property="twitter:description" content="{{ meta.description }}"/>
     <meta property="twitter:image" content="/static/img/favicons/favicon-196x196.png"/>
 
     <!-- TODO: SET THIS -->
@@ -86,6 +86,10 @@
     <meta name="msapplication-square310x310logo"
           content="/static/img/favicons/mstile-310x310.png"/>
 
+    {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+
     <script>
         // (function (i, s, o, g, r, a, m) {
         //     i['GoogleAnalyticsObject'] = r;
@@ -107,6 +111,7 @@
 </head>
 
 <body class="page {% for tag in meta.tags %}page--{{ tag }} {% endfor %}">
+{{ toastr.include_toastr_js() }}
 <div id="container" class="container">
     <header class="header">
         <div class="topBar">
@@ -119,11 +124,11 @@
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.changelog') }}">Changelog</a></li>
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.help') }}">Help</a></li>
                     {% if current_user.is_authenticated %}
-                    <li class="topBar__nav__item"><a href="#">Pastebin</a></li>
-                    <li class="topBar__nav__item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                        <li class="topBar__nav__item"><a href="#">Pastebin</a></li>
+                        <li class="topBar__nav__item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% else %}
-                    <li class="topBar__nav__item"><a href="{{ url_for('auth.login') }}">Login</a></li>
-                    <li class="topBar__nav__item"><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                        <li class="topBar__nav__item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                        <li class="topBar__nav__item"><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -140,7 +145,7 @@
                                                                            target="_blank">great API</a>. The rest
                     has been originally designed and coded by <abbr title="Marco Escher">m.e.</abbr> and is now
                     maintained
-                    and developed by <a href="mailto:steve@proxycroak.com">Steve</a>. (build v{{ BUILD_VERSION}})</p>
+                    and developed by <a href="mailto:steve@proxycroak.com">Steve</a>. (build v{{ BUILD_VERSION }})</p>
                 <p>The information presented on this site about Pokémon and the Pokémon Trading Card Game, both literal
                     and graphical, is copyrighted by their respectful owners. This website is in no way affiliated with
                     TPCi, Nintendo, Creatures, or Game Freak.</p>

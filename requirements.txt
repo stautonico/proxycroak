@@ -12,3 +12,7 @@ beautifulsoup4==4.12.3
 flask-login==0.6.3
 bcrypt==4.1.2
 sendgrid==6.11.0
+beautifulsoup4==4.12.3
+alt-profanity-check==1.4.1.post1
+pytest==8.1.1
+Flask-Toastr==0.5.8
