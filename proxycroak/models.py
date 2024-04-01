@@ -74,6 +74,11 @@ class SharedDecklist(db.Model):
     expires: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
 
 
+class UserDecklist(db.Model):
+    id: Mapped[str] = mapped_column(String(8), primary_key=True)
+    
+
+
 class User(UserMixin, db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)

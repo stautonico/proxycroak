@@ -124,7 +124,7 @@
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.changelog') }}">Changelog</a></li>
                     <li class="topBar__nav__item"><a href="{{ url_for('ui.help') }}">Help</a></li>
                     {% if current_user.is_authenticated %}
-                        <li class="topBar__nav__item"><a href="#">Pastebin</a></li>
+                        <li class="topBar__nav__item"><a href="{{ url_for('pastebin.index') }}">Pastebin</a></li>
                         <li class="topBar__nav__item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% else %}
                         <li class="topBar__nav__item"><a href="{{ url_for('auth.login') }}">Login</a></li>

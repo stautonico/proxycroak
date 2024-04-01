@@ -27,7 +27,7 @@ def login():
 
     if request.method == "GET":
         if not current_user.is_authenticated:
-            return render_template("pages/login.html", meta=meta)
+            return render_template("pages/account/login.html", meta=meta)
         else:
             return redirect(url_for("ui.index"))
     else:
@@ -43,23 +43,23 @@ def login():
             errors.append("'password' is required")
 
         if len(errors) > 0:
-            return render_template("pages/login.html", meta=meta, errors=errors)
+            return render_template("pages/account/login.html", meta=meta, errors=errors)
 
         user_obj = User.query.filter(
             or_(User.email == username_or_email, User.username == username_or_email)).first()
 
         if not user_obj:
-            return render_template("pages/login.html", meta=meta, errors=["Invalid credentials"])
+            return render_template("pages/account/login.html", meta=meta, errors=["Invalid credentials"])
 
         sha256_hash = hashlib.sha256(password.encode()).digest()
         base64_password = base64.b64encode(sha256_hash)
         if not bcrypt.checkpw(base64_password, user_obj.password.encode()):
-            return render_template("pages/login.html", meta=meta, errors=["Invalid credentials"])
+            return render_template("pages/account/login.html", meta=meta, errors=["Invalid credentials"])
 
         result = login_user(user_obj)
 
         if not result:
-            return render_template("pages/login.html", meta=meta, errors=["Something went wrong when signing in"])
+            return render_template("pages/account/login.html", meta=meta, errors=["Something went wrong when signing in"])
 
         flash("Login successful", "success")
         return redirect(url_for("ui.index"))
@@ -79,7 +79,7 @@ def signup():
                    "tags": ["signup"]}
 
     if request.method == "GET":
-        return render_template("pages/signup.html", meta=signup)
+        return render_template("pages/account/signup.html", meta=signup)
     else:
         meta = {
             "title": "Activation Sent",
@@ -103,11 +103,11 @@ def signup():
             errors.append("'password' field is required")
 
         if len(errors) > 0:
-            return render_template("pages/signup.html", meta=signup_meta, errors=errors)
+            return render_template("pages/account/signup.html", meta=signup_meta, errors=errors)
 
         # Check if the provided username is a reserved username
         if username.lower() in RESERVED_USERNAMES:
-            return render_template("pages/signup.html", meta=signup_meta, errors=[
+            return render_template("pages/account/signup.html", meta=signup_meta, errors=[
                 f"Provided credentials already in use. Choose a different username or password"])
 
         # NOTE: This may be removed due to either removing too much stuff or not removing enough
@@ -115,14 +115,14 @@ def signup():
         profanity_probability = predict_prob([username.lower()])[0]
         # If we have > 75% prediction, its profanity, so fail
         if profanity_probability > 0.75:
-            return render_template("pages/signup.html", meta=signup_meta, errors=[
+            return render_template("pages/account/signup.html", meta=signup_meta, errors=[
                 f"Provided credentials already in use. Choose a different username or password"])
 
         # activate the email (using an overcomplicated regular expression)
         regex = r'^([a-zA-Z0-9_\-\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$'
 
         if not re.fullmatch(regex, email):
-            return render_template("pages/signup.html", meta=signup_meta,
+            return render_template("pages/account/signup.html", meta=signup_meta,
                                    errors=[f"'{email}' is not a valid email address"])
 
         # Check if a user with the given email or username already exists
@@ -130,7 +130,7 @@ def signup():
             or_(User.email == email, User.username == username)).first()
 
         if user_obj:
-            return render_template("pages/signup.html", meta=signup_meta, errors=[
+            return render_template("pages/account/signup.html", meta=signup_meta, errors=[
                 f"Provided credentials already in use. Choose a different username or password"])
 
         # Hash the user's password
@@ -158,10 +158,10 @@ def signup():
         send_result = send_activation_email(email, token)
 
         if not send_result:
-            return render_template("pages/signup.html", meta=signup_meta,
+            return render_template("pages/account/signup.html", meta=signup_meta,
                                    errors=["Something went wrong when sending activation email"])
 
-        return render_template("pages/activation_sent.html", meta=meta)
+        return render_template("pages/account/activation_sent.html", meta=meta)
 
 
 @blueprint.route("/activate", methods=["GET"])
@@ -188,11 +188,11 @@ def activate():
         db.session.add(user_obj)
         db.session.commit()
 
-        return render_template("pages/account_activated.html", meta=meta)
+        return render_template("pages/account/account_activated.html", meta=meta)
 
     # Make sure the token is still valid
     if datetime.datetime.now() > user_obj.account_activation_expires:
-        return render_template("pages/resend_activation.html", meta=meta, token=token,
+        return render_template("pages/account/resend_activation.html", meta=meta, token=token,
                                censored_email=censor_email(user_obj.email))
 
     user_obj.account_activated = True
@@ -204,7 +204,7 @@ def activate():
     db.session.add(user_obj)
     db.session.commit()
 
-    return render_template("pages/account_activated.html", meta=meta)
+    return render_template("pages/account/account_activated.html", meta=meta)
 
 
 @blueprint.route("/resend_activation", methods=["POST"])
@@ -246,7 +246,7 @@ def resend_activation():
     db.session.add(user_obj)
     db.session.commit()
 
-    return render_template("pages/activation_sent.html", meta=meta)
+    return render_template("pages/account/activation_sent.html", meta=meta)
 
 
 @blueprint.route("/forgot_password", methods=["GET", "POST"])
@@ -258,12 +258,12 @@ def forgot_password():
     }
 
     if request.method == "GET":
-        return render_template("pages/forgot_password.html", meta=meta)
+        return render_template("pages/account/forgot_password.html", meta=meta)
     else:
         email = request.form.get("email")
 
         if not email:
-            return render_template("pages/forgot_password.html", meta=meta, errors=["An email is required"])
+            return render_template("pages/account/forgot_password.html", meta=meta, errors=["An email is required"])
 
         user_obj = User.query.filter_by(email=email).first()
 
@@ -278,7 +278,7 @@ def forgot_password():
                 db.session.commit()
                 send_password_reset_email(email, token)
 
-        return render_template("pages/password_reset_sent.html", meta=meta)
+        return render_template("pages/account/password_reset_sent.html", meta=meta)
 
 
 @blueprint.route("/reset_password", methods=["GET", "POST"])
@@ -306,10 +306,10 @@ def reset_password():
             user_obj.password_reset_expires = None
             db.session.commit()
 
-            return render_template("pages/forgot_password.html", meta=meta, errors=[
+            return render_template("pages/account/forgot_password.html", meta=meta, errors=[
                 "This password reset link is expired, please enter your email to send a new password reset link."])
 
-        return render_template("pages/password_reset.html", meta=meta, token=token)
+        return render_template("pages/account/password_reset.html", meta=meta, token=token)
 
     else:
         token = request.form.get("token")
@@ -319,7 +319,7 @@ def reset_password():
             return abort(500)
 
         if not password:
-            return render_template("pages/password_reset.html", meta=meta, token=token,
+            return render_template("pages/account/password_reset.html", meta=meta, token=token,
                                    errors=["A password is required"])
 
         user_obj = User.query.filter_by(password_reset_token=token).first()
@@ -345,4 +345,4 @@ def reset_password():
         db.session.add(user_obj)
         db.session.commit()
 
-        return render_template("pages/password_reset_success.html", meta=meta)
+        return render_template("pages/account/password_reset_success.html", meta=meta)
