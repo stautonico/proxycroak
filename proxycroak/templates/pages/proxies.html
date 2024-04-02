@@ -6,7 +6,6 @@
     <main id="main" class="main main--proxies">
         <div class="main__head hide-from-print">
             <h1 id="notice-title" class="text--title text--center">Your proxy deck is ready!</h1>
-            <small class="text--center">Oops! All Snorlax!</small>
             {% if errors|length > 0 %}
                 <div class="row errors">
                     <div class="error">
@@ -34,12 +33,6 @@
                     <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
                     <span class="btn__text">Share Deck</span>
                 </button>
-                <button onclick="undoSnorlax()" id="share-deck" class="btn">
-                    <span class="btn__icon"><img width="24" src="/static/img/icons/pokeflute.svg"
-                                                 class="white-svg"/></span>
-                    <span class="btn__text">Use Poké Flute</span>
-                </button>
-
 
                 <!--
                 <div id="export-deck" class="btn btn--dropdown" data-toggle="#export-dropdown"
@@ -269,34 +262,7 @@
         </a>
     </main>
 
-    <audio id="pokeflute" src="/static/audio/pokeflute.mp3" hidden></audio>
-
     <script>
-
-        let backup = []
-
-        function makeSnorlax() {
-            let cards = document.getElementsByClassName("proxyDeck__card");
-            for (let card of cards) {
-                let card_image = card.getElementsByTagName("img")[0];
-                backup.push(card_image.src);
-                card_image.src = "/static/img/cards/pgo/pgo-55/large.webp";
-            }
-        }
-
-        function undoSnorlax() {
-            let pokeflute = document.getElementById("pokeflute");
-            pokeflute.play()
-            setTimeout(() => {
-                let cards = document.getElementsByClassName("proxyDeck__card");
-                for (let i = 0; i < cards.length; i++) {
-                    let card_image = cards[i].getElementsByTagName("img")[0];
-                    backup.push(card_image.src);
-                    card_image.src = backup[i];
-                }
-            }, 7000)
-        }
-
         function copy_to_clipboard() {
             navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/share/{{share_id}}`);
             // TODO: Maybe use a toast?
