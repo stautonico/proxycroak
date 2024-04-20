@@ -17,11 +17,15 @@
 - [ ] AUTOMATED TESTING
 - [ ] Maybe don't create the share by default. Only create the share when the "share deck" button is clicked
 - [ ] The build hash is a stupid system, find a way to match it in dev and in prod (it doesn't rn)
-
 - [ ] Tools that have attacks (TMs, forest seal, etc.) look weird in text mode
 - [ ] Cards with multiple subtypes (e.g. forest seal stone being both item and tool) only show a single type
-
-
+- [ ] When clicking a card from the search modal, don't alert, show a toast instead
+- [ ] LOG STUFF, NOTHING IS BEING LOGGED IN ANYTHING NEW!
+- [ ] Paste as guest w/ expiration?
+- [ ] Make an option to resend the email when signing in to an unactivated account
+- [ ] Put templates from similar pages in folder (e.g. put all password reset templates in one folder)
+- [ ] Create a helper to get/set user password
+- [ ] Implement a dismissible, timed toast (used after login, after adding cards from modal, etc.)
 
 ## IP
 
@@ -35,6 +39,7 @@
 - [X] Refactor all the text on the website that changed (such as links, email addrs, and changed features like "up to
   3 decklists")
 - [X] The build hash doesn't work in github actions
+- [X] Add meta to head (for stuff like discord embed images, etc) (works but titles of alternate pages don't work)
 
 ## DONE
 
@@ -58,6 +63,8 @@
 - [X] Items, special energies, supporters, and stadiums don't work in text mode
 - [X] Include robots.txt
 - [X] Include security.txt
+- [X] Cards with '?' (like Unown UF ?) fail due to having a '?' in the filename (ex10-?/large.webp)
+
 
 ## NOT DOING
 
