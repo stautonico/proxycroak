@@ -2,7 +2,6 @@ flask-SQLAlchemy==3.1.1
 python-dotenv==1.0.0
 pokemontcgsdk==3.4.0
 flask==3.0.0
-flask-migrate==4.0.5
 python-dotenv==1.0.0
 requests==2.31.0
 Pillow==10.1.0
@@ -16,3 +15,5 @@ beautifulsoup4==4.12.3
 alt-profanity-check==1.4.1.post1
 pytest==8.1.1
 Flask-Toastr==0.5.8
+Flask-Migrate==4.0.7
+mysql-connector-python==8.4.0

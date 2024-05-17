@@ -461,3 +461,5 @@ beta.env.secrets
 VERSION
 test_decklist.txt
 test.html
+
+mysql-data/
