@@ -71,7 +71,20 @@ def proxies_base(parsed_decklist, options):
             errors.append({"card": card["line"], "message": "Invalid line"})
             continue
 
+
+        if card["card_name"] == "back":
+            output.append([card, Card(image="/static/img/cards/back")])
+            continue
+
+        if card["set_id"] in SET_IDS:
+            set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
+        else:
+            set_obj = Set.query.filter(
+                or_(Set.ptcgoCode == card["set_id"], Set.alternatePtcgoCode == card["set_id"])).first()
+            # set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
+
         set_obj = find_set(card, hide_unreleased=options["hideUnreleased"])
+
 
         if not set_obj:
             # If we couldn't find it, it's possible that the user never provided a set

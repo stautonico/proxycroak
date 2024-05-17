@@ -20,6 +20,25 @@ SET_IDS = {
     # Exceptions for Shiny Vaults
     "HIF-SV": "sma",
     "SHF-SV": "swsh45sv",
+
+    "POP1": "pop1",
+    "P1": "pop1",
+    "POP2": "pop2",
+    "P2": "pop2",
+    "POP3": "pop3",
+    "P3": "pop3",
+    "POP4": "pop4",
+    "P4": "pop4",
+    "POP5": "pop5",
+    "P5": "pop5",
+    "POP6": "pop6",
+    "P6": "pop6",
+    "POP7": "pop7",
+    "P7": "pop7",
+    "POP8": "pop8",
+    "P8": "pop8",
+    "POP9": "pop9",
+    "P9": "pop9",
 }
 
 CARD_TEXT_REPLACEMENTS = {

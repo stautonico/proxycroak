@@ -3,44 +3,21 @@
 
 {% block content %}
 
-<style>
-    #loader {
-        background: url("/static/img/loader.gif") no-repeat center center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        z-index: 9999999;
-        transition: opacity 250ms ease-in-out;
-    }
-
-    #main__content {
-        transition: opacity 250ms ease-in-out;
-    }
-
-</style>
-
-<main id="main" class="main main--proxies">
-    <div id="loader" style="display: none"></div>
-
-    <div id="main__content">
+    <main id="main" class="main main--proxies">
         <div class="main__head hide-from-print">
-            <h1 id="notice-title" class="text--title text--center">{% if make_meme_title %}The feeling you have when
-                waiting for this page to load is the same feeling other players get when you play Snorlax Stall...
-                {% endif %}</h1>
+            <h1 id="notice-title" class="text--title text--center">Your proxy deck is ready!</h1>
             {% if errors|length > 0 %}
-            <div class="row errors">
-                <div class="error">
-                    <div class="error__head">Deck 1 has the following errors:</div>
-                    <ul class="error__lines">
-                        {% for error in errors %}
-                        <li class="error__line">{{error.card}} — {{error.message}}</li>
-                        {% endfor %}
-                        </li>
-                    </ul>
+                <div class="row errors">
+                    <div class="error">
+                        <div class="error__head">Deck 1 has the following errors:</div>
+                        <ul class="error__lines">
+                            {% for error in errors %}
+                                <li class="error__line">{{ error.card }} — {{ error.message }}</li>
+                            {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
             {% endif %}
             <div class="row text--center">
                 <p>Needless to say, you can't use proxy cards at sanctioned events or pass them off as original cards.
@@ -52,10 +29,9 @@
                     <span class="btn__icon"><img width="16" src="/static/img/icons/edit.svg" class="white-svg"/></span>
                     <span class="btn__text">Edit Deck</span>
                 </div>
-                <button onclick="copy_to_clipboard()" id="share-deck" {{
-                'disabled' if not share_id }} class="btn">
-                <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
-                <span class="btn__text">Share Deck</span>
+                <button onclick="copy_to_clipboard()" id="share-deck" {{ 'disabled' if not share_id }} class="btn">
+                    <span class="btn__icon"><img width="16" src="/static/img/icons/share.svg" class="white-svg"/></span>
+                    <span class="btn__text">Share Deck</span>
                 </button>
 
                 <!--
@@ -106,230 +82,209 @@
 
         <div id="proxyDeck" class="proxyDeck proxyDeck--hiRes">
             {% for row in rows %}
-            <div class="proxyDeck__row">
-                {% for card in row %}
-                <div class="proxyDeck__card">
-                    <div class="proxyDeck__card__inner">
-                        {% if card.type == "text" %}
-                        {% set classes = "" %}
-                        {% if options.nomin %}{% set classes = classes ~ "card--liteMin " %}{% endif %}
-                        {% if options.illustration %}{% set classes = classes ~ "card--hasBg " %}{% endif %}
-                        {#{% if options.copy %}{% set classes = classes ~ "card--isCopy " %}{% endif %}#}
-                        <!-- TODO: What is this? -->
-                        {% if card.data.supertype == "Pokémon" %}{% set classes = classes ~ "card--isPokemon " %}{%
-                        endif %}
-                        {% if card.data.supertype == "Trainer" %}{% set classes = classes ~ "card--isTrainer " %}{%
-                        endif %}
-                        {% if card.data.supertype == "Energy" %}{% set classes = classes ~ "card--isEnergy " %}{% endif
-                        %}
-                        <!-- TODO: Add classes for subtypes -->
-                        <!--TODO: Add support for set codes < 23? -->
-                        <!-- TODO: Make an options for smaller images? -->
-
-                        <div class="card {{classes}}">
-                            {% if options.illustration %}
-                            <div class="card__bg"
-                                 style="background-image: url('{{card.data.image}}/large.webp');"></div>
-                            {% endif %}
-                            <div class="card__head">
-                                <div class="card__head__left">
-                                    <h4 class="card__name"><span>{{card.data.name}}</span></h4>
-                                </div>
-
-                                <div class="card__head__right">
-                                    <div class="card__head__right__inner">
-                                        {% if card.data.hp %}
-                                        <div class="card__hp"><small>HP</small>{{card.data.hp}}</div>
-                                        {% if card.data.types %}
-                                        <div class="card__type">
-                                            {{card.data.types|join(" ")|safe}}
-                                        </div>
-                                        {% endif %}
-                                        {% elif card.data.supertype == "Energy" and "Basic" in card.data.subtype %}
-                                        <div class="card__type">
-                                            <!-- TODO: Get energy color and set as class name -->
-                                            <div class="energy energy--"></div>
-                                        </div>
-                                        {% else %}
-                                        <div class="card__subtype">{{card.data.subtypes[0]}}</div>
-                                        {% endif %}
-                                        <!-- if missing TODO: show missing warning -->
-                                        <!-- endif -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- TODO: If not copy/missing -->
-                            <div class="card__body">
-                                {% if card.data.supertype == "Pokémon" %}
-                                {% if card.data.abilities %}
-                                {% for a in card.data.abilities %}
-                                <div class="card__ability">
-                                    <strong>
-                                        {% if options.nomin %}
-                                        [Ability: {{a.name}}]
-                                        {% else %}
-                                        [ABL]
-                                        {% endif %}
-                                    </strong>&nbsp;
-                                    {{a.text}}
-                                </div>
-                                {% endfor %}
-                                {% endif %}
-
-                                {% if card.data.attacks %}
-                                {% for atk in card.data.attacks %}
-                                <div class="card__attack"><strong>
-                                    [
-                                    {% if atk.cost|length == 0 or atk.cost == "Free" %}
-                                    #
-                                    {% else %}
-                                    {% for cost in atk.cost %}
-                                    {{ cost|safe }}
-                                    {% endfor %}
-                                    {% endif %}
-
-                                    , {{ atk.name }}
-
-                                    {% if atk.damage %}
-                                    , {{atk.damage}}
-                                    {% endif %}
-
-                                    {% if atk.text %}
-                                    ]</strong> {{ atk.text }}
-                                    {% else %}
-                                    ]</strong>
-                                    {% endif %}
-
-                                </div>
-                                {% endfor %}
-                                {% endif %}
-
-
-                                {% if card.data.supertype == "Pokémon" and card.data.rules %}
-                                <div class="card__text">
-                                    {% for rule in card.data.rules %}
-                                    {{ rule }}&nbsp;
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% else %}
-                                {% if card.data.rules %}
-                                <div class="card__text">
-                                    {% for rule in card.data.rules %}
-                                    {{ rule }}&nbsp;<br/><br/>
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% endif %}
-                            </div>
-
-                            <div class="card__foot">
-                                <div class="card__foot__left">
+                <div class="proxyDeck__row">
+                    {% for card in row %}
+                        <div class="proxyDeck__card">
+                            <div class="proxyDeck__card__inner">
+                                {% if card.type == "text" %}
+                                    {% set classes = "" %}
+                                    {% if options.nomin %}{% set classes = classes ~ "card--liteMin " %}{% endif %}
+                                    {% if options.illustration %}{% set classes = classes ~ "card--hasBg " %}{% endif %}
+                                    {#{% if options.copy %}{% set classes = classes ~ "card--isCopy " %}{% endif %}#}
+                                    <!-- TODO: What is this? -->
                                     {% if card.data.supertype == "Pokémon" %}
-                                    {% if card.data.weaknesses %}
-                                    <span class="card__wrc">
+                                        {% set classes = classes ~ "card--isPokemon " %}{% endif %}
+                                    {% if card.data.supertype == "Trainer" %}
+                                        {% set classes = classes ~ "card--isTrainer " %}{% endif %}
+                                    {% if card.data.supertype == "Energy" %}
+                                        {% set classes = classes ~ "card--isEnergy " %}{% endif %}
+                                    <!-- TODO: Add classes for subtypes -->
+                                    <!--TODO: Add support for set codes < 23? -->
+                                    <!-- TODO: Make an options for smaller images? -->
+
+                                    <div class="card {{ classes }}">
+                                        {% if options.illustration %}
+                                            <div class="card__bg"
+                                                 style="background-image: url('{{ card.data.image }}/large.webp');"></div>
+                                        {% endif %}
+                                        <div class="card__head">
+                                            <div class="card__head__left">
+                                                <h4 class="card__name"><span>{{ card.data.name }}</span></h4>
+                                            </div>
+
+                                            <div class="card__head__right">
+                                                <div class="card__head__right__inner">
+                                                    {% if card.data.hp %}
+                                                        <div class="card__hp"><small>HP</small>{{ card.data.hp }}</div>
+                                                        {% if card.data.types %}
+                                                            <div class="card__type">
+                                                                {{ card.data.types|join(" ")|safe }}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% elif card.data.supertype == "Energy" and "Basic" in card.data.subtype %}
+                                                        <div class="card__type">
+                                                            <!-- TODO: Get energy color and set as class name -->
+                                                            <div class="energy energy--"></div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="card__subtype">{{ card.data.subtypes[0] }}</div>
+                                                    {% endif %}
+                                                    <!-- if missing TODO: show missing warning -->
+                                                    <!-- endif -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- TODO: If not copy/missing -->
+                                        <div class="card__body">
+                                            {% if card.data.supertype == "Pokémon" %}
+                                                {% if card.data.abilities %}
+                                                    {% for a in card.data.abilities %}
+                                                        <div class="card__ability">
+                                                            <strong>
+                                                                {% if options.nomin %}
+                                                                    [Ability: {{ a.name }}]
+                                                                {% else %}
+                                                                    [ABL]
+                                                                {% endif %}
+                                                            </strong>&nbsp;
+                                                            {{ a.text }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% if card.data.attacks %}
+                                                    {% for atk in card.data.attacks %}
+                                                        <div class="card__attack"><strong>
+                                                            [
+                                                            {% if atk.cost|length == 0 or atk.cost == "Free" %}
+                                                                #
+                                                            {% else %}
+                                                                {% for cost in atk.cost %}
+                                                                    {{ cost|safe }}
+                                                                {% endfor %}
+                                                            {% endif %}
+
+                                                            , {{ atk.name }}
+
+                                                            {% if atk.damage %}
+                                                                , {{ atk.damage }}
+                                                            {% endif %}
+
+                                                            {% if atk.text %}
+                                                                ]</strong> {{ atk.text }}
+                                                            {% else %}
+                                                                ]</strong>
+                                                            {% endif %}
+
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+
+
+                                                {% if card.data.supertype == "Pokémon" and card.data.rules %}
+                                                    <div class="card__text">
+                                                        {% for rule in card.data.rules %}
+                                                            {{ rule }}&nbsp;
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if card.data.rules %}
+                                                    <div class="card__text">
+                                                        {% for rule in card.data.rules %}
+                                                            {{ rule }}&nbsp;<br/><br/>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="card__foot">
+                                            <div class="card__foot__left">
+                                                {% if card.data.supertype == "Pokémon" %}
+                                                    {% if card.data.weaknesses %}
+                                                        <span class="card__wrc">
                                         W [
-                                        {% for w in card.data.weaknesses %}
-                                            {{ w.type|safe }}
-                                        {% endfor %}
-                                        {{ card.data.weaknesses[0].value }}]
+                                                            {% for w in card.data.weaknesses %}
+                                                                {{ w.type|safe }}
+                                                            {% endfor %}
+                                                            {{ card.data.weaknesses[0].value }}]
                                     </span>
-                                    {% endif %}
+                                                    {% endif %}
 
-                                    {% if card.data.resistances %}
-                                    <span class="card__wrc">
+                                                    {% if card.data.resistances %}
+                                                        <span class="card__wrc">
                                         R [
-                                        {% for r in card.data.resistances %}
-                                            {{ r.type|safe }}
-                                        {% endfor %}
-                                        {{ card.data.resistances[0].value }}]
+                                                            {% for r in card.data.resistances %}
+                                                                {{ r.type|safe }}
+                                                            {% endfor %}
+                                                            {{ card.data.resistances[0].value }}]
                                     </span>
-                                    {% endif %}
+                                                    {% endif %}
 
-                                    <span class="card__wrc">
+                                                    <span class="card__wrc">
                                     RC [
-                                    {% if card.data.retreatCost %}
-                                    {% for rc in card.data.retreatCost %}
-                                        {{ rc|safe }}
-                                    {% endfor %}
-                                    {% endif %}
-                                    ]
+                                                        {% if card.data.retreatCost %}
+                                                            {% for rc in card.data.retreatCost %}
+                                                                {{ rc|safe }}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        ]
                                 </span>
 
-                                    {% endif %}
-                                </div>
+                                                {% endif %}
+                                            </div>
 
-                                <div class="card__foot__right">
-                                    <!-- TODO: if not missing and not copy -->
-                                    <div class="card__id">
-                                        {{card.data.set.ptcgoCode}} {{card.data.number}}
+                                            <div class="card__foot__right">
+                                                <!-- TODO: if not missing and not copy -->
+                                                <div class="card__id">
+                                                    {{ card.data.set.ptcgoCode }} {{ card.data.number }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                {% else %}
+                                    <div class="scan">
+                                        <div class="scan__quantity"></div>
+                                        <img src="{{ card.data }}" class="scan__pic">
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
-                        {% else %}
-                        <div class="scan">
-                            <div class="scan__quantity"></div>
-                            <img src="{{ card.data }}" class="scan__pic">
-                        </div>
-                        {% endif %}
-                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
             {% endfor %}
         </div>
+
         <a id="printBtn" class="btn printBtn hide-from-print" href="javascript:window.print()">
             <span class="btn__text">Print page</span>
         </a>
-    </div>
-</main>
+    </main>
 
-<script>
+    <script>
+        function copy_to_clipboard() {
+            navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/share/{{share_id}}`);
+            // TODO: Maybe use a toast?
+            alert("Copied link to clipboard!");
+        }
 
-    //{% if make_meme_title %}
-    const content = document.getElementById("main__content");
-    const loader = document.getElementById("loader");
-    setTimeout(() => {
-        content.style.display = "block";
-        setTimeout(() => {
-            content.style.opacity = "100%";
-        }, 250);
+        let localShares = localStorage.getItem("shares");
 
-        loader.style.opacity = "0%";
-        setTimeout(() => {
-            loader.style.display = "none";
-        }, 250);
+        if (localShares === null) {
+            localShares = [];
+        } else {
+            localShares = JSON.parse(localShares);
+        }
 
-    }, 5000);
-    content.style.display = "none";
-    content.style.opacity = "0%";
-    loader.style.display = "block";
-    loader.style.opacity = "100%";
+        if (!localShares.includes("{{share_id}}")) {
+            localShares.push("{{share_id}}");
+        }
 
-    //{% endif %}
+        localStorage.setItem("shares", JSON.stringify(localShares));
 
-    function copy_to_clipboard() {
-        navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/share/{{share_id}}`);
-        // TODO: Maybe use a toast?
-        alert("Copied link to clipboard!");
-    }
+        makeSnorlax();
 
-    let localShares = localStorage.getItem("shares");
-
-    if (localShares === null) {
-        localShares = [];
-    } else {
-        localShares = JSON.parse(localShares);
-    }
-
-    if (!localShares.includes("{{share_id}}")) {
-        localShares.push("{{share_id}}");
-    }
-
-    localStorage.setItem("shares", JSON.stringify(localShares));
-
-</script>
+    </script>
 
 {% endblock %}
