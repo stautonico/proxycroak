@@ -109,7 +109,7 @@ def configure_middleware(app):
         profiles_sample_rate=1.0,
         enable_tracing=True,
         # debug=CONFIG.DEBUG,
-        environment="development" if CONFIG.DEBUG else "testing" if CONFIG.TESTING else "production"
+        environment=CONFIG.ENVIRONMENT
     )
 
     scheduler.init_app(app)

@@ -21,7 +21,8 @@ def handle_proxies_page(data, meta, opts=None):
         "illustration": False,
         "nomin": False,
         "jp": False,
-        "exclude_secrets": False
+        "exclude_secrets": False,
+        "hideUnreleased": False
     }
 
     # TODO: Don't hardcode decks[0]
@@ -45,6 +46,12 @@ def handle_proxies_page(data, meta, opts=None):
     parsed_list = parse_decklist(data["decks[0]"])
     if parsed_list is [] or parsed_list is None:
         return make_invalid_dl_error(data['decks[0]'])
+
+    make_meme_title = False
+    for line in parsed_list:
+        if line.get("set_id") == "PGO" and line.get("card_num") == '55' and line.get("card_name") == "Snorlax":
+            make_meme_title = True
+            break
 
     # Total up the requested cards. If its > 100, fail
     total = 0
@@ -99,5 +106,9 @@ def handle_proxies_page(data, meta, opts=None):
         db.session.add(shared_decklist)
         db.session.commit()
 
+    from pprint import pprint
+
+    pprint(output)
+
     return render_template("pages/proxies.html", meta=meta, rows=output, errors=errors, share_id=random_id,
-                           options=options)
+                           options=options, make_meme_title=make_meme_title)
