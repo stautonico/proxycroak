@@ -12,6 +12,18 @@ def parse_new_line(line: str):
 
         elements = line.split(" ")
 
+        if "cardback" in elements or "back" in elements:
+            # We expect the format to be <num> 'back'/'cardback'
+            if len(elements) > 2:
+                return {"error": "Unable to parse line", "line": line}
+
+            return {
+                "amnt": int(elements[0]),
+                "set_id": None,
+                "card_num": None,
+                "card_name": 'back'
+            }
+
         # Check if we have a basic energy without a set
         expr = r"^([\d]+) ((?:Basic)?[\w\s]+(?:Energy)) (\d+)?$"
         matches = re.search(expr, line)
@@ -170,6 +182,7 @@ def parse_decklist(decklist: str):
             line = line.replace(" Star ", " ★ ")  # Hack for star
             line = line.replace(" Delta ", " δ ")  # Hack for delta species
             line = line.rstrip()  # Clear out spaces from the right side
+
             if dlformat == "old":
                 if line[0] == "#" or line[:2] == "**":
                     continue

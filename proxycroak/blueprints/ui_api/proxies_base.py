@@ -16,6 +16,10 @@ def proxies_base(parsed_decklist, options):
             errors.append({"card": card["line"], "message": "Invalid line"})
             continue
 
+        if card["card_name"] == "back":
+            output.append([card, Card(image="/static/img/cards/back")])
+            continue
+
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
