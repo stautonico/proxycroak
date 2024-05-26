@@ -124,8 +124,9 @@ def parse_old_line(line):
 
 def parse_decklist(decklist: str):
     # Strip out any of the "section" lines (Pokemon: n, Trainer: n, Energy: n)
-    # TODO: Why doesn't using ^$ work even if multi-line is enabled?
-    pattern = r"((?:pok[eé]mon|trainer|energy): ?\d+)"
+    # TODO: Why doesn't using ^$ work even if multi-
+    HEADER_EXPR = r"((?:pok[eé]mon|trainer|energy) ?(?:\:|-) ?\d+)"
+    pattern = HEADER_EXPR
     matches = re.findall(pattern, decklist, flags=re.IGNORECASE | re.MULTILINE)
     for match in matches:
         decklist = decklist.replace(match, "")
@@ -182,7 +183,7 @@ def parse_decklist(decklist: str):
                     continue
             else:
                 # If we're dealing with the "header" line, ignore it
-                pattern = re.compile(r'(?:[^\W_]|[ \'-])*( - |: )\d*', re.UNICODE)
+                pattern = re.compile(HEADER_EXPR, re.UNICODE)
                 match = pattern.match(line)
 
                 if match:
