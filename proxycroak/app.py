@@ -38,10 +38,11 @@ def create_app(mode=None):
 
 def configure_blueprints(app):
     logger.info("Configuring blueprints...", "init")
-    from proxycroak.blueprints import ui, ui_api
+    from proxycroak.blueprints import ui, ui_api, public_api
 
     app.register_blueprint(ui.blueprint)
     app.register_blueprint(ui_api.blueprint)
+    app.register_blueprint(public_api.blueprint)
 
 
 def configure_filter(app):

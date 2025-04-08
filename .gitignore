@@ -457,3 +457,4 @@ VERSION
 test_decklist.txt
 test.html
 env.secrets
+mysql-data
