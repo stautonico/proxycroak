@@ -4,7 +4,6 @@ from datetime import datetime as dt
 
 from flask.logging import default_handler
 from flask import Flask, render_template, request
-from flask_migrate import Migrate
 import sentry_sdk
 
 from proxycroak.config import CONFIG
@@ -38,11 +37,10 @@ def create_app(mode=None):
 
 def configure_blueprints(app):
     logger.info("Configuring blueprints...", "init")
-    from proxycroak.blueprints import ui, ui_api, public_api
+    from proxycroak.blueprints import ui, ui_api
 
     app.register_blueprint(ui.blueprint)
     app.register_blueprint(ui_api.blueprint)
-    app.register_blueprint(public_api.blueprint)
 
 
 def configure_filter(app):
@@ -99,9 +97,6 @@ def configure_middleware(app):
 
     with app.app_context():
         db.create_all()
-
-    # Configure flask-migrate for migration support
-    migrate = Migrate(app, db)
 
     # idk if this is considered middleware, but we'll put it here anyway
     sentry_sdk.init(

@@ -8,6 +8,3 @@ requests==2.31.0
 Pillow==10.1.0
 sentry-sdk==1.38.0
 Flask-APScheduler==1.13.1
-weasyprint==62.1
-flask_weasyprint==1.1.0
-pdf2image==1.17.0
