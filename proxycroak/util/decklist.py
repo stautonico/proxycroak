@@ -51,9 +51,9 @@ def parse_new_line(line: str):
                 card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
 
             # If we're using PTCGL format (CRZ-GG 6 instead of CRZ GG06), we need to change the card num to include the GG
-            if "tg" in set_id.lower():
+            if "-tg" in set_id.lower():
                 card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
-            elif "gg" in set_id.lower():
+            elif "-gg" in set_id.lower():
                 card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
             elif "pr-sw" in set_id.lower() and "SWSH" not in card_num:
                 card_num = "SWSH" + ("0" if int(card_num) < 10 else "") + card_num
