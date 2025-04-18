@@ -283,7 +283,38 @@
 
         localStorage.setItem("shares", JSON.stringify(localShares));
 
-        makeSnorlax();
+        // makeSnorlax();
+
+        // To prevent looping when error checking
+        var errorHandled = {};
+
+        // If the image fails to load, try to load the alternative one
+        document.querySelectorAll(".scan__pic").forEach(img => {
+            const parts = img.src.split('/');
+            parts.pop();
+            const base = parts.join('/');
+
+
+            img.onerror = () => {
+                if (errorHandled[base] !== null) {
+                    img.onerror = null;
+                    // Set it to missing and don't try again
+                    img.src = "/static/img/missing.webp";
+                    return;
+                }
+
+
+                errorHandled[base] = true;
+
+                const parts = img.src.split("/");
+                if (parts[parts.length - 1] === "large.webp") {
+                    img.src = `${base}/small.webp`;
+                } else {
+                    img.src = `${base}/large.webp`;
+                }
+            };
+
+        });
 
     </script>
 

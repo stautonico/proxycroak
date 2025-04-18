@@ -1,4 +1,5 @@
 from sqlalchemy import or_
+import os
 
 from proxycroak.models import Card, Set
 from proxycroak.const import SET_IDS
@@ -16,6 +17,9 @@ def proxies_base(parsed_decklist, options):
             errors.append({"card": card["line"], "message": "Invalid line"})
             continue
 
+        card["set_id"] = card["set_id"].upper()
+
+
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
         else:
@@ -26,7 +30,7 @@ def proxies_base(parsed_decklist, options):
         if not set_obj:
             # If we couldn't find it, it's possible that the user never provided a set
             # so try to find a similar card (same number and name)
-            # Try to find similar card
+            # Try to find a similar card
             card_obj = Card.query.filter_by(name=card["card_name"], number=card["card_num"]).first()
             if not card_obj:
                 # TODO: Hard-code error messages somewhere else
@@ -66,6 +70,14 @@ def proxies_base(parsed_decklist, options):
                         })
 
             if card_obj:
+                # Check if we have the card image (and make an error if we don't)
+                if not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")) and not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")):
+                    errors.append({
+                        "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
+                        "message": "No image available"
+                    })
+                    continue
+
                 output.append([card, card_obj])
 
     return output, errors
