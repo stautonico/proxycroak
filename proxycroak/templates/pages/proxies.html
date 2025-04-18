@@ -296,7 +296,7 @@
 
 
             img.onerror = () => {
-                if (errorHandled[base] !== null) {
+                if (errorHandled[base] !== undefined) {
                     img.onerror = null;
                     // Set it to missing and don't try again
                     img.src = "/static/img/missing.webp";

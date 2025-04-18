@@ -71,7 +71,7 @@ def proxies_base(parsed_decklist, options):
 
             if card_obj:
                 # Check if we have the card image (and make an error if we don't)
-                if not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")) and not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")):
+                if not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")) and not os.path.exists(os.path.join("proxycroak" + card_obj.image, "small.webp")):
                     errors.append({
                         "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
                         "message": "No image available"
