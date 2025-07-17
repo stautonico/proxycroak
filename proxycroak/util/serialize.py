@@ -4,11 +4,19 @@ from sqlalchemy import inspect
 
 
 def recursive_json_loads(obj):
+    def handle_nonstandard_constants(val):
+        # Preserve as string to avoid conversion to float
+        return val
+
     if isinstance(obj, str):
         try:
-            return recursive_json_loads(loads(obj))
+            parsed = loads(obj, parse_constant=handle_nonstandard_constants)
+            # Only recurse if it's a dict or list, not a string again
+            if isinstance(parsed, (dict, list)):
+                return recursive_json_loads(parsed)
+            else:
+                return parsed
         except ValueError:
-            # If the string cannot be parsed as JSON, return it as is
             return obj
     elif isinstance(obj, list):
         return [recursive_json_loads(item) for item in obj]
@@ -16,6 +24,7 @@ def recursive_json_loads(obj):
         return {key: recursive_json_loads(value) for key, value in obj.items()}
     else:
         return obj
+
 
 
 def serialize_card(card):
