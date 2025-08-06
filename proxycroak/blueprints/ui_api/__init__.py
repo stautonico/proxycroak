@@ -35,7 +35,8 @@ def proxies():
             "illustration": False,
             "nomin": False,
             "jp": False,
-            "exclude_secrets": False
+            "exclude_secrets": False,
+            "grayscale": False
         }
 
         if "mode" in form_data:
@@ -82,7 +83,7 @@ def proxies():
 
         # TODO: Find a better way to do this
 
-        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets"]:
+        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets", "grayscale"]:
             if f"options[{opt}]" in form_data:
                 options[opt] = form_data[f"options[{opt}]"] == "1"
 
