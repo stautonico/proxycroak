@@ -52,6 +52,13 @@ def parse_new_line(line: str):
             card_num = elements.pop(-1).replace("\r", "")
             card_name = " ".join(elements)
 
+            # TODO: This is just a hack to get prism star and star to work
+            # We can't do this if our card name is "team star grunt"
+            if "team star grunt" not in card_name.lower():
+                card_name = card_name.replace("{*}", "◇")  # Hack for prism star
+                card_name = card_name.replace(" Star ", " ★ ")  # Hack for star
+                card_name = card_name.replace(" Delta ", " δ ")  # Hack for delta species
+
             # TODO: Bullshit hack
             if "tg" in card_num.lower():
                 # Remove the "tg"
@@ -70,18 +77,24 @@ def parse_new_line(line: str):
             elif "pr-sw" in set_id.lower() and "SWSH" not in card_num:
                 card_num = "SWSH" + ("0" if int(card_num) < 10 else "") + card_num
 
-            # TODO: More bullshit hacks
-            if set_id.lower() == "hif":
-                if int(card_num) > 69:
-                    # We're in the hidden fates shiny vault
-                    card_num = "SV" + str(int(card_num) - 69)
+            print(set_id, card_num, card_name)
 
-            if set_id.lower() == "shf":
-                if int(card_num) > 73:
-                    # We're in the shining fates shiny vault
-                    # Calculate the padding for this (should be 3 digits)
-                    card_num = "SV" + str(int(card_num) - 73).zfill(3)
-                    set_id = "SHF-SV"
+            # TODO: More bullshit hacks
+            # if set_id.lower() == "hif":
+            #     if "sv" in card_num.lower():
+            #         card_num = card_num.lower().replace("sv", "")
+            #     if int(card_num) > 69:
+            #         # We're in the hidden fates shiny vault
+            #         card_num = "SV" + str(int(card_num) - 69)
+
+            # if set_id.lower() == "shf":
+            #     if "sv" in card_num.lower():
+            #         card_num = card_num.lower().replace("sv", "")
+            #     if int(card_num) > 73:
+            #         # We're in the shining fates shiny vault
+            #         # Calculate the padding for this (should be 3 digits)
+            #         card_num = "SV" + str(int(card_num) - 73).zfill(3)
+            #         set_id = "SHF-SV"
 
         return {
             "amnt": int(amnt),
@@ -90,6 +103,8 @@ def parse_new_line(line: str):
             "card_name": card_name.lstrip()
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         # Something went wrong when trying to parse a decklist, and its probably the user's fault
         logger.warn(f"Something went wrong when parsing line: {line}", "decklist:parse_new_line")
         return {"error": "Unable to parse line", "line": line}
@@ -178,11 +193,8 @@ def parse_decklist(decklist: str):
     for line in lines:
         # Shouldn't happen but check anyway
         if line != "":
-            # TODO: This is just a hack to get prism star and star to work
-            line = line.replace("{*}", "◇")  # Hack for prism star
-            line = line.replace(" Star ", " ★ ")  # Hack for star
-            line = line.replace(" Delta ", " δ ")  # Hack for delta species
             line = line.rstrip()  # Clear out spaces from the right side
+
 
             if dlformat == "old":
                 if line[0] == "#" or line[:2] == "**":

@@ -15,79 +15,84 @@ blueprint = Blueprint("ui_api", __name__, url_prefix="/ui/api")
 
 @blueprint.route("/proxies", methods=["GET", "POST"])
 def proxies():
-    if request.method == "GET":
-        return redirect(url_for("ui.index"))
-    else:
-        META = {
-            "title": "Proxies",
-            "description": "A simple tool for deck testing: choose the format (pics or text), and print up to 3 decks made of combined Pokémon proxy cards.",
-            "tags": ["proxies"]
-        }
-
-        # Load the form data
-        form_data = request.form
-
-        data = {}
-        options = {
-            "lowres": False,
-            "watermark": False,
-            "legacy": False,
-            "illustration": False,
-            "nomin": False,
-            "jp": False,
-            "exclude_secrets": False,
-            "hideUnreleased": False,
-        }
-
-        if "mode" in form_data:
-            data["mode"] = form_data["mode"]
+    try:
+        if request.method == "GET":
+            return redirect(url_for("ui.index"))
         else:
-            # TODO: Provide a proper error page
-            logger.error("User did not provide a mode", "proxies")
-            abort(400)
+            META = {
+                "title": "Proxies",
+                "description": "A simple tool for deck testing: choose the format (pics or text), and print up to 3 decks made of combined Pokémon proxy cards.",
+                "tags": ["proxies"]
+            }
 
-        if "activeDeck" in form_data:
-            data["activeDeck"] = form_data["activeDeck"]
-        else:
-            logger.error("User did not provide an active deck", "proxies")
-            # TODO: Provide a proper error page
-            abort(400)
+            # Load the form data
+            form_data = request.form
 
-        has_active_deck = False
+            data = {}
+            options = {
+                "lowres": False,
+                "watermark": False,
+                "legacy": False,
+                "illustration": False,
+                "nomin": False,
+                "jp": False,
+                "exclude_secrets": False,
+                "hideUnreleased": False,
+            }
 
-        # if "activeDeck[0]" in form_data:
-        #     data["activeDeck[0]"] = form_data["activeDeck[0]"]
-        #     has_active_deck = True
-        #
-        # if "activeDeck[1]" in form_data:
-        #     data["activeDeck[1]"] = form_data["activeDeck[1]"]
-        #     has_active_deck = True
-        #
-        # if "activeDeck[2]" in form_data:
-        #     data["activeDeck[2]"] = form_data["activeDeck[2]"]
-        #     has_active_deck = True
-        #
-        # if not has_active_deck:
-        #     logger.error("User did not provide an any decks", "proxies")
-        #     # TODO: Provide a proper error page
-        #     abort(400)
+            if "mode" in form_data:
+                data["mode"] = form_data["mode"]
+            else:
+                # TODO: Provide a proper error page
+                logger.error("User did not provide a mode", "proxies")
+                abort(400)
 
-        if "decks[0]" in form_data:
-            data["decks[0]"] = form_data["decks[0]"]
+            if "activeDeck" in form_data:
+                data["activeDeck"] = form_data["activeDeck"]
+            else:
+                logger.error("User did not provide an active deck", "proxies")
+                # TODO: Provide a proper error page
+                abort(400)
 
-        if "decks[1]" in form_data:
-            data["decks[1]"] = form_data["decks[1]"]
+            has_active_deck = False
 
-        if "decks[2]" in form_data:
-            data["decks[2]"] = form_data["decks[2]"]
+            # if "activeDeck[0]" in form_data:
+            #     data["activeDeck[0]"] = form_data["activeDeck[0]"]
+            #     has_active_deck = True
+            #
+            # if "activeDeck[1]" in form_data:
+            #     data["activeDeck[1]"] = form_data["activeDeck[1]"]
+            #     has_active_deck = True
+            #
+            # if "activeDeck[2]" in form_data:
+            #     data["activeDeck[2]"] = form_data["activeDeck[2]"]
+            #     has_active_deck = True
+            #
+            # if not has_active_deck:
+            #     logger.error("User did not provide an any decks", "proxies")
+            #     # TODO: Provide a proper error page
+            #     abort(400)
 
-        # TODO: Find a better way to do this
+            if "decks[0]" in form_data:
+                data["decks[0]"] = form_data["decks[0]"]
 
-        for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets", "hideUnreleased"]:
-            if f"options[{opt}]" in form_data:
-                options[opt] = form_data[f"options[{opt}]"] == "1"
+            if "decks[1]" in form_data:
+                data["decks[1]"] = form_data["decks[1]"]
 
-        return handle_proxies_page(data, META, options)
+            if "decks[2]" in form_data:
+                data["decks[2]"] = form_data["decks[2]"]
+
+            # TODO: Find a better way to do this
+
+            for opt in ["lowres", "watermark", "legacy", "illustration", "nomin", "jp", "exclude_secrets", "hideUnreleased"]:
+                if f"options[{opt}]" in form_data:
+                    options[opt] = form_data[f"options[{opt}]"] == "1"
+
+            return handle_proxies_page(data, META, options)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return "FAIL"
 
 
 @blueprint.route("/search", methods=["GET"])
@@ -99,6 +104,8 @@ def search():
 
         unreleased_entires = [recursive_json_loads(serialize_card(e, True)) for e in UnreleasedCard.query.filter(
             UnreleasedCard.name.ilike(f"%{request.args.to_dict()['name']}%")).all()]
+
+        print(entries)
 
         return jsonify([*entries, *unreleased_entires])
     except Exception as e:

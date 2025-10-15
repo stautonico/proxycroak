@@ -80,6 +80,8 @@ class BaseConfig:
 
     DISCORD_URL = None
 
+    POKEMONTCG_IO_API_KEY = None
+
     BUILD_VERSION = None
     BUILD_HASH = None
 
@@ -124,6 +126,8 @@ class BaseConfig:
         newconfig.LOG_DIRECTORY = env.get("LOG_DIRECTORY")
 
         newconfig.DISCORD_URL = env.get("DISCORD_URL")
+
+        newconfig.POKEMONTCG_IO_API_KEY = env.get("POKEMONTCG_IO_API_KEY")
 
         if not env.get("ENVIRONMENT") == "tools":
             with open("VERSION", "r") as f:

@@ -80,7 +80,7 @@ def handle_proxies_page(data, meta, opts=None):
             random_id = ''.join(random.choices(string.ascii_uppercase +
                                                string.digits, k=8))
 
-            shared_dl = SharedDecklist.query.get(random_id)
+            shared_dl = db.session.get(SharedDecklist, random_id)
 
             if not shared_dl:
                 break
@@ -105,10 +105,6 @@ def handle_proxies_page(data, meta, opts=None):
 
         db.session.add(shared_decklist)
         db.session.commit()
-
-    from pprint import pprint
-
-    pprint(output)
 
     return render_template("pages/proxies.html", meta=meta, rows=output, errors=errors, share_id=random_id,
                            options=options, make_meme_title=make_meme_title)

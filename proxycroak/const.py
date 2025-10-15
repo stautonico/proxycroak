@@ -3,13 +3,6 @@ ENVIRONMENTS = ["development", "testing", "production", "beta", "tools"]
 
 # In theory, we should only need newer sets (SVI+) since all the rest have ptcgo codes
 SET_IDS = {
-    # "SVI": "sv1",
-    # "PAL": "sv2",
-    # "OBF": "sv3",
-    # "MEW": "sv3pt5",
-    # "PAR": "sv4",
-    # "PAF": "sv4pt5",
-
     # Exceptions for McDonalds
     "MCD11": "mcd11",
     "MCD12": "mcd12",
@@ -21,6 +14,17 @@ SET_IDS = {
     "MCD19": "mcd19",
     "MCD21": "mcd21",
     "MCD22": "mcd22",
+
+    # Exceptions for some other misc sets missing codes
+    "RU1": "ru1", # Pokemon rumble
+    "SU1": "su1", # Southern islands
+    "TK1A": "tk1a", # EX Trainer Kit Latias
+    "TK1B": "tk1b", # EX Trainer Kit Latios
+    "TK2A": "tk2a", # EX Trainer Kit Plusle
+    "TK2B": "tk2b", # EX Trainer Kit Minun
+
+    # Exceptions for basic energies (SVE)
+    "SVE": "sve",
 
     # Exceptions for GG and TGs
     "BRS-TG": "swsh9tg",

@@ -1,10 +1,11 @@
 import logging
 import os
-from datetime import datetime as dt
+from datetime import datetime as dt, timezone
 
 from flask.logging import default_handler
 from flask import Flask, render_template, request
 import sentry_sdk
+from pokemontcgsdk import RestClient
 
 from proxycroak.config import CONFIG
 from proxycroak.database import db
@@ -103,7 +104,6 @@ def configure_middleware(app):
         dsn=CONFIG.SENTRY_DSN,
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
-        enable_tracing=True,
         # debug=CONFIG.DEBUG,
         environment=CONFIG.ENVIRONMENT
     )
@@ -141,7 +141,7 @@ def configure_logging(app):
         if "static" not in request.path:
             app.logger.info(
                 "(%s) - %s | %s | %s | %s | len: %s | %s",
-                dt.utcnow().strftime("%b/%d/%Y:%H:%M:%S.%f")[:-3],
+                dt.now(timezone.utc).strftime("%b/%d/%Y:%H:%M:%S.%f")[:-3],
                 request.remote_addr,
                 request.method,
                 request.path,
@@ -155,6 +155,9 @@ def configure_logging(app):
 
 def configure_additional(app):
     logger.info("Configuring additional...", "init")
+
+    # Setup the TCG API key
+    RestClient.configure(CONFIG.POKEMONTCG_IO_API_KEY)
 
     app.config["SCHEDULER_API_ENABLED"] = True
     """Misc things to do when the app starts"""
@@ -181,7 +184,11 @@ def configure_additional(app):
     scheduler.add_job(func=update_cards_database, trigger="interval", hours=24, id="update-sets")
     # scheduler.add_job(func=update_cards_database, trigger="interval", seconds=5, id="update-sets")
 
+    # with app.app_context():
+    #     update_sets()
+
     scheduler.start()
+
 
     # Configure global variables that are available in any template
     @app.context_processor

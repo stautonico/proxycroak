@@ -76,24 +76,19 @@ def proxies_base(parsed_decklist, options):
         if card["card_name"] == "back":
             output.append([card, Card(image="/static/img/cards/back")])
             continue
-            
+
         card["set_id"] = card["set_id"].upper()
 
 
-        if card["set_id"] in SET_IDS:
-            set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
-        else:
-            set_obj = Set.query.filter(
-                or_(Set.ptcgoCode == card["set_id"], Set.alternatePtcgoCode == card["set_id"])).first()
-            # set_obj = Set.query.filter_by(ptcgoCode=card["set_id"]).first()
-
+        # Default to no card object to prevent failure later down the line
+        card_obj = None
         set_obj = find_set(card, hide_unreleased=options["hideUnreleased"])
 
 
         if not set_obj:
             # If we couldn't find it, it's possible that the user never provided a set
             # so try to find a similar card (same number and name)
-            # Try to find similar card
+            # Try to find a similar card
             card_obj, local_error = fuzzy_find_card_or_error(card, hide_unreleased=options["hideUnreleased"])
 
             if local_error:
