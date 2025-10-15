@@ -6,7 +6,6 @@ from proxycroak.util.card_to_html import type_to_html
 from proxycroak.blueprints.ui_api.proxies_base import proxies_base
 
 
-
 def handle_text_mode(parsed_decklist, options):
     final_output = [[]]
 
@@ -17,14 +16,14 @@ def handle_text_mode(parsed_decklist, options):
         loaded_card = load_card(card_obj)
 
         # TODO: Optimize
-        if loaded_card["types"]:
+        if loaded_card.get("types"):
             types = []
             for t in loaded_card["types"]:
                 types.append(type_to_html(t))
 
             loaded_card["types"] = types
 
-        if loaded_card["abilities"]:
+        if loaded_card.get("abilities"):
             abils = []
             for a in loaded_card["abilities"]:
                 if not options["nomin"]:
@@ -33,7 +32,7 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["abilities"] = abils
 
-        if loaded_card["attacks"]:
+        if loaded_card.get("attacks"):
             atks = []
             for atk in loaded_card["attacks"]:
                 atkout = []
@@ -48,7 +47,7 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["attacks"] = atks
 
-        if loaded_card["weaknesses"]:
+        if loaded_card.get("weaknesses"):
             weaks = []
             for w in loaded_card["weaknesses"]:
                 w["type"] = type_to_html(w["type"])
@@ -56,7 +55,7 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["weaknesses"] = weaks
 
-        if loaded_card["resistances"]:
+        if loaded_card.get("resistances"):
             res = []
             for r in loaded_card["resistances"]:
                 r["type"] = type_to_html(r["type"])
@@ -64,7 +63,7 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["resistances"] = res
 
-        if loaded_card["retreatCost"]:
+        if loaded_card.get("retreatCost"):
             rcs = []
             for rc in loaded_card["retreatCost"]:
                 rc = type_to_html(rc)
@@ -72,7 +71,7 @@ def handle_text_mode(parsed_decklist, options):
 
             loaded_card["retreatCost"] = rcs
 
-        if loaded_card["rules"]:
+        if loaded_card.get("rules"):
             rules = []
             for rule in loaded_card["rules"]:
                 rules.append(minify_card_text(rule) if not options["nomin"] else rule)
@@ -82,6 +81,16 @@ def handle_text_mode(parsed_decklist, options):
         # If we have an SVI+ set code, set it from our dict
         if loaded_card["set"].ptcgoCode is None:
             loaded_card["set"].ptcgoCode = lookup_set_code_by_id(loaded_card["set_id"])
+
+        # Let's check if we're missing any fields (ones that unreleased cards wouldn't have)
+        # This prevents unreleased cards from crashing
+        unreleased_fields = ["abilities", "artist", "ancientTrait", "attacks", "convertedRetreatCost", "evolvesFrom",
+                             "flavorText", "hp", "regulationMark", "legalities", "nationalPokedexNumbers", "rarity",
+                             "resistances", "retreatCost", "rules", "subtypes", "supertype", "types", "weaknesses"]
+
+        for field in unreleased_fields:
+            if not hasattr(loaded_card, field):
+                loaded_card[field] = ""
 
         cleaned_output.append([card, loaded_card])
 

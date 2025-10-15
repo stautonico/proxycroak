@@ -6,7 +6,7 @@ from sqlalchemy import asc
 from proxycroak.const import lookup_set_code_by_id
 from proxycroak.util.decklist import parse_decklist
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
-from proxycroak.models import SharedDecklist, Set
+from proxycroak.models import SharedDecklist, Set, UnreleasedSet
 from proxycroak.util.handle_proxies_page import handle_proxies_page
 from proxycroak.util.errors import make_invalid_dl_error
 from proxycroak.logging import logger
@@ -19,7 +19,7 @@ blueprint = Blueprint("ui", __name__, url_prefix="/")
 @blueprint.route("/")
 def index():
     meta = {"title": "",
-            "description": "A simple tool for deck testing: choose the format (pics or text), and print up to 3 decks made of combined Pokémon proxy cards.",
+            "description": "Proxycroak is a simple tool to print Pokémon proxy cards for playtesting, straight from a decklist.",
             "tags": ["home"]}
     return render_template("pages/index.html", meta=meta)
 
@@ -78,7 +78,8 @@ def share(sid):
         "illustration": False,
         "nomin": False,
         "jp": False,
-        "exclude_secrets": False
+        "exclude_secrets": False,
+        "hideUnreleased": False,
     }
 
     output, errors = handle_pic_mode(parse_decklist(dl.decklist), options)
@@ -95,6 +96,14 @@ def set_codes():
     }
 
     sets = Set.query.order_by(asc(Set.releaseDate)).all()
+    unreleased_sets_dirty = UnreleasedSet.query.order_by(asc(UnreleasedSet.updatedAt)).all()
+    unreleased_sets_clean = []
+
+    for s in unreleased_sets_dirty:
+        s.name = s.name + " (Unreleased)"
+        unreleased_sets_clean.append(s)
+
+
 
     # set (lol) the set codes for SVI+
     # What this crazy conditional does:
@@ -116,7 +125,7 @@ def set_codes():
                 or s.name == "Shiny Vault":
             s.ptcgoCode = lookup_set_code_by_id(s.id) or s.id.upper()
 
-    return render_template("pages/set_codes.html", meta=META, sets=sets)
+    return render_template("pages/set_codes.html", meta=META, sets=[*sets, *unreleased_sets_clean])
 
 
 @blueprint.route("/issues/cards")

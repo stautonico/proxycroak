@@ -1,0 +1,8 @@
+FROM nginx
+
+COPY nginx.beta.conf /etc/nginx/nginx.conf
+
+EXPOSE 8001
+
+#CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx"]
