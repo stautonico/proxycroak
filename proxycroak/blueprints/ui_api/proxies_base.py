@@ -1,4 +1,5 @@
 from sqlalchemy import or_
+import os
 
 from proxycroak.models import Card, Set, UnreleasedCard, UnreleasedSet
 from proxycroak.const import SET_IDS
@@ -75,6 +76,9 @@ def proxies_base(parsed_decklist, options):
         if card["card_name"] == "back":
             output.append([card, Card(image="/static/img/cards/back")])
             continue
+            
+        card["set_id"] = card["set_id"].upper()
+
 
         if card["set_id"] in SET_IDS:
             set_obj = Set.query.filter_by(id=SET_IDS[card["set_id"]]).first()
@@ -96,17 +100,39 @@ def proxies_base(parsed_decklist, options):
                 errors.append(local_error)
                 continue
 
-            # At this point, we have our card object, so just add it to our output
-            # and continue to the next iteration
-            output.append([card, card_obj])
-            continue
+        if not card_obj:
+            card_obj = Card.query.filter_by(set_id=set_obj.id, name=card["card_name"], number=card["card_num"]).first()
 
-        # If we reached this point, we have a set
-        card_obj, local_error = find_card_with_set_or_error(card, set_obj, hide_unreleased=options["hideUnreleased"])
+            if not card_obj:
+                # Try to find similar card
+                card_obj = Card.query.filter_by(name=card["card_name"], number=card["card_num"]).first()
+                if not card_obj:
+                    # Try fuzzy matching the card name
+                    card_obj = Card.query.filter(
+                        Card.name.like(card["card_name"]) | Card.name.like(f"%{card['card_num']}%")).first()
 
-        if card_obj:
-            output.append([card, card_obj])
-        else:
-            errors.append(local_error)
+                    if not card_obj:
+                        # TODO: Hard-code error messages somewhere else
+                        errors.append({
+                            "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
+                            "message": "No results found (card misspelled or unavailable)"
+                        })
+                        continue
+                    else:
+                        errors.append({
+                            "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
+                            "message": "No exact match found, showing closest one"
+                        })
+
+            if card_obj:
+                # Check if we have the card image (and make an error if we don't)
+                if not os.path.exists(os.path.join("proxycroak" + card_obj.image, "large.webp")) and not os.path.exists(os.path.join("proxycroak" + card_obj.image, "small.webp")):
+                    errors.append({
+                        "card": f"{card['amnt']}x {card['card_name']} ({card['card_num']})",
+                        "message": "No image available"
+                    })
+                    continue
+
+                output.append([card, card_obj])
 
     return output, errors

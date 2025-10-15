@@ -63,9 +63,9 @@ def parse_new_line(line: str):
                 card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
 
             # If we're using PTCGL format (CRZ-GG 6 instead of CRZ GG06), we need to change the card num to include the GG
-            if "tg" in set_id.lower():
+            if "-tg" in set_id.lower():
                 card_num = "TG" + ("0" if int(card_num) < 10 else "") + card_num
-            elif "gg" in set_id.lower():
+            elif "-gg" in set_id.lower():
                 card_num = "GG" + ("0" if int(card_num) < 10 else "") + card_num
             elif "pr-sw" in set_id.lower() and "SWSH" not in card_num:
                 card_num = "SWSH" + ("0" if int(card_num) < 10 else "") + card_num
@@ -136,8 +136,9 @@ def parse_old_line(line):
 
 def parse_decklist(decklist: str):
     # Strip out any of the "section" lines (Pokemon: n, Trainer: n, Energy: n)
-    # TODO: Why doesn't using ^$ work even if multi-line is enabled?
-    pattern = r"((?:pok[eé]mon|trainer|energy): ?\d+)"
+    # TODO: Why doesn't using ^$ work even if multi-
+    HEADER_EXPR = r"((?:pok[eé]mon|trainer|energy) ?(?:\:|-) ?\d+)"
+    pattern = HEADER_EXPR
     matches = re.findall(pattern, decklist, flags=re.IGNORECASE | re.MULTILINE)
     for match in matches:
         decklist = decklist.replace(match, "")
@@ -195,7 +196,7 @@ def parse_decklist(decklist: str):
                     continue
             else:
                 # If we're dealing with the "header" line, ignore it
-                pattern = re.compile(r'(?:[^\W_]|[ \'-])*( - |: )\d*', re.UNICODE)
+                pattern = re.compile(HEADER_EXPR, re.UNICODE)
                 match = pattern.match(line)
 
                 if match:

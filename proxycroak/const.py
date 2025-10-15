@@ -3,12 +3,24 @@ ENVIRONMENTS = ["development", "testing", "production", "beta", "tools"]
 
 # In theory, we should only need newer sets (SVI+) since all the rest have ptcgo codes
 SET_IDS = {
-    "SVI": "sv1",
-    "PAL": "sv2",
-    "OBF": "sv3",
-    "MEW": "sv3pt5",
-    "PAR": "sv4",
-    "PAF": "sv4pt5",
+    # "SVI": "sv1",
+    # "PAL": "sv2",
+    # "OBF": "sv3",
+    # "MEW": "sv3pt5",
+    # "PAR": "sv4",
+    # "PAF": "sv4pt5",
+
+    # Exceptions for McDonalds
+    "MCD11": "mcd11",
+    "MCD12": "mcd12",
+    "MCD14": "mcd14",
+    "MCD15": "mcd15",
+    "MCD16": "mcd16",
+    "MCD17": "mcd17",
+    "MCD18": "mcd18",
+    "MCD19": "mcd19",
+    "MCD21": "mcd21",
+    "MCD22": "mcd22",
 
     # Exceptions for GG and TGs
     "BRS-TG": "swsh9tg",

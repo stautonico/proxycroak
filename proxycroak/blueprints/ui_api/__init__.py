@@ -1,5 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, abort, jsonify
 from sentry_sdk import capture_exception
+import re
 
 from proxycroak.blueprints.ui_api.handle_pic_mode import handle_pic_mode
 from proxycroak.blueprints.ui_api.handle_text_mode import handle_text_mode
